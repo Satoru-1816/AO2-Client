@@ -1,0 +1,115 @@
+name: CI build
+
+on: [push, pull_request]
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - 5.15.1
+        platform:
+          - msvc2019
+
+        include:
+          - platform: msvc2019
+            os: windows-2019
+
+    runs-on: ${{matrix.os}}
+    steps:
+      - uses: actions/checkout@master
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@master
+        with:
+          python-version: '3.10'
+          
+      - name: actions/cache qt
+        uses: actions/cache@master
+        id: cache
+        with:
+          path: qt/${{matrix.version}}/${{matrix.platform}}
+          key: qt-${{matrix.version}}-${{matrix.platform}}
+
+      - name: Add msbuild to PATH
+        if: matrix.platform == 'msvc2019'
+        uses: microsoft/setup-msbuild@main
+        
+      - uses: Skycoder42/action-setup-qt@master
+        id: qt
+        with:
+          version: ${{matrix.version}}
+          platform: ${{matrix.platform}}
+
+      - name: Install QtApng
+        run: |
+          git clone https://github.com/Skycoder42/QtApng.git
+          cd QtApng
+          cd src/3rdparty
+          chmod +x get_libs.sh
+          ./get_libs.sh 1.3 1.6.37
+          cd ../..
+          qmake CONFIG+=install_ok QMAKE_CXXFLAGS+="-fno-sized-deallocation" QT_PLATFORM=${{matrix.platform}}
+          ${{steps.qt.outputs.make}} qmake_all
+          ${{steps.qt.outputs.make}}
+          ${{steps.qt.outputs.make}} INSTALL_ROOT="${{steps.qt.outputs.installdir}}" install
+
+      - name: Install Windows Discord RPC
+        if: contains(matrix.os, 'windows')
+        run: |
+          curl -L https://github.com/discordapp/discord-rpc/releases/download/v3.4.0/discord-rpc-win.zip -o discord_rpc.zip
+          unzip discord_rpc.zip
+          cp ./discord-rpc/win32-dynamic/lib/discord-rpc.lib ./lib/
+          cp ./discord-rpc/win32-dynamic/bin/discord-rpc.dll ./bin/
+          cp ./discord-rpc/win32-dynamic/include/discord*.h ./include/
+
+      - name: Install Windows BASS
+        if: contains(matrix.os, 'windows')
+        run: |
+          curl http://www.un4seen.com/files/bass24.zip -o bass.zip
+          unzip -d bass -o bass.zip
+          cp ./bass/c/bass.lib ./lib/
+          cp ./bass/bass.dll ./bin/
+
+          curl http://www.un4seen.com/files/bassmidi24.zip -o bassmidi.zip
+          unzip -d bass -o bassmidi.zip
+          cp ./bass/c/bassmidi.lib ./lib/
+          cp ./bass/bassmidi.dll ./bin/
+
+          curl http://www.un4seen.com/files/bassopus24.zip -o bassopus.zip
+          unzip -d bass -o bassopus.zip
+          cp ./bass/c/bassopus.lib ./lib/
+          cp ./bass/bassopus.dll ./bin/
+
+      - name: build
+        run: |
+          ${{steps.qt.outputs.make}}
+
+      - name: Deploy Windows
+        if: contains(matrix.os, 'windows')
+        working-directory: ${{github.workspace}}/bin/
+        shell: bash
+        run: |
+          windeployqt --no-quick-import --no-translations --no-virtualkeyboard --no-compiler-runtime --no-webkit2 --no-opengl-sw .
+          cp ../QtApng/plugins/imageformats/qapng.dll ./imageformats/
+          rm ./imageformats/qtiff.dll
+          rm ./imageformats/qjpeg.dll
+          rm ./imageformats/qicns.dll
+          rm ./imageformats/qico.dll
+          rm ./imageformats/qsvg.dll
+          rm ./imageformats/qtga.dll
+          rm ./imageformats/qwbmp.dll
+          rm ./Qt5Svg.dll
+          rm -r iconengines
+          rm -r bearer
+          rm -r styles
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: Attorney_Online-${{matrix.os}}-${{matrix.platform}}
+          path: ${{github.workspace}}/bin/
