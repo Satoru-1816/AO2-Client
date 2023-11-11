@@ -31,7 +31,6 @@
 #include <QCompleter>
 #include <QStringListModel>
 #include <QModelIndex>
-#include <QTextDocumentLayout>
 #include <QComboBox>
 #include <QHeaderView>
 #include <QLineEdit>
