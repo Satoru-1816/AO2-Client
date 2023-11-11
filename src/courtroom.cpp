@@ -641,6 +641,12 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
 
   connect(ui_ic_chat_message, &QTextEdit::textChanged, this, &Courtroom::onTextChanged);
   connect(typingTimer, &QTimer::timeout, this, &Courtroom::onTypingTimeout);
+  connect(
+    ui_ic_chat_message->document()->documentLayout(),
+    &QTextDocumentLayout::documentSizeChanged,
+    this,
+    &Courtroom::docRect
+  );
 
 
   connect(ui_pos_dropdown, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
@@ -4618,6 +4624,10 @@ void Courtroom::mod_called(QString p_ip)
     modcall_player->play(ao_app->get_court_sfx("mod_call"));
     ao_app->alert(this);
   }
+}
+
+void Courtroom::docRect(const QSizeF& r) {
+    ui_ic_chat_message->setMaximumHeight(int(r.height()));
 }
 
 void Courtroom::on_ooc_return_pressed()
