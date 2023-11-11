@@ -31,6 +31,7 @@
 #include <QCompleter>
 #include <QStringListModel>
 #include <QModelIndex>
+#include <QTextDocumentLayout>
 #include <QComboBox>
 #include <QHeaderView>
 #include <QLineEdit>
@@ -947,6 +948,8 @@ private slots:
   void on_pair_list_clicked(QModelIndex p_index);
 
   void on_ooc_return_pressed();
+
+  void docRect(const QSizeF& r);
 
   void on_music_search_return_pressed();
   void on_music_search_edited(QString p_text);
