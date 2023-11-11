@@ -643,7 +643,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   connect(typingTimer, &QTimer::timeout, this, &Courtroom::onTypingTimeout);
   connect(
     ui_ic_chat_message->document()->documentLayout(),
-    &QTextDocumentLayout::documentSizeChanged,
+    &QAbstractTextDocumentLayout::documentSizeChanged,
     this,
     &Courtroom::docRect
   );
