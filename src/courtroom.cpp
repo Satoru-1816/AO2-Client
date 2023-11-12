@@ -4642,13 +4642,13 @@ void Courtroom::docRect(const QSizeF& r) {
     QTextCursor cursor = ui_ic_chat_message->textCursor();
     cursor.movePosition(QTextCursor::End);
 
-    if (cursor.atBlockStart() && newSize.height() > ui_ic_chat_message->height()) {
+    if (cursor.atBlockStart() && r.height() > ui_ic_chat_message->height()) {
         QTextBlockFormat format = cursor.blockFormat();
         format.setTopMargin(format.topMargin() - 10);
         cursor.mergeBlockFormat(format);
     }
 
-    ui_ic_chat_message->setFixedHeight(int(newSize.height()));
+    ui_ic_chat_message->setFixedHeight(int(r.height()));
 }
 
 void Courtroom::on_ooc_return_pressed()
