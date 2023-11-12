@@ -6216,7 +6216,7 @@ void Courtroom::on_reload_theme_clicked()
 {
   ao_app->current_theme = ao_app->get_real_path(ao_app->get_theme_path("courtroom_design.ini"));
   qDebug() << ao_app->current_theme;
-  ao_app->golden_parse_ini(current_theme);
+  ao_app->golden_parse_ini(ao_app->current_theme);
   set_courtroom_size();
   set_widgets();
   update_character(m_cid, ui_iniswap_dropdown->itemText(ui_iniswap_dropdown->currentIndex()));
