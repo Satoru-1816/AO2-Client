@@ -1556,7 +1556,7 @@ void Courtroom::set_size_and_pos(QWidget *p_widget, QString p_identifier, QStrin
 {
   QString filename = "courtroom_design.ini";
 
-  if (!parsedData.contains(p_identifier)) {
+  if (!ao_app->parsed_theme_data.contains(p_identifier)) {
       qWarning() << "could not find" << p_identifier << "in" << filename;
       p_widget->hide();
   } else {
@@ -1565,7 +1565,7 @@ void Courtroom::set_size_and_pos(QWidget *p_widget, QString p_identifier, QStrin
           menuBarHeight = 21;
 
       // Is the menu bar locked? If so, move the widgets a few pixels down to give it space
-      int y_position = parsed_theme_data[p_identifier]["y_position"];
+      int y_position = ao_app->parsed_theme_data[p_identifier]["y_position"];
 
       if (Options::getInstance().menuBarLocked()) {
           // Should the widget be unaffected? If not, we check if it's on the "affect" list.
@@ -1579,8 +1579,8 @@ void Courtroom::set_size_and_pos(QWidget *p_widget, QString p_identifier, QStrin
           if (!unaffected.contains(p_identifier) && (affect.contains(p_identifier) || !p_identifier.startsWith("evidence_")))
               y_position += menuBarHeight;
       }
-      p_widget->move(parsed_theme_data[p_identifier]["x_position"], y_position);
-      p_widget->resize(parsed_theme_data[p_identifier]["width"], parsed_theme_data[p_identifier]["height"]);
+      p_widget->move(ao_app->parsed_theme_data[p_identifier]["x_position"], y_position);
+      p_widget->resize(ao_app->parsed_theme_data[p_identifier]["width"], ao_app->parsed_theme_data[p_identifier]["height"]);
   }
 }
 
@@ -6214,6 +6214,9 @@ void Courtroom::on_change_character_clicked()
 
 void Courtroom::on_reload_theme_clicked()
 {
+  ao_app->current_theme = ao_app->get_real_path(ao_app->get_theme_path("courtroom_design.ini"));
+  qDebug() << ao_app->current_theme;
+  ao_app->golden_parse_ini(current_theme);
   set_courtroom_size();
   set_widgets();
   update_character(m_cid, ui_iniswap_dropdown->itemText(ui_iniswap_dropdown->currentIndex()));
