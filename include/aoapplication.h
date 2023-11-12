@@ -13,6 +13,7 @@
 #include <QFile>
 #include <QSettings>
 #include <QVector>
+#include <QMap>
 
 #include <QDebug>
 #include <QRect>
