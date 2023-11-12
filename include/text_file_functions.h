@@ -9,5 +9,6 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QVector>
+#include <QMap>
 
 #endif // TEXT_FILE_FUNCTIONS_H
