@@ -6214,7 +6214,7 @@ void Courtroom::on_change_character_clicked()
 
 void Courtroom::on_reload_theme_clicked()
 {
-  ao_app->current_theme = ao_app->get_real_path(ao_app->get_theme_path("courtroom_design.ini"));
+  ao_app->current_theme = ao_app->get_real_path(ao_app->get_theme_path("courtroom_design.ini", "default"));
   qDebug() << ao_app->current_theme;
   ao_app->golden_parse_ini(ao_app->current_theme);
   set_courtroom_size();
