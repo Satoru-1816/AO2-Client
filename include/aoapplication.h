@@ -368,7 +368,7 @@ public:
   const QString default_theme = "default";
 
   // Stores current theme's elements' dimensions
-  QMap<QString, QMap<QString, int>> parsed_theme_data;
+  QHash<QString, QHash<QString, int>> parsed_theme_data;
 
   // The file name of the log file in base/logs.
   QString log_filename;
