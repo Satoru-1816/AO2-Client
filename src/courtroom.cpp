@@ -4639,7 +4639,7 @@ void Courtroom::mod_called(QString p_ip)
 }
 
 void Courtroom::docRect(const QSizeF& r) {
-    ui_ic_chat_message->setMaximumHeight(int(r.height()));
+    ui_ic_chat_message->setFixedHeight(int(r.height()));
 }
 
 void Courtroom::on_ooc_return_pressed()
