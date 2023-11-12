@@ -874,8 +874,8 @@ bool AOApplication::get_pos_is_judge(const QString &p_pos)
   return positions.contains(p_pos.trimmed());
 }
 
-QMap<QString, QMap<QString, int>> AOApplication::golden_parse_ini(const QString& fileName) {
-    QMap<QString, QMap<QString, int>> result;
+QHash<QString, QHash<QString, int>> AOApplication::golden_parse_ini(const QString& fileName) {
+    QHash<QString, QHash<QString, int>> result;
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -892,7 +892,7 @@ QMap<QString, QMap<QString, int>> AOApplication::golden_parse_ini(const QString&
                 QString elementName = parts[0].trimmed();
                 QStringList values = parts[1].split(",");
                 if (values.size() == 4) {
-                    QMap<QString, int> elementData;
+                    QHash<QString, int> elementData;
                     elementData["x_position"] = values[0].trimmed().toInt();
                     elementData["y_position"] = values[1].trimmed().toInt();
                     elementData["width"] = values[2].trimmed().toInt();
