@@ -1060,6 +1060,8 @@ void Courtroom::set_widgets()
 
   set_size_and_pos(ui_debug_log, "ms_chatlog"); // Old name, still use it to not break compatibility
   ui_debug_log->setFrameShape(QFrame::NoFrame);
+  ui_debug_log->move(50, 50);
+  
 
   set_size_and_pos(ui_server_chatlog, "server_chatlog");
   ui_server_chatlog->setFrameShape(QFrame::NoFrame);
@@ -1255,6 +1257,7 @@ void Courtroom::set_widgets()
   ui_ooc_toggle->setText(tr("Server"));
   ui_ooc_toggle->setToolTip(
       tr("Toggle between server chat and global AO2 chat."));
+    ui_ooc_toggle->move(100, 100);
 
   set_size_and_pos(ui_witness_testimony, "witness_testimony");
   ui_witness_testimony->set_image("witnesstestimony");
