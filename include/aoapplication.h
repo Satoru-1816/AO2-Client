@@ -188,7 +188,7 @@ public:
   void append_to_demofile(QString packet_string);
 
   // Handles parsing courtroom_design.ini to a QMap.
-  QMap<QString, QMap<QString, int>> golden_parse_ini(const QString& fileName);
+  QHash<QString, QHash<QString, int>> golden_parse_ini(const QString& fileName);
 
   /**
    * @brief Reads the clients log folder and locates potential demo files to populate the demoserver list.
