@@ -653,13 +653,6 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
 
   connect(ui_ic_chat_message, &QTextEdit::textChanged, this, &Courtroom::onTextChanged);
   connect(typingTimer, &QTimer::timeout, this, &Courtroom::onTypingTimeout);
-  connect(
-    ui_ic_chat_message->document()->documentLayout(),
-    &QAbstractTextDocumentLayout::documentSizeChanged,
-    this,
-    &Courtroom::docRect
-  );
-
 
   connect(ui_pos_dropdown, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
           QOverload<int>::of(&Courtroom::on_pos_dropdown_changed));
@@ -1098,6 +1091,13 @@ void Courtroom::set_widgets()
   set_size_and_pos(ui_ic_chat_message, "ao2_ic_chat_message");
   set_size_and_pos(ui_ic_chat_name, "ao2_ic_chat_name");
 
+  connect(
+    ui_ic_chat_message->document()->documentLayout(),
+    &QAbstractTextDocumentLayout::documentSizeChanged,
+    this,
+    &Courtroom::docRect
+  );
+  
   initialize_chatbox();
 
   ui_vp_sticker->move(ui_viewport->x(), ui_viewport->y());
@@ -4639,7 +4639,16 @@ void Courtroom::mod_called(QString p_ip)
 }
 
 void Courtroom::docRect(const QSizeF& r) {
-    ui_ic_chat_message->setFixedHeight(int(r.height()));
+    QTextCursor cursor = ui_ic_chat_message->textCursor();
+    cursor.movePosition(QTextCursor::End);
+
+    if (cursor.atBlockStart() && newSize.height() > ui_ic_chat_message->height()) {
+        QTextBlockFormat format = cursor.blockFormat();
+        format.setTopMargin(format.topMargin() - 10);
+        cursor.mergeBlockFormat(format);
+    }
+
+    ui_ic_chat_message->setFixedHeight(int(newSize.height()));
 }
 
 void Courtroom::on_ooc_return_pressed()
