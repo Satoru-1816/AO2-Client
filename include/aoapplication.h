@@ -357,11 +357,17 @@ public:
   // These are all casing-related settings.
   // ======
 
+  // Currently defined theme
+  QString current_theme;
+
   // Currently defined subtheme
   QString subtheme;
 
   //Default is always default.
   const QString default_theme = "default";
+
+  // Stores current theme's elements' dimensions
+  QMap<QString, QMap<QString, int>> parsed_theme_data;
 
   // The file name of the log file in base/logs.
   QString log_filename;
