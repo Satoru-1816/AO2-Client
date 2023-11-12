@@ -10,5 +10,6 @@
 #include <QTextStream>
 #include <QVector>
 #include <QMap>
+#include <QHash>
 
 #endif // TEXT_FILE_FUNCTIONS_H
