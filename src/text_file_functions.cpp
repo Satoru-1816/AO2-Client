@@ -879,13 +879,14 @@ QHash<QString, QHash<QString, int>> AOApplication::golden_parse_ini(const QStrin
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Error opening file.";
+        qDebug() << "Error opening file to parse.";
         return result;
     }
 
     QTextStream design_ini(&file);
     while (!design_ini.atEnd()) {
         QString line = design_ini.readLine().trimmed();
+        qDebug() << line;
         if (!line.isEmpty()) {
             QStringList parts = line.split("=");
             if (parts.size() == 2) {
