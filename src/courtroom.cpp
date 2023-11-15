@@ -6277,6 +6277,10 @@ void Courtroom::on_update_theme_clicked()
   qDebug() << ao_app->current_theme;
 }
 
+bool Courtroom::update_character_needed(const QString& selectedIni) const {
+  return m_cid != -1 && selectedIni != ui_iniswap_dropdown->itemText(ui_iniswap_dropdown->currentIndex());
+}
+
 void Courtroom::on_return_to_lobby_clicked()
 {
     QMessageBox msgBox;
