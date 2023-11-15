@@ -1558,44 +1558,6 @@ void Courtroom::set_window_title(QString p_title)
 void Courtroom::set_size_and_pos(QWidget *p_widget, QString p_identifier, QString p_misc)
 {
   QString filename = "courtroom_design.ini";
-  pos_size_type design_ini_result =
-      ao_app->get_element_dimensions(p_identifier, filename, p_misc);
-
-  if (design_ini_result.width < 0 || design_ini_result.height < 0) {
-    qWarning() << "could not find" << p_identifier << "in" << filename;
-    p_widget->hide();
-  }
-  else {
-    int menuBarHeight = menu_bar->height();
-    if (menuBarHeight == 19)
-      menuBarHeight = 21;
-    // qDebug() << "Menu bar height: " << menuBarHeight;
-    QSet<QString> unaffected = {"message", "showname", "back_to_lobby", "char_buttons",  // A list of widgets that shouldn't be affected
-                              "char_select_left", "char_select_right", "spectator", "char_password", // by the menu bar repositioning
-                                "char_list", "char_taken", "char_passworded", "char_search",
-                                "left_evidence_icon", "right_evidence_icon", "music_name"};
-    QSet<QString> affect = {"evidence_background", "evidence_button"}; // Relative widgets that SHOULD be affected
-
-    // Is the menu bar locked? If so, move the widgets a few pixels down to give it space
-    int y_position = design_ini_result.y;
-
-    // qDebug() << "Y position 1: " << y_position;
-
-    if (Options::getInstance().menuBarLocked()) { // Trust me, this will get redone
-       // Should the widget be unaffected? If not, we check if it's on the "affect" list. 
-       // If not, we let it pass as long as it doesn't start with "evidence_" (so relative positioning doesn't screw us over)
-       if (!unaffected.contains(p_identifier) && ( affect.contains(p_identifier) || !p_identifier.startsWith("evidence_") ))
-         y_position += menuBarHeight;
-    }
-    p_widget->move(design_ini_result.x, y_position);
-    p_widget->resize(design_ini_result.width, design_ini_result.height);
-    // qDebug() << "Y position 2: " << y_position;
-  }
-}    
-
-void Courtroom::set_new_size_and_pos(QWidget *p_widget, QString p_identifier, QString p_misc)
-{
-  QString filename = "courtroom_design.ini";
 
   if (!ao_app->parsed_theme_data.contains(p_identifier)) {
       qWarning() << "PARSED could not find" << p_identifier << "in" << filename;
@@ -6275,7 +6237,7 @@ void Courtroom::on_change_character_clicked()
 
 void Courtroom::on_reload_theme_clicked()
 {
-  ao_app->current_theme = ao_app->get_real_path(ao_app->get_theme_path("courtroom_design.ini", "default"));
+  ao_app->current_theme = ao_app->get_real_path(ao_app->get_theme_path("courtroom_design.ini"));
   qDebug() << ao_app->current_theme;
   ao_app->parsed_theme_data = ao_app->golden_parse_ini(ao_app->current_theme);
   qDebug() << ao_app->parsed_theme_data;
