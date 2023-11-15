@@ -578,7 +578,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   CommandsMenu->addAction(action_clear_ooc_shortcuts);
   
   connect(action_change_character, &QAction::triggered, this, &Courtroom::on_change_character_clicked);
-  connect(action_reload_theme, &QAction::triggered, this, &Courtroom::on_reload_theme_clicked);
+  connect(action_reload_theme, &QAction::triggered, this, &Courtroom::on_update_theme_clicked);
   connect(action_call_mod, &QAction::triggered, this, &Courtroom::on_call_mod_clicked);
   connect(action_open_dl_manager, &QAction::triggered, this, [this]() { ao_app->call_settings_menu(1); });
   connect(action_settings, &QAction::triggered, this, &Courtroom::on_settings_clicked);
@@ -6242,6 +6242,38 @@ void Courtroom::on_reload_theme_clicked()
   // to update status on the background
   set_background(current_background, true);
   set_character_sets("global_char_set.ini");
+  qDebug() << ao_app->current_theme;
+}
+
+void Courtroom::on_update_theme_clicked()
+{
+  QString new_theme = ao_app->get_real_path(ao_app->get_theme_path("courtroom_design.ini"));
+  if (new_theme != ao_app->current_theme) {
+    ao_app->current_theme = new_theme;
+    qDebug() << ao_app->current_theme;
+
+    auto new_parsed_theme_data = ao_app->golden_parse_ini(ao_app->current_theme);
+    if (new_parsed_theme_data != ao_app->parsed_theme_data) {
+      ao_app->parsed_theme_data = std::move(new_parsed_theme_data);
+      qDebug() << ao_app->parsed_theme_data;
+
+      if (new_parsed_theme_data["courtroom"]["height"] != parsed_theme_data["courtroom"]["height"] ||
+        new_parsed_theme_data["courtroom"]["width"] != parsed_theme_data["courtroom"]["width"]) {
+        set_courtroom_size();
+        qDebug() << "We set courtroom size!"
+      }
+      set_widgets();
+    }
+
+    QString selectedIni = ui_iniswap_dropdown->itemText(ui_iniswap_dropdown->currentIndex());
+    if (update_character_needed(selectedIni)) {
+      update_character(m_cid, selectedIni);
+      enter_courtroom();
+      gen_char_rgb_list(ao_app->get_chat(current_char));
+      set_background(current_background, true);
+      set_character_sets("global_char_set.ini");
+    }
+  }
   qDebug() << ao_app->current_theme;
 }
 
