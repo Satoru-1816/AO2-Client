@@ -887,22 +887,28 @@ void Courtroom::update_audio_volume()
 
 void Courtroom::set_courtroom_size()
 {
-  const QString p_identifier = "courtroom";
-  const auto& theme_data = ao_app->parsed_theme_data[p_identifier];
+  QString p_identifier = "courtroom";
 
-  if (!theme_data.contains("width") || theme_data["width"] < 0 || theme_data["height"] < 0) {
-    qWarning() << "Did not find courtroom width or height in courtroom_design.ini";
-    setFixedSize(714, 668);
-  } else {
-    const int m_courtroom_width = theme_data["width"];
-    const int m_courtroom_height = theme_data["height"];
-    const int menuBarHeight = Options::getInstance().menuBarLocked() ? menu_bar->height() : 0;
-
-    setFixedSize(m_courtroom_width, m_courtroom_height + menuBarHeight);
-    ui_background->move(0, menuBarHeight);
+  if (!ao_app->parsed_theme_data.contains(p_identifier) || 
+     ao_app->parsed_theme_data[p_identifier]["width"] < 0 ||
+     ao_app->parsed_theme_data[p_identifier]["height"] < 0) {
+    qWarning() << "did not find courtroom width or height in courtroom_design.ini";
+  
+    this->setFixedSize(714, 668);
   }
+  else {
+    int m_courtroom_width = ao_app->parsed_theme_data[p_identifier]["width"]
+    int m_courtroom_height = ao_app->parsed_theme_data[p_identifier]["height"]
 
-  ui_background->resize(width(), height());
+    if (Options::getInstance().menuBarLocked()) {
+      this->setFixedSize(m_courtroom_width, m_courtroom_height + menu_bar->height());
+      ui_background->move(0, menu_bar->height());
+    } else {
+      this->setFixedSize(m_courtroom_width, m_courtroom_height);
+      ui_background->move(0, 0);
+    }
+  }
+  ui_background->resize(m_courtroom_width, m_courtroom_height);
   ui_background->set_image("courtroombackground");
 }
 
