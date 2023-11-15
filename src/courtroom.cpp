@@ -6257,10 +6257,10 @@ void Courtroom::on_update_theme_clicked()
       ao_app->parsed_theme_data = std::move(new_parsed_theme_data);
       qDebug() << ao_app->parsed_theme_data;
 
-      if (new_parsed_theme_data["courtroom"]["height"] != parsed_theme_data["courtroom"]["height"] ||
-        new_parsed_theme_data["courtroom"]["width"] != parsed_theme_data["courtroom"]["width"]) {
+      if (new_parsed_theme_data["courtroom"]["height"] != ao_app->parsed_theme_data["courtroom"]["height"] ||
+        new_parsed_theme_data["courtroom"]["width"] != ao_app->parsed_theme_data["courtroom"]["width"]) {
         set_courtroom_size();
-        qDebug() << "We set courtroom size!"
+        qDebug() << "We set courtroom size!";
       }
       set_widgets();
     }
