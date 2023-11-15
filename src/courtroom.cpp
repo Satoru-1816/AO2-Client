@@ -1606,7 +1606,7 @@ void Courtroom::set_new_size_and_pos(QWidget *p_widget, QString p_identifier, QS
           menuBarHeight = 21;
 
       // Is the menu bar locked? If so, move the widgets a few pixels down to give it space
-      int y_position = ao_app->parsed_theme_data[p_identifier]["y_position"];
+      int y_position = ao_app->parsed_theme_data[p_identifier]["y_position"].toInt();
 
       if (Options::getInstance().menuBarLocked()) {
           // Should the widget be unaffected? If not, we check if it's on the "affect" list.
@@ -1621,12 +1621,15 @@ void Courtroom::set_new_size_and_pos(QWidget *p_widget, QString p_identifier, QS
               y_position += menuBarHeight;
       }
       qDebug() << "X POSITION: " << ao_app->parsed_theme_data[p_identifier]["x_position"];
+      int x = ao_app->parsed_theme_data[p_identifier]["x_position"].toInt();
       qDebug() << "Y POSITION: " << ao_app->parsed_theme_data[p_identifier]["y_position"];
       qDebug() << "WIDTH: " << ao_app->parsed_theme_data[p_identifier]["width"];
+      int width = ao_app->parsed_theme_data[p_identifier]["width"].toInt();
       qDebug() << "HEIGHT: " << ao_app->parsed_theme_data[p_identifier]["height"];
+      int height = ao_app->parsed_theme_data[p_identifier]["height"].toInt();
     
-      p_widget->move(ao_app->parsed_theme_data[p_identifier]["x_position"], y_position);
-      p_widget->resize(ao_app->parsed_theme_data[p_identifier]["width"], ao_app->parsed_theme_data[p_identifier]["height"]);
+      p_widget->move(x, y_position);
+      p_widget->resize(width, height);
   }
 }
 
