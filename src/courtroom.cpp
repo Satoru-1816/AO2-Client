@@ -953,7 +953,7 @@ void Courtroom::set_widgets()
   QString filename = "courtroom_design.ini";
 
   set_fonts();
-  set_new_size_and_pos(ui_viewport, "viewport");
+  set_size_and_pos(ui_viewport, "viewport");
 
   // If there is a point to it, show all CCCC features.
   // We also do this this soon so that set_size_and_pos can hide them all later,
@@ -999,9 +999,6 @@ void Courtroom::set_widgets()
 
   ui_vp_player_char->move_and_center(0, 0);
   ui_vp_player_char->combo_resize(ui_viewport->width(), ui_viewport->height());
-  qDebug() << "ui_viewport x: " << ui_viewport->x();
-  qDebug() << "ui_viewport y: " << ui_viewport->x();
-
 
   ui_vp_crossfade_char->move_and_center(0, 0);
   ui_vp_crossfade_char->combo_resize(ui_viewport->width(), ui_viewport->height());
@@ -1063,8 +1060,6 @@ void Courtroom::set_widgets()
 
   set_size_and_pos(ui_debug_log, "ms_chatlog"); // Old name, still use it to not break compatibility
   ui_debug_log->setFrameShape(QFrame::NoFrame);
-  ui_debug_log->move(50, 50);
-  
 
   set_size_and_pos(ui_server_chatlog, "server_chatlog");
   ui_server_chatlog->setFrameShape(QFrame::NoFrame);
@@ -1095,7 +1090,7 @@ void Courtroom::set_widgets()
   ui_pair_order_dropdown->setToolTip(
       tr("Change the order of appearance for your character."));
 
-  set_new_size_and_pos(ui_pair_button, "pair_button");
+  set_size_and_pos(ui_pair_button, "pair_button");
   ui_pair_button->set_image("pair_button");
   ui_pair_button->setToolTip(
       tr("Display the list of characters to pair with."));
@@ -1561,44 +1556,6 @@ void Courtroom::set_window_title(QString p_title)
 void Courtroom::set_size_and_pos(QWidget *p_widget, QString p_identifier, QString p_misc)
 {
   QString filename = "courtroom_design.ini";
-  pos_size_type design_ini_result =
-      ao_app->get_element_dimensions(p_identifier, filename, p_misc);
-
-  if (design_ini_result.width < 0 || design_ini_result.height < 0) {
-    qWarning() << "could not find" << p_identifier << "in" << filename;
-    p_widget->hide();
-  }
-  else {
-    int menuBarHeight = menu_bar->height();
-    if (menuBarHeight == 19)
-      menuBarHeight = 21;
-    // qDebug() << "Menu bar height: " << menuBarHeight;
-    QSet<QString> unaffected = {"message", "showname", "back_to_lobby", "char_buttons",  // A list of widgets that shouldn't be affected
-                              "char_select_left", "char_select_right", "spectator", "char_password", // by the menu bar repositioning
-                                "char_list", "char_taken", "char_passworded", "char_search",
-                                "left_evidence_icon", "right_evidence_icon", "music_name"};
-    QSet<QString> affect = {"evidence_background", "evidence_button"}; // Relative widgets that SHOULD be affected
-
-    // Is the menu bar locked? If so, move the widgets a few pixels down to give it space
-    int y_position = design_ini_result.y;
-
-    // qDebug() << "Y position 1: " << y_position;
-
-    if (Options::getInstance().menuBarLocked()) { // Trust me, this will get redone
-       // Should the widget be unaffected? If not, we check if it's on the "affect" list. 
-       // If not, we let it pass as long as it doesn't start with "evidence_" (so relative positioning doesn't screw us over)
-       if (!unaffected.contains(p_identifier) && ( affect.contains(p_identifier) || !p_identifier.startsWith("evidence_") ))
-         y_position += menuBarHeight;
-    }
-    p_widget->move(design_ini_result.x, y_position);
-    p_widget->resize(design_ini_result.width, design_ini_result.height);
-    // qDebug() << "Y position 2: " << y_position;
-  }
-}    
-
-void Courtroom::set_new_size_and_pos(QWidget *p_widget, QString p_identifier, QString p_misc)
-{
-  QString filename = "courtroom_design.ini";
 
   if (!ao_app->parsed_theme_data.contains(p_identifier)) {
       qWarning() << "PARSED could not find" << p_identifier << "in" << filename;
@@ -1623,16 +1580,13 @@ void Courtroom::set_new_size_and_pos(QWidget *p_widget, QString p_identifier, QS
           if (!unaffected.contains(p_identifier) && (affect.contains(p_identifier) || !p_identifier.startsWith("evidence_")))
               y_position += menuBarHeight;
       }
-      qDebug() << "X POSITION: " << ao_app->parsed_theme_data[p_identifier]["x_position"];
-      int x = ao_app->parsed_theme_data[p_identifier]["x_position"];
-      qDebug() << "Y POSITION: " << ao_app->parsed_theme_data[p_identifier]["y_position"];
-      qDebug() << "WIDTH: " << ao_app->parsed_theme_data[p_identifier]["width"];
-      int width = ao_app->parsed_theme_data[p_identifier]["width"];
-      qDebug() << "HEIGHT: " << ao_app->parsed_theme_data[p_identifier]["height"];
-      int height = ao_app->parsed_theme_data[p_identifier]["height"];
+      // qDebug() << "X POSITION: " << ao_app->parsed_theme_data[p_identifier]["x_position"];
+      // qDebug() << "Y POSITION: " << ao_app->parsed_theme_data[p_identifier]["y_position"];
+      // qDebug() << "WIDTH: " << ao_app->parsed_theme_data[p_identifier]["width"];
+      // qDebug() << "HEIGHT: " << ao_app->parsed_theme_data[p_identifier]["height"];
     
-      p_widget->move(x, y_position);
-      p_widget->resize(width, height);
+      p_widget->move(ao_app->parsed_theme_data[p_identifier]["x_position"], y_position);
+      p_widget->resize(ao_app->parsed_theme_data[p_identifier]["width"], ao_app->parsed_theme_data[p_identifier]["height"]);
   }
 }
 
