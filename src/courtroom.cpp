@@ -897,8 +897,8 @@ void Courtroom::set_courtroom_size()
     this->setFixedSize(714, 668);
   }
   else {
-    int m_courtroom_width = ao_app->parsed_theme_data[p_identifier]["width"];
-    int m_courtroom_height = ao_app->parsed_theme_data[p_identifier]["height"];
+    m_courtroom_width = ao_app->parsed_theme_data[p_identifier]["width"];
+    m_courtroom_height = ao_app->parsed_theme_data[p_identifier]["height"];
 
     if (Options::getInstance().menuBarLocked()) {
       this->setFixedSize(m_courtroom_width, m_courtroom_height + menu_bar->height());
