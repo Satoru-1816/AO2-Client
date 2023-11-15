@@ -339,6 +339,8 @@ public:
     return ao_app->get_image_suffix(ao_app->get_character_path(charname, "emotions/button" + emotion_number + "_off")); 
   }
 
+  bool update_character_needed(const QString& selectedIni) const;
+
   QString server_overlay = "";
 
   void search_download_file(QString action);
