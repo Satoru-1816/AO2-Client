@@ -934,6 +934,7 @@ public slots:
   void mod_called(QString p_ip);
 
   void on_reload_theme_clicked();
+  void on_update_theme_clicked();
 
   void update_ui_music_name();
 
