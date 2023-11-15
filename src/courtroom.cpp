@@ -2624,6 +2624,7 @@ void Courtroom::log_chatmessage(QString f_message, int f_char_id, QString f_show
     // Grab the char.ini showname
     f_showname = ao_app->get_showname(char_list.at(f_char_id).name);
     f_folder = f_char;
+    qDebug() << "CHAR ICON CHAR: " << f_char;
   }
   // If display name is just whitespace, use the char.ini showname.
   if (f_displayname.trimmed().isEmpty())
@@ -2692,14 +2693,14 @@ void Courtroom::log_chatmessage(QString f_message, int f_char_id, QString f_show
         case DISPLAY_AND_IO:
           log_ic_text(f_char, f_displayname, shout_message, tr("shouts"));
           append_ic_text(shout_message, f_displayname, tr("shouts"),
-                         0, selfname, QDateTime::currentDateTime(), false, f_folder);
+                         0, selfname, QDateTime::currentDateTime(), false);
           break;
         case DISPLAY_ONLY:
         case QUEUED:
           if (!ghost && sender)
             pop_ic_ghost();
           append_ic_text(shout_message, f_displayname, tr("shouts"),
-                         0, selfname, QDateTime::currentDateTime(), ghost, f_folder);
+                         0, selfname, QDateTime::currentDateTime(), ghost);
           break;
       }
     }
@@ -2744,7 +2745,7 @@ void Courtroom::log_chatmessage(QString f_message, int f_char_id, QString f_show
     case DISPLAY_AND_IO:
       log_ic_text(f_showname, f_displayname, f_message, "", f_color, selfname);
       append_ic_text(f_message, f_displayname, "",
-                     f_color, selfname, QDateTime::currentDateTime(), false);
+                     f_color, selfname, QDateTime::currentDateTime(), false, f_folder);
       break;
     case DISPLAY_ONLY:
     case QUEUED:
@@ -3786,16 +3787,16 @@ void Courtroom::append_ic_text(QString p_text, QString p_name, QString p_action,
     ui_ic_chatlog->moveCursor(log_goes_downwards ? QTextCursor::EndOfBlock
                                                  : QTextCursor::StartOfBlock);
   }
-
-  QString charIconPath = ao_app->get_image_suffix(ao_app->get_character_path(p_folder_name, "char_icon"));
-  QString imageHtml = QString("<img src=\"file://%1\">").arg(charIconPath);
-  ui_ic_chatlog->textCursor().insertHtml(imageHtml);
   
   // Only prepend with newline if log goes downwards
   if (log_goes_downwards && need_newline) {
     ui_ic_chatlog->textCursor().insertBlock(format);
   }
 
+  QString charIconPath = ao_app->get_image_suffix(ao_app->get_character_path(p_folder_name, "char_icon"));
+  qDebug() << "charicon path: " << charIconPath;
+  QString imageHtml = QString("<img src=\"file://%1\">").arg(charIconPath);
+  ui_ic_chatlog->textCursor().insertHtml(imageHtml);
 
   // Timestamp if we're doing that meme
   if (log_timestamp) {
