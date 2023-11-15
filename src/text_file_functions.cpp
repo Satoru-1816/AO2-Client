@@ -894,10 +894,10 @@ QHash<QString, QHash<QString, int>> AOApplication::golden_parse_ini(const QStrin
                 QStringList values = parts[1].split(",");
                 if (values.size() == 4) {
                     QHash<QString, int> elementData;
-                    elementData["x_position"] = values[0].trimmed().toInt();
-                    elementData["y_position"] = values[1].trimmed().toInt();
-                    elementData["width"] = values[2].trimmed().toInt();
-                    elementData["height"] = values[3].trimmed().toInt();
+                    elementData["x"] = values[0].trimmed().toInt();
+                    elementData["y"] = values[1].trimmed().toInt();
+                    elementData["w"] = values[2].trimmed().toInt();
+                    elementData["h"] = values[3].trimmed().toInt();
                     result[elementName] = elementData;
                 }
             }
