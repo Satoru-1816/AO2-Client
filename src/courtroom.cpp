@@ -999,6 +999,9 @@ void Courtroom::set_widgets()
 
   ui_vp_player_char->move_and_center(0, 0);
   ui_vp_player_char->combo_resize(ui_viewport->width(), ui_viewport->height());
+  qDebug() << "ui_viewport x: " << ui_viewport->x();
+  qDebug() << "ui_viewport y: " << ui_viewport->x();
+
 
   ui_vp_crossfade_char->move_and_center(0, 0);
   ui_vp_crossfade_char->combo_resize(ui_viewport->width(), ui_viewport->height());
@@ -1599,7 +1602,7 @@ void Courtroom::set_new_size_and_pos(QWidget *p_widget, QString p_identifier, QS
 
   if (!ao_app->parsed_theme_data.contains(p_identifier)) {
       qWarning() << "PARSED could not find" << p_identifier << "in" << filename;
-      p_widget->hide();
+      // p_widget->hide();
   } else {
       int menuBarHeight = menu_bar->height();
       if (menuBarHeight == 19)
