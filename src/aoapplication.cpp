@@ -48,9 +48,12 @@ void AOApplication::construct_lobby()
     qWarning() << "lobby was attempted constructed when it already exists";
     return;
   }
-
+  
   w_lobby = new Lobby(this, net_manager);
   lobby_constructed = true;
+
+  current_theme = get_real_path(get_theme_path("courtroom_design.ini"));
+  parsed_theme_data = golden_parse_ini(current_theme); // We parse all the data as soon as the lobby is constructed
 
   QRect geometry = QGuiApplication::primaryScreen()->geometry();
   int x = (geometry.width() - w_lobby->width()) / 2;
