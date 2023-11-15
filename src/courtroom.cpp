@@ -2623,7 +2623,7 @@ void Courtroom::log_chatmessage(QString f_message, int f_char_id, QString f_show
   if (f_char_id != -1) {
     // Grab the char.ini showname
     f_showname = ao_app->get_showname(char_list.at(f_char_id).name);
-    f_folder = ao_app->get_character_path(char_list.at(f_char_id).name);
+    f_folder = f_char;
   }
   // If display name is just whitespace, use the char.ini showname.
   if (f_displayname.trimmed().isEmpty())
