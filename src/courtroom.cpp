@@ -1092,7 +1092,7 @@ void Courtroom::set_widgets()
   ui_pair_order_dropdown->setToolTip(
       tr("Change the order of appearance for your character."));
 
-  set_new_size_and_pos(ui_pair_button, "pair_button");
+  set_size_and_pos(ui_pair_button, "pair_button");
   ui_pair_button->set_image("pair_button");
   ui_pair_button->setToolTip(
       tr("Display the list of characters to pair with."));
