@@ -887,24 +887,24 @@ void Courtroom::update_audio_volume()
 
 void Courtroom::set_courtroom_size()
 {
-  QString p_identifier = "courtroom";
+  QString filename = "courtroom_design.ini";
+  pos_size_type f_courtroom =
+      ao_app->get_element_dimensions("courtroom", filename);
 
-  if (!ao_app->parsed_theme_data.contains(p_identifier) || 
-     ao_app->parsed_theme_data[p_identifier]["width"] < 0 ||
-     ao_app->parsed_theme_data[p_identifier]["height"] < 0) {
-    qWarning() << "did not find courtroom width or height in courtroom_design.ini";
-  
+  if (f_courtroom.width < 0 || f_courtroom.height < 0) {
+    qWarning() << "did not find courtroom width or height in " << filename;
+
     this->setFixedSize(714, 668);
   }
   else {
-    m_courtroom_width = ao_app->parsed_theme_data[p_identifier]["width"];
-    m_courtroom_height = ao_app->parsed_theme_data[p_identifier]["height"];
+    m_courtroom_width = f_courtroom.width;
+    m_courtroom_height = f_courtroom.height;
 
     if (Options::getInstance().menuBarLocked()) {
-      this->setFixedSize(m_courtroom_width, m_courtroom_height + menu_bar->height());
+      this->setFixedSize(f_courtroom.width, f_courtroom.height + menu_bar->height());
       ui_background->move(0, menu_bar->height());
     } else {
-      this->setFixedSize(m_courtroom_width, m_courtroom_height);
+      this->setFixedSize(f_courtroom.width, f_courtroom.height);
       ui_background->move(0, 0);
     }
   }
