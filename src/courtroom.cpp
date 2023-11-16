@@ -3795,9 +3795,8 @@ void Courtroom::append_ic_text(QString p_text, QString p_name, QString p_action,
 
   if (!ghost) {
     QString charIconPath = ao_app->get_image_suffix(ao_app->get_character_path(m_chatmessage[CHAR_NAME], "char_icon"));
-    QPixmap original_pixmap(charIconPath);
-    QPixmap scaled_pixmap = original_pixmap.scaled(40, 40, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    QString imageHtml = QString("<img src=\"%1\" style=\"float: left;\" width=\"40\" height=\"40\">").arg(scaled_pixmap.toImage());
+    qDebug() << "charicon path: " << charIconPath;
+    QString imageHtml = QString("<img src=\"%1\" style=\"float: left; margin-right: 5px;\" width=\"40\" height=\"40\">").arg(charIconPath);
     ui_ic_chatlog->textCursor().insertHtml(imageHtml);
   }
 
