@@ -3795,16 +3795,17 @@ void Courtroom::append_ic_text(QString p_text, QString p_name, QString p_action,
 
   if (!ghost) {
     QString charIconPath = ao_app->get_image_suffix(ao_app->get_character_path(m_chatmessage[CHAR_NAME], "char_icon"));
+    QPixmap scaled_pixmap;
     if (icon_lookup_cache.contains(charIconPath)) {
-        QPixmap scaled_pixmap = icon_lookup_cache.object(charIconPath);
+        scaled_pixmap = icon_lookup_cache.object(charIconPath);
     } else {
         // Realizar el escalado y almacenar en la caché
         QPixmap original_pixmap(charIconPath);
-        QPixmap scaled_pixmap = original_pixmap.scaled(40, 40, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        scaled_pixmap = original_pixmap.scaled(40, 40, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         icon_lookup_cache.insert(charIconPath, scaled_pixmap);
     }
-      QString imageHtml = QString("<img src=\"%1\" style=\"float: left;\" width=\"40\" height=\"40\">").arg(scaled_pixmap.toImage());
-      ui_ic_chatlog->textCursor().insertHtml(imageHtml);
+    QString imageHtml = QString("<img src=\"%1\" style=\"float: left;\" width=\"40\" height=\"40\">").arg(scaled_pixmap.toImage());
+    ui_ic_chatlog->textCursor().insertHtml(imageHtml);
   }
 
   // Timestamp if we're doing that meme
