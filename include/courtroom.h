@@ -631,6 +631,9 @@ private:
   QVector<bool> color_markdown_talking_list;
   // Text Color-related optimization END
 
+  // Cache stuff
+  QCache<QString, QPixmap> icon_lookup_cache;
+
   // List of all currently available pos
   QStringList pos_dropdown_list;
 
