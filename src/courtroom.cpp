@@ -3796,9 +3796,8 @@ void Courtroom::append_ic_text(QString p_text, QString p_name, QString p_action,
   if (!ghost) {
     QString charIconPath = ao_app->get_image_suffix(ao_app->get_character_path(m_chatmessage[CHAR_NAME], "char_icon"));
     qDebug() << "charicon path: " << charIconPath;
-    QString imageHtml = QString("<img src=\"%1\" style=\"float: left;\" width=\"40\" height=\"40\">
-                                <img src=\"%2\" style=\"float: left;\" width=\"7\" height=\"40\">").arg(charIconPath)
-                                                                                                   .arg(":/resource/ui/lobby_assets/blank.png"); // I have no regrets
+    QString imageHtml = QString("<img src=\"%1\" style=\"float: left;\" width=\"40\" height=\"40\"/><img src=\"%2\" style=\"float: left;\" width=\"7\" height=\"40\">")
+                                .arg(charIconPath).arg(":/resource/ui/lobby_assets/blank.png"); // I have no regrets
     ui_ic_chatlog->textCursor().insertHtml(imageHtml);
   }
   // Timestamp if we're doing that meme
