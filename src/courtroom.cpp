@@ -3803,7 +3803,7 @@ void Courtroom::append_ic_text(QString p_text, QString p_name, QString p_action,
         QPixmap scaled_pixmap = original_pixmap.scaled(40, 40, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         icon_lookup_cache.insert(charIconPath, scaled_pixmap);
     }
-      QString imageHtml = QString("<img src=\"%1\" style=\"float: left;\" width=\"40\" height=\"40\">").arg(scaledPixmap.toImage());
+      QString imageHtml = QString("<img src=\"%1\" style=\"float: left;\" width=\"40\" height=\"40\">").arg(scaled_pixmap.toImage());
       ui_ic_chatlog->textCursor().insertHtml(imageHtml);
   }
 
