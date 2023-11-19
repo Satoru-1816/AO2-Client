@@ -5863,7 +5863,7 @@ void Courtroom::typing_signal(int signal)
               QLabel* charIcon = charIcons[i];
               QLabel* pencilIcon = pencilIcons[i];
       
-              if (charIcon->pixmap() == char_icon_pixmap) {
+              if (*charIcon->pixmap() == char_icon_pixmap) {
                   charIcon->hide();
                   pencilIcon->hide();
                   break;
