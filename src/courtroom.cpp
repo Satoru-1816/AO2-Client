@@ -65,16 +65,11 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
 
   ui_vp_char_icon_3 = new QLabel(ui_viewport);
   ui_vp_char_icon_3->setObjectName("ui_vp_char_icon_3");
-
-  ui_vp_pencil;
-  ui_vp_pencil_2;
-  ui_vp_pencil_3;
   
   QString pencil_path = ao_app->get_real_path(ao_app->get_misc_path("default", "pencil.png"));
-  
-  createPincels(ui_vp_pencil, ui_viewport, "ui_vp_pencil", pencil_path, 30, 30);
-  createPincels(ui_vp_pencil_2, ui_viewport, "ui_vp_pencil_2", pencil_path, 30, 30);
-  createPincels(ui_vp_pencil_3, ui_viewport, "ui_vp_pencil_3", pencil_path, 30, 30);
+  createPencils(ui_vp_pencil, ui_viewport, "ui_vp_pencil", pencil_path, 30, 30);
+  createPencils(ui_vp_pencil_2, ui_viewport, "ui_vp_pencil_2", pencil_path, 30, 30);
+  createPencils(ui_vp_pencil_3, ui_viewport, "ui_vp_pencil_3", pencil_path, 30, 30);
 
   ui_vp_background = new BackgroundLayer(ui_viewport, ao_app);
   ui_vp_background->setObjectName("ui_vp_background");
@@ -6511,11 +6506,11 @@ void Courtroom::on_switch_area_music_clicked()
 
 }
 
-void Courtroom::createPincels(QLabel*& label, QWidget* parent, const QString& objectName, const QString& imagePath, int width, int height) 
+void Courtroom::createPencils(QLabel*& label, QWidget* parent, const QString& objectName, const QString& imagePath, int width, int height) 
 {
     label = new QLabel(parent);
     label->setObjectName(objectName);
-    QPixmap pixmap(ao_app->get_real_path(imagePath));
+    QPixmap pixmap(imagePath);
     label->setPixmap(pixmap.scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     label->setFixedSize(width, height);
     label->hide();
