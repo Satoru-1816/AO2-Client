@@ -60,13 +60,21 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   ui_vp_char_icon = new QLabel(ui_viewport);
   ui_vp_char_icon->setObjectName("ui_vp_char_icon");
 
-  ui_vp_pencil = new QLabel (ui_viewport);
-  ui_vp_pencil->setObjectName("ui_vp_pencil");
+  ui_vp_char_icon_2 = new QLabel(ui_viewport);
+  ui_vp_char_icon_2->setObjectName("ui_vp_char_icon_2");
+
+  ui_vp_char_icon_3 = new QLabel(ui_viewport);
+  ui_vp_char_icon_3->setObjectName("ui_vp_char_icon_3");
+
+  ui_vp_pencil;
+  ui_vp_pencil_2;
+  ui_vp_pencil_3;
+  
   QString pencil_path = ao_app->get_real_path(ao_app->get_misc_path("default", "pencil.png"));
-  QPixmap pencil_pixmap(pencil_path);
-  ui_vp_pencil->setPixmap(pencil_pixmap.scaled(30, 30, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-  ui_vp_pencil->setFixedSize(30, 30);
-  ui_vp_pencil->hide();
+  
+  createPincels(ui_vp_pencil, ui_viewport, "ui_vp_pencil", pencil_path, 30, 30);
+  createPincels(ui_vp_pencil_2, ui_viewport, "ui_vp_pencil_2", pencil_path, 30, 30);
+  createPincels(ui_vp_pencil_3, ui_viewport, "ui_vp_pencil_3", pencil_path, 30, 30);
 
   ui_vp_background = new BackgroundLayer(ui_viewport, ao_app);
   ui_vp_background->setObjectName("ui_vp_background");
@@ -987,9 +995,13 @@ void Courtroom::set_widgets()
 
   ui_vp_char_icon->move(3, 3);
   ui_vp_pencil->move(26, 20);
+
   // ui_vp_pencil->move(45, 3);
 
-
+  ui_vp_char_icon_2->move(ui_vp_char_icon->x() + 50, ui_vp_char_icon->y()); 
+  ui_vp_char_icon_3->move(ui_vp_char_icon->x() + 100, ui_vp_char_icon->y());
+  ui_vp_pencil_2->move(ui_vp_pencil->x() + 50, ui_vp_pencil->y());
+  ui_vp_pencil_3->move(ui_vp_pencil->x() + 100, ui_vp_pencil->y());
 
   ui_vp_background->move_and_center(0, 0);
   ui_vp_background->combo_resize(ui_viewport->width(), ui_viewport->height());
@@ -5820,20 +5832,45 @@ void Courtroom::onTypingTimeout()
 
 void Courtroom::typing_signal(int signal)
 {
-  if (!Options::getInstance().hideTyping()) {
-    QPixmap char_icon_pixmap(current_icon_path);
-    if (signal == 1) {
-      ui_vp_char_icon->setPixmap(char_icon_pixmap.scaled(40, 40, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-      ui_vp_char_icon->setFixedSize(40, 40);
-      ui_vp_char_icon->show();
-      ui_vp_pencil->show();
-      typingTimer->start();
-    } else {
-      typingTimer->stop();
-      ui_vp_char_icon->hide();
-      ui_vp_pencil->hide();
-    }    
-  }
+    // Lists holding character icons and pencil icons
+    QList<QLabel*> charIcons = { ui_vp_char_icon, ui_vp_char_icon_2, ui_vp_char_icon_3 };
+    QList<QLabel*> pencilIcons = { ui_vp_pencil, ui_vp_pencil_2, ui_vp_pencil_3 };
+
+    if (!Options::getInstance().hideTyping()) {
+        // Load the current character icon pixmap
+        QPixmap char_icon_pixmap(current_icon_path);
+
+        // Check the signal value (show/hide)
+        if (signal == 1) {
+            for (int i = 0; i < charIcons.size(); ++i) {
+                QLabel* charIcon = charIcons[i];
+                QLabel* pencilIcon = pencilIcons[i];
+        
+                if (charIcon->isVisible()) {
+                    charIcons[(i + 1) % charIcons.size()]->setPixmap(char_icon_pixmap.scaled(40, 40, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                    charIcons[(i + 1) % charIcons.size()]->setFixedSize(40, 40);
+                    charIcons[(i + 1) % charIcons.size()]->show();
+                    pencilIcons[(i + 1) % pencilIcons.size()]->show();
+        
+                    typingTimer->stop();
+                    break;
+                }
+            }
+        } else {
+          typingTimer->stop();
+
+          for (int i = 0; i < charIcons.size(); ++i) {
+              QLabel* charIcon = charIcons[i];
+              QLabel* pencilIcon = pencilIcons[i];
+      
+              if (charIcon->pixmap() == char_icon_pixmap) {
+                  charIcon->hide();
+                  pencilIcon->hide();
+                  break;
+              }
+          }
+       }
+    }
 }
 
 void Courtroom::on_objection_clicked()
@@ -6473,6 +6510,17 @@ void Courtroom::on_switch_area_music_clicked()
   on_music_search_edited(ui_music_search->text());
 
 }
+
+void Courtroom::createPincels(QLabel*& label, QWidget* parent, const QString& objectName, const QString& imagePath, int width, int height) 
+{
+    label = new QLabel(parent);
+    label->setObjectName(objectName);
+    QPixmap pixmap(ao_app->get_real_path(imagePath));
+    label->setPixmap(pixmap.scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    label->setFixedSize(width, height);
+    label->hide();
+}
+
 
 void Courtroom::ping_server()
 {
