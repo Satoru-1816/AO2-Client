@@ -364,7 +364,7 @@ public:
 
   void default_autocompleter_load();
 
-  void createPincels(QLabel*& label, QWidget* parent, const QString& objectName, const QString& imagePath, int width, int height);
+  void createPencils(QLabel*& label, QWidget* parent, const QString& objectName, const QString& imagePath, int width, int height);
 
   void handle_clock(QString time);
 
