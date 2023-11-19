@@ -724,7 +724,11 @@ private:
   QWidget *ui_viewport;
   QLabel *ui_vp_void;
   QLabel *ui_vp_char_icon;
+  QLabel *ui_vp_char_icon_2;
+  QLabel *ui_vp_char_icon_3;
   QLabel *ui_vp_pencil;
+  QLabel *ui_vp_pencil_2;
+  QLabel *ui_vp_pencil_3;
   BackgroundLayer *ui_vp_background;
   SplashLayer *ui_vp_speedlines;
   CharLayer *ui_vp_player_char;
