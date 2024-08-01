@@ -328,6 +328,8 @@ public:
   void setCallwords_WholeWord(bool value);
   bool callwords_CaseSensitive() const;
   void setCallwords_CaseSensitive(bool value);
+  void callwords_SystemNotification() const;
+  void setCallwords_SystemNotification(bool value);
 
   // Filtered words get censored by the replaced character
   QStringList filteredWords() const;
