@@ -2122,7 +2122,9 @@ void Courtroom::append_server_chatmessage(QString p_name, QString p_message,
 
   if (scan_for_callwords(p_message) && !isActiveWindow()) {
     ao_app->alert(this);
-    show_notification(1, p_name, p_message);
+    if (Options::getInstance().callwords_SystemNotification()) {
+      show_notification(1, p_name, p_message);
+    }
   }
 
   if (Options::getInstance().logToTextFileEnabled() && !ao_app->log_filename.isEmpty()) {
