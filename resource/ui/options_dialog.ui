@@ -993,6 +993,16 @@ Double click the items to download them!</string>
               </item>
              </layout>
             </item>
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QCheckBox" name="callwords_notification_cb">
+              <property name="toolTip">
+               <string>Whether or not callwords will use your OS system tray.</string>
+              </property>
+              <property name="text">
+               <string>System Notification</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
