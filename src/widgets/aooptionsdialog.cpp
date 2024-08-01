@@ -533,6 +533,7 @@ void AOOptionsDialog::setupUI()
   FROM_UI(QPlainTextEdit, callwords_textbox)
   FROM_UI(QRadioButton, callwords_whole_word)
   FROM_UI(QRadioButton, callwords_case_sensitive)
+  FROM_UI(QCheckBox, callwords_notification_cb)
 
   registerOption<QPlainTextEdit, QStringList>("callwords_textbox", 
                                   &Options::callwords, 
@@ -543,6 +544,9 @@ void AOOptionsDialog::setupUI()
   registerOption<QRadioButton, bool>("callwords_case_sensitive",
                                   &Options::callwords_CaseSensitive,
                                   &Options::setCallwords_CaseSensitive);
+  registerOption<QRadioButton, bool>("callwords_notification_cb",
+                                  &Options::callwords_SystemNotification,
+                                  &Options::setCallwords_SystemNotification);
 
   if (Options::getInstance().callwords_WholeWord()) {
     ui_callwords_whole_word->setChecked(true);
@@ -550,6 +554,10 @@ void AOOptionsDialog::setupUI()
   
   if (Options::getInstance().callwords_CaseSensitive()) {
     ui_callwords_case_sensitive->setChecked(true);
+  }
+
+  if (Options::getInstance().callwords_SystemNotification()) {
+    ui_callwords_notification_cb->setChecked(true);
   }
 
   FROM_UI(QPlainTextEdit, blacklist_textbox)
