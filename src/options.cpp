@@ -722,6 +722,16 @@ void Options::setCallwords_CaseSensitive(bool value)
   config.setValue("callwords_case_sensitive", value);
 }
 
+bool Options::callwords_SystemNotification() const
+{
+  return config.value("callwords_notification", true).toBool();
+}
+
+void Options::setCallwords_SystemNotification(bool value)
+{
+  config.setValue("callwords_notification", value);
+}
+
 QStringList Options::filteredWords() const
 {
   QStringList l_filtered_words =
