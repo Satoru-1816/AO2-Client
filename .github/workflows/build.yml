@@ -8,19 +8,10 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
 
-      - name: Install vcpkg
-        run: |
-          git clone https://github.com/microsoft/vcpkg.git
-          ./vcpkg/bootstrap-vcpkg.bat
-
-      - name: Install Catch2
-        run: |
-          ./vcpkg/vcpkg install catch2
-      
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -29,27 +20,10 @@ jobs:
           arch: win64_msvc2019_64
           cache: true
           cache-key-prefix: qt-windows-5.15.2
-
-      - name: Clone QtApng
-        uses: actions/checkout@master
-        with:
-          repository: Skycoder42/QtApng
-          path: "QtApng"
+          modules: 'qtimageformats qtwebsockets'
 
       - name: Configure MSVC (Windows)
         uses: ilammy/msvc-dev-cmd@v1
-
-      - name: Build and deploy QtApng
-        run: |
-          cd QtApng/src/3rdparty
-          chmod +x get_libs.sh
-          ./get_libs.sh 1.3.1 1.6.40
-          cd ../..
-          qmake CONFIG+=install_ok QMAKE_CXXFLAGS+="-fno-sized-deallocation"
-          nmake
-          cd ..
-          mkdir ./bin/imageformats
-          cp ./QtApng/plugins/imageformats/qapng.dll ./bin/imageformats/qapng.dll
 
       - name: Install Windows Discord RPC
         shell: bash
@@ -69,44 +43,37 @@ jobs:
           cp ./bass/c/x64/bass.lib ./lib/
           cp ./bass/x64/bass.dll ./bin/
 
-          curl http://www.un4seen.com/files/bassmidi24.zip -o bassmidi.zip
-          unzip -d bass -o bassmidi.zip
-          cp ./bass/c/bassmidi.h ./lib
-          cp ./bass/c/x64/bassmidi.lib ./lib/
-          cp ./bass/x64/bassmidi.dll ./bin/
-
           curl http://www.un4seen.com/files/bassopus24.zip -o bassopus.zip
           unzip -d bass -o bassopus.zip
           cp ./bass/c/bassopus.h ./lib
           cp ./bass/c/x64/bassopus.lib ./lib/
           cp ./bass/x64/bassopus.dll ./bin/
 
-      - name: Set reusable strings
-        id: strings
-        shell: bash
-        run: |
-          echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+      - name: Clone Apng plugin
+        uses: actions/checkout@v3
+        with:
+          repository: jurplel/QtApng
+          path: ./qtapng
 
-      - name: Configure CMake
-        run: >
-          cmake -B ${{ steps.strings.outputs.build-output-dir }}
-          -DCMAKE_CXX_COMPILER=cl
-          -DCMAKE_C_COMPILER=cl
-          -DCMAKE_BUILD_TYPE=Release
-          -S ${{ github.workspace }}
-          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+      - name: Build Apng plugin
+        run: |
+          cd ./qtapng
+          qmake
+          nmake
 
       - name: Build
-        run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config Release
+        run: |
+          cmake . -D CMAKE_BUILD_TYPE=Release
+          cmake --build . --config Release
 
       - name: Deploy Windows
         working-directory: ${{github.workspace}}/bin/
         shell: bash
         run: |
-          windeployqt --no-quick-import --no-translations --no-virtualkeyboard --no-compiler-runtime --no-webkit2 --no-opengl-sw ./Attorney_Online.exe
+          windeployqt --no-quick-import --no-translations --no-compiler-runtime --no-opengl-sw ./Attorney_Online.exe
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3
         with:
           name: Attorney_Online-Windows
           path: ${{github.workspace}}/bin
