@@ -544,7 +544,7 @@ void AOOptionsDialog::setupUI()
   registerOption<QRadioButton, bool>("callwords_case_sensitive",
                                   &Options::callwords_CaseSensitive,
                                   &Options::setCallwords_CaseSensitive);
-  registerOption<QRadioButton, bool>("callwords_notification_cb",
+  registerOption<QCheckBox, bool>("callwords_notification_cb",
                                   &Options::callwords_SystemNotification,
                                   &Options::setCallwords_SystemNotification);
 
