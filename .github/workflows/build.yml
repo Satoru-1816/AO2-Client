@@ -94,6 +94,7 @@ jobs:
           -DCMAKE_C_COMPILER=cl
           -DCMAKE_BUILD_TYPE=Release
           -S ${{ github.workspace }}
+          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
 
       - name: Build
         run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config Release
