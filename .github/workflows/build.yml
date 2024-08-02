@@ -119,7 +119,6 @@ jobs:
           rm ./Qt5Svg.dll
           rm -r iconengines
           rm -r bearer
-          rm -r styles
           rm -r base
 
       - name: Upload Artifact
