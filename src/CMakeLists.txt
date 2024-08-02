@@ -2,7 +2,6 @@ target_sources(Attorney_Online PRIVATE
 aoapplication.cpp
 aoblipplayer.cpp
 aobutton.cpp
-aocaseannouncerdialog.cpp
 aocharbutton.cpp
 aoclocklabel.cpp
 aoemotebutton.cpp
