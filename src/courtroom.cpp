@@ -568,7 +568,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   RoleplayMenu->addAction(action_gm_screen);      //
 
   // QMenu* QSwapOptions = QSwappingMenu->addMenu("Options");  // For RC2
-  QSwappingMenu->addAction(action_load_set);
+  QSwappingMenu->addAction(action_load_set); 
   QSwappingMenu->addSeparator();                 //  SWAPPING TAB
 
   ShortcutsMenu = CommandsMenu->addMenu("Default OOC shortcuts");
