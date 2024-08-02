@@ -99,7 +99,7 @@ private:
   QCheckBox *ui_callwords_char_textbox;
   QRadioButton *ui_callwords_whole_word;
   QRadioButton *ui_callwords_case_sensitive;
-  QRadioButton *ui_callwords_notification_cb;
+  QCheckBox *ui_callwords_notification_cb;
 
   QPlainTextEdit *ui_blacklist_textbox;
   QRadioButton *ui_blacklist_whole_word;
