@@ -2,6 +2,7 @@
 #define EMOTE_MENU_FILTER_H
 
 #include "aoemotebutton.h"
+#include "courtroom.h"
 #include <QDialog>
 #include <QListWidget>
 #include <QLineEdit>
@@ -16,7 +17,7 @@ class EmoteMenuFilter : public QDialog
     Q_OBJECT
 
 public:
-    EmoteMenuFilter(QDialog *parent = nullptr, AOApplication *p_ao_app = nullptr);
+    EmoteMenuFilter(QDialog *parent = nullptr, AOApplication *p_ao_app = nullptr, Courtroom *p_courtroom = nullptr);
     ~EmoteMenuFilter();
 
 private slots:
@@ -30,6 +31,7 @@ private:
     void loadButtons();
 
     AOApplication *ao_app;
+    Courtroom *courtroom;
     QListWidget *categoryList;
     QLineEdit *searchBox;
     QScrollArea *scrollArea;
