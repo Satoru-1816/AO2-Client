@@ -11,6 +11,7 @@
 #include <QGridLayout>
 
 class AOApplication;
+class Courtroom;
 
 class EmoteMenuFilter : public QDialog
 {
