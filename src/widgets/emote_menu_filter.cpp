@@ -101,7 +101,8 @@ void EmoteMenuFilter::loadButtons() {
         spriteButton->set_image(emotePath, "");
 
         spriteButtons.append(spriteButton);
-        
+		spriteButton->setContextMenuPolicy(Qt::CustomContextMenu);
+		
         connect(spriteButton, &AOEmoteButton::customContextMenuRequested, [this, spriteButton](const QPoint &pos) {
             QMenu menu;
             QAction *addTagsAction = menu.addAction("Add Tags...");
