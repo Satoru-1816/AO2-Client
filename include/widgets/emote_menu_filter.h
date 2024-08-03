@@ -42,6 +42,7 @@ private:
     QLineEdit *searchBox;
     QScrollArea *scrollArea;
     QWidget *buttonContainer;
+    QWidget *containerWidget;
     QGridLayout *gridLayout;
     QPushButton *addCategoryButton;
     QPushButton *removeCategoryButton;

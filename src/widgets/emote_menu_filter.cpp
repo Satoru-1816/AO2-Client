@@ -27,7 +27,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     categoryList->addItem("Default Emotes");
     categoryList->addItem("Favorites");
 
-    QWidget *containerWidget = new QWidget();
+    containerWidget = new QWidget(this);
     containerWidget->setLayout(gridLayout);
     
     scrollArea->setWidget(containerWidget);
