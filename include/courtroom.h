@@ -13,6 +13,7 @@
 #include "aolayer.h"
 #include "aomusicplayer.h"
 #include "widgets/aooptionsdialog.h"
+#include "widgets/emote_menu_filter.h"
 #include "aopacket.h"
 #include "aosfxplayer.h"
 #include "aotextarea.h"
@@ -720,6 +721,7 @@ private:
   QMenuBar* menu_bar;
   QPropertyAnimation* menu_animation;
 
+  QAction* action_open_emote_filter_menu;
   QAction* action_hide;
   QAction* action_narrator;
   QAction* action_disable_url_sharing;

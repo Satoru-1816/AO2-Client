@@ -490,6 +490,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   action_open_dl_manager->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
 
   // Character tab
+  action_open_emote_filter_menu = new QAction("Emote Filter Menu", this);
   action_hide = new QAction("Hide", this);
   action_narrator = new QAction("Narrate", this);
   QAction* action_set_dl = new QAction("Set Download Link", this);
@@ -582,6 +583,11 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   connect(action_settings, &QAction::triggered, this, &Courtroom::on_settings_clicked);
   connect(action_return_lobby, &QAction::triggered, this, &Courtroom::on_return_to_lobby_clicked);
 
+  connect(action_open_emote_filter_menu, &QAction::triggered, this, [this]() { 
+		EmoteMenuFilter *emoteFilterMenu = new EmoteMenuFilter(this, ao_app);
+		emoteFilterMenu->show();
+  	}
+  );
   connect(action_preanim, &QAction::triggered, this, &Courtroom::on_pre_clicked);
   connect(action_flip, &QAction::triggered, this, &Courtroom::on_flip_clicked);
   connect(action_additive, &QAction::triggered, this, &Courtroom::on_additive_clicked);
