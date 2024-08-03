@@ -29,8 +29,12 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
 
     QWidget *containerWidget = new QWidget();
     containerWidget->setLayout(gridLayout);
+    
     scrollArea->setWidget(containerWidget);
     scrollArea->setWidgetResizable(true);
+	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
     
     loadButtons();
 
@@ -107,7 +111,7 @@ void EmoteMenuFilter::loadButtons() {
 
 void EmoteMenuFilter::arrangeButtons() {
     int buttonSize = 40;
-    int containerWidth = scrollArea->width() - 80;
+    int containerWidth = scrollArea->viewport()->width();
     int columns = containerWidth / buttonSize;
 
     if (columns == 0) columns = 1;
@@ -129,6 +133,14 @@ void EmoteMenuFilter::arrangeButtons() {
             row++;
         }
     }
+    
+    int totalHeight = (row + 1) * buttonSize;
+    containerWidget->setMinimumSize(containerWidth, totalHeight);
+
+    containerWidget->adjustSize();
+
+    scrollArea->setWidget(containerWidget);
+    scrollArea->setWidgetResizable(true);
 }
 
 
