@@ -1,6 +1,7 @@
 #include "widgets/emote_menu_filter.h"
 #include "aoemotebutton.h"
 #include "aoapplication.h"
+#include "courtroom.h"
 #include <QVBoxLayout>
 #include <QInputDialog>
 #include <QMessageBox>
@@ -24,6 +25,13 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app)
     categoryList->addItem("Default Emotes");
     categoryList->addItem("Favorites");
 
+    QWidget *containerWidget = new QWidget();
+    containerWidget->setLayout(gridLayout);
+    scrollArea->setWidget(containerWidget);
+    scrollArea->setWidgetResizable(true);
+    
+    loadButtons();
+
     // connect(categoryList, &QListWidget::currentTextChanged, this, &EmoteMenuFilter::onCategoryChanged);
     connect(addCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::addCategory);
     connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
@@ -33,7 +41,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app)
 
 void EmoteMenuFilter::setupLayout()
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this); // maybe change this to something else?
     mainLayout->addWidget(searchBox);
     mainLayout->addWidget(categoryList);
     mainLayout->addWidget(scrollArea);
@@ -60,6 +68,35 @@ void EmoteMenuFilter::removeCategory()
         delete item;
     } else {
         QMessageBox::warning(this, tr("Remove Category"), tr("No category selected"));
+    }
+}
+
+void EmoteMenuFilter::loadButtons()
+{
+    int total_emotes = ao_app->get_emote_number(current_char);
+
+    // Button size (width and height)
+    int buttonSize = 40;
+    int containerWidth = scrollArea->width();
+    int columns = containerWidth / buttonSize;
+
+    if (columns == 0) columns = 1; // Make sure there's at least one column
+
+    int row = 0, col = 0;
+    for (int n = 0; n < total_emotes; ++n) {
+        QString emotePath = ao_app->get_image_suffix(ao_app->get_character_path(
+            current_char, "emotions/button" + QString::number(n + 1) + "_off"));
+        
+        AOEmoteButton *spriteButton = new AOEmoteButton(this, ao_app, 0, 0, buttonSize, buttonSize);
+        spriteButton->set_image(emotePath, "");
+
+        gridLayout->addWidget(spriteButton, row, col);
+
+        col++;
+        if (col >= columns) {
+            col = 0;
+            row++;
+        }
     }
 }
 

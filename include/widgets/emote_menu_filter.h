@@ -27,6 +27,7 @@ private slots:
 
 private:
     void setupLayout();
+    void loadButtons();
 
     AOApplication *ao_app;
     QListWidget *categoryList;
