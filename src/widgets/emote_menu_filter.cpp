@@ -6,46 +6,47 @@
 #include <QMessageBox>
 
 EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app)
-    : QDialog(parent), ao_app(p_ao_app), emote_filter_ui(new Ui::EmoteMenuFilter)
+    : QDialog(parent), ao_app(p_ao_app)
 {
-    emote_filter_ui->setupUi(this);
-
     categoryList = new QListWidget(this);
-    categoryList->addItem("Default Emotes");
-    categoryList->addItem("Favorites");
-    
     searchBox = new QLineEdit(this);
     scrollArea = new QScrollArea(this);
     buttonContainer = new QWidget(this);
     gridLayout = new QGridLayout(buttonContainer);
-    addCategory = new QPushButton("Add Category", this);
-    removeCategory = new QPushButton("Remove Category", this);
+    addCategoryButton = new QPushButton("Add Category", this);
+    removeCategoryButton = new QPushButton("Remove Category", this);
 
     scrollArea->setWidget(buttonContainer);
     scrollArea->setWidgetResizable(true);
 
+    setupLayout();
+
+    categoryList->addItem("Default Emotes");
+    categoryList->addItem("Favorites");
+
+    // connect(categoryList, &QListWidget::currentTextChanged, this, &EmoteMenuFilter::onCategoryChanged);
+    connect(addCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::addCategory);
+    connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
+    // connect(searchBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
+
+    // Cargar sprites en "Default Emotes"
+    loadDefaultEmotes();
+}
+
+void EmoteMenuFilter::setupLayout()
+{
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(searchBox);
     mainLayout->addWidget(categoryList);
     mainLayout->addWidget(scrollArea);
-    mainLayout->addWidget(addCategory);
-    mainLayout->addWidget(removeCategory);
+    mainLayout->addWidget(addCategoryButton);
+    mainLayout->addWidget(removeCategoryButton);
     setLayout(mainLayout);
-
-    // connect(categoryList, &QListWidget::currentTextChanged, this, &EmoteMenuFilter::onCategoryChanged);
-    connect(addCategory, &QPushButton::clicked, this, &EmoteMenuFilter::addCategory);
-    connect(removeCategory, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
-    // connect(searchBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
-}
-
-EmoteMenuFilter::~EmoteMenuFilter()
-{
-    delete emote_filter_ui;
 }
 
 void EmoteMenuFilter::onCategoryChanged()
 {
-    return;
+	return;
 }
 
 void EmoteMenuFilter::addCategory()

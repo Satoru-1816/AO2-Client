@@ -2,7 +2,6 @@
 #define EMOTE_MENU_FILTER_H
 
 #include "aoemotebutton.h"
-
 #include <QDialog>
 #include <QListWidget>
 #include <QLineEdit>
@@ -11,10 +10,6 @@
 #include <QGridLayout>
 
 class AOApplication;
-
-QT_BEGIN_NAMESPACE
-namespace Ui { class EmoteMenuFilter; }
-QT_END_NAMESPACE
 
 class EmoteMenuFilter : public QDialog
 {
@@ -27,18 +22,20 @@ public:
 private slots:
     void onCategoryChanged();
     void onSearchTextChanged(const QString &text);
+    void addCategory();
+    void removeCategory();
 
 private:
-	AOApplication *ao_app;
-    Ui::EmoteMenuFilter *emote_filter_ui;
+    void setupLayout();
+
+    AOApplication *ao_app;
     QListWidget *categoryList;
     QLineEdit *searchBox;
     QScrollArea *scrollArea;
     QWidget *buttonContainer;
     QGridLayout *gridLayout;
-    QPushButton *addCategory;
-    QPushButton *removeCategory;
-
+    QPushButton *addCategoryButton;
+    QPushButton *removeCategoryButton;
 };
 
 #endif // EMOTE_MENU_FILTER_H
