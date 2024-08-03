@@ -29,8 +29,6 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app)
     connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
     // connect(searchBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
 
-    // Cargar sprites en "Default Emotes"
-    loadDefaultEmotes();
 }
 
 void EmoteMenuFilter::setupLayout()
