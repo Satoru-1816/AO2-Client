@@ -73,14 +73,24 @@ void EmoteMenuFilter::removeCategory()
     }
 }
 
+
+void EmoteMenuFilter::resizeEvent(QResizeEvent *event) {
+    QDialog::resizeEvent(event);
+    if (gridLayout) {
+        arrangeButtons();
+    } else {
+        qWarning() << "GridLayout not yet initialized.";
+    }
+}
+
 void EmoteMenuFilter::loadButtons() {
     int total_emotes = ao_app->get_emote_number(courtroom->get_current_char());
 
     // Button size (width and height)
     int buttonSize = 40;
     
-    qDeleteAll(spriteButtons);
-    spriteButtons.clear();
+    // qDeleteAll(spriteButtons);
+    // spriteButtons.clear();
 
     for (int n = 0; n < total_emotes; ++n) {
         QString emotePath = ao_app->get_image_suffix(ao_app->get_character_path(
@@ -105,10 +115,10 @@ void EmoteMenuFilter::arrangeButtons() {
     int row = 0, col = 0;
 
     // Clear the layout
-    while (QLayoutItem* item = gridLayout->takeAt(0)) {
-        delete item->widget();
-        delete item;
-    }
+    // while (QLayoutItem* item = gridLayout->takeAt(0)) {
+    //     delete item->widget();
+    //     delete item;
+    // }
 
     for (AOEmoteButton *spriteButton : qAsConst(spriteButtons)) {
         gridLayout->addWidget(spriteButton, row, col);
@@ -121,11 +131,6 @@ void EmoteMenuFilter::arrangeButtons() {
     }
 }
 
-
-void EmoteMenuFilter::resizeEvent(QResizeEvent *event) {
-    QDialog::resizeEvent(event);
-    arrangeButtons();
-}
 
 EmoteMenuFilter::~EmoteMenuFilter()
 {
