@@ -544,14 +544,15 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   MainMenu->addAction(action_settings);        //
   MainMenu->addAction(action_return_lobby);   //
 
-  CharacterMenu->addAction(action_hide);              //
-  CharacterMenu->addAction(action_narrator);         //
-  CharacterMenu->addSeparator();                    //
-  CharacterMenu->addAction(action_preanim);        //  CHARACTER TAB
-  CharacterMenu->addAction(action_flip);          //
-  CharacterMenu->addAction(action_additive);     //  
-  CharacterMenu->addAction(action_immediate);   //
-  CharacterMenu->addAction(action_shownames);  //
+  CharacterMenu->addAction(action_open_emote_filter_menu); //
+  CharacterMenu->addAction(action_hide);                  //
+  CharacterMenu->addAction(action_narrator);             //
+  CharacterMenu->addSeparator();                        //
+  CharacterMenu->addAction(action_preanim);            //  CHARACTER TAB
+  CharacterMenu->addAction(action_flip);              //
+  CharacterMenu->addAction(action_additive);         //  
+  CharacterMenu->addAction(action_immediate);       //
+  CharacterMenu->addAction(action_shownames);      //
   CharacterMenu->addSeparator();
   QMenu* DLMenu = CharacterMenu->addMenu("Download.ini");
 
