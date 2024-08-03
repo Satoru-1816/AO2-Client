@@ -32,10 +32,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     
     scrollArea->setWidget(containerWidget);
     scrollArea->setWidgetResizable(true);
-	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-    
     loadButtons();
 
     // connect(categoryList, &QListWidget::currentTextChanged, this, &EmoteMenuFilter::onCategoryChanged);
