@@ -6,7 +6,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 
-EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app)
+EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Courtroom *p_courtroom)
     : QDialog(parent), ao_app(p_ao_app), courtroom(p_courtroom)
 {
     categoryList = new QListWidget(this);
