@@ -163,6 +163,16 @@ QStringList EmoteMenuFilter::getCategoryList() const {
     return categories;
 }
 
+void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
+    QStringList categories = getCategoryList();
+    TagDialog dialog(categories, this);
+    if (dialog.exec() == QDialog::Accepted) {
+        QStringList selectedTags = dialog.selectedTags();
+        # Do something with it
+    }
+}
+
+
 EmoteMenuFilter::~EmoteMenuFilter()
 {
     delete categoryList;
