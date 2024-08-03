@@ -167,7 +167,7 @@ void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
     QStringList categories = getCategoryList();
     TagDialog dialog(categories, this);
     if (dialog.exec() == QDialog::Accepted) {
-        QStringList selectedTags = dialog.selectedTags();
+        QStringList selectedTags;
         # Do something with it
     }
 }
