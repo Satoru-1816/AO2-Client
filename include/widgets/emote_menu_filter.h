@@ -28,6 +28,8 @@ class EmoteMenuFilter : public QDialog
 public:
     EmoteMenuFilter(QDialog *parent = nullptr, AOApplication *p_ao_app = nullptr, Courtroom *p_courtroom = nullptr);
     ~EmoteMenuFilter();
+    void showTagDialog(AOEmoteButton *button);
+    QStringList getCategoryList() const;
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -42,8 +44,6 @@ private:
     void setupLayout();
     void loadButtons();
     void arrangeButtons();
-    void showTagDialog(AOEmoteButton *button);
-    QStringList getCategoryList() const;
     
     AOApplication *ao_app;
     Courtroom *courtroom;
