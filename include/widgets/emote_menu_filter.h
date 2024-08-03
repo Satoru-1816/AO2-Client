@@ -3,6 +3,7 @@
 
 #include "aoemotebutton.h"
 #include "courtroom.h"
+#include <QResizeEvent>
 #include <QDialog>
 #include <QListWidget>
 #include <QLineEdit>
@@ -21,6 +22,9 @@ public:
     EmoteMenuFilter(QDialog *parent = nullptr, AOApplication *p_ao_app = nullptr, Courtroom *p_courtroom = nullptr);
     ~EmoteMenuFilter();
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
 private slots:
     // void onCategoryChanged();
     // void onSearchTextChanged(const QString &text);
@@ -30,6 +34,7 @@ private slots:
 private:
     void setupLayout();
     void loadButtons();
+    void arrangeButtons();
 
     AOApplication *ao_app;
     Courtroom *courtroom;
@@ -40,6 +45,8 @@ private:
     QGridLayout *gridLayout;
     QPushButton *addCategoryButton;
     QPushButton *removeCategoryButton;
+    
+    QVector<AOEmoteButton*> spriteButtons;
 };
 
 #endif // EMOTE_MENU_FILTER_H
