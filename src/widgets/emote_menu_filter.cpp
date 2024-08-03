@@ -134,13 +134,13 @@ void EmoteMenuFilter::arrangeButtons() {
         }
     }
     
-    int totalHeight = (row + 1) * buttonSize;
-    containerWidget->setMinimumSize(containerWidth, totalHeight);
+    // int totalHeight = (row + 1) * buttonSize;
+    // containerWidget->setMinimumSize(containerWidth, totalHeight);
 
-    containerWidget->adjustSize();
+    // containerWidget->adjustSize();
 
-    scrollArea->setWidget(containerWidget);
-    scrollArea->setWidgetResizable(true);
+    // scrollArea->setWidget(containerWidget);
+    // scrollArea->setWidgetResizable(true);
 }
 
 
