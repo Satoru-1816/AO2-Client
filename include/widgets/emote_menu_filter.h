@@ -11,6 +11,13 @@
 #include <QPushButton>
 #include <QGridLayout>
 
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QVBoxLayout>
+#include <QMenu>
+#include <QContextMenuEvent>
+#include <QMessageBox>
+
 class AOApplication;
 class Courtroom;
 
@@ -35,7 +42,9 @@ private:
     void setupLayout();
     void loadButtons();
     void arrangeButtons();
-
+    void showTagDialog(AOEmoteButton *button);
+    QStringList getCategoryList() const;
+    
     AOApplication *ao_app;
     Courtroom *courtroom;
     QListWidget *categoryList;
@@ -48,6 +57,18 @@ private:
     QPushButton *removeCategoryButton;
     
     QVector<AOEmoteButton*> spriteButtons;
+};
+
+class TagDialog : public QDialog {
+    Q_OBJECT
+public:
+    explicit TagDialog(const QStringList &categories, QWidget *parent = nullptr);
+
+private:
+    QVBoxLayout *mainLayout;
+    QGroupBox *groupBox;
+    QVBoxLayout *groupBoxLayout;
+    QList<QCheckBox *> checkboxes;
 };
 
 #endif // EMOTE_MENU_FILTER_H

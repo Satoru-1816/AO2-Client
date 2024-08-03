@@ -101,6 +101,16 @@ void EmoteMenuFilter::loadButtons() {
         spriteButton->set_image(emotePath, "");
 
         spriteButtons.append(spriteButton);
+        
+        connect(spriteButton, &AOEmoteButton::customContextMenuRequested, [this, spriteButton](const QPoint &pos) {
+            QMenu menu;
+            QAction *addTagsAction = menu.addAction("Add Tags...");
+            connect(addTagsAction, &QAction::triggered, [this, spriteButton]() {
+                showTagDialog(spriteButton);
+            });
+            menu.exec(spriteButton->mapToGlobal(pos));
+        });
+
     }
 
     arrangeButtons();
@@ -145,6 +155,13 @@ void EmoteMenuFilter::arrangeButtons() {
 
 }
 
+QStringList EmoteMenuFilter::getCategoryList() const {
+    QStringList categories;
+    for (int i = 0; i < categoryList->count(); ++i) {
+        categories << categoryList->item(i)->text();
+    }
+    return categories;
+}
 
 EmoteMenuFilter::~EmoteMenuFilter()
 {
@@ -155,4 +172,29 @@ EmoteMenuFilter::~EmoteMenuFilter()
     delete gridLayout;
     delete addCategoryButton;
     delete removeCategoryButton;
+}
+
+TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
+    : QDialog(parent), mainLayout(new QVBoxLayout(this)), groupBox(new QGroupBox("Emote Tags", this)), groupBoxLayout(new QVBoxLayout(groupBox)) {
+
+    for (const QString &category : categories) {
+        QCheckBox *checkBox = new QCheckBox(category, groupBox);
+        groupBoxLayout->addWidget(checkBox);
+        checkboxes.append(checkBox);
+    }
+
+    groupBox->setLayout(groupBoxLayout);
+    mainLayout->addWidget(groupBox);
+
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    QPushButton *okButton = new QPushButton("Save", this);
+    QPushButton *cancelButton = new QPushButton("Cancel", this);
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+
+    connect(okButton, &QPushButton::clicked, this, &TagDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, this, &TagDialog::reject);
+
+    mainLayout->addLayout(buttonLayout);
+    setLayout(mainLayout);
 }
