@@ -67,3 +67,14 @@ void EmoteMenuFilter::removeCategory()
         QMessageBox::warning(this, tr("Remove Category"), tr("No category selected"));
     }
 }
+
+EmoteMenuFilter::~EmoteMenuFilter()
+{
+    delete categoryList;
+    delete searchBox;
+    delete scrollArea;
+    delete buttonContainer;
+    delete gridLayout;
+    delete addCategoryButton;
+    delete removeCategoryButton;
+}

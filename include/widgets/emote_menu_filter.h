@@ -20,8 +20,8 @@ public:
     ~EmoteMenuFilter();
 
 private slots:
-    void onCategoryChanged();
-    void onSearchTextChanged(const QString &text);
+    // void onCategoryChanged();
+    // void onSearchTextChanged(const QString &text);
     void addCategory();
     void removeCategory();
 
