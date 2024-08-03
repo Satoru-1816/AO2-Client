@@ -107,7 +107,7 @@ void EmoteMenuFilter::loadButtons() {
 
 void EmoteMenuFilter::arrangeButtons() {
     int buttonSize = 40;
-    int containerWidth = scrollArea->width();
+    int containerWidth = scrollArea->width() - 80;
     int columns = containerWidth / buttonSize;
 
     if (columns == 0) columns = 1;
