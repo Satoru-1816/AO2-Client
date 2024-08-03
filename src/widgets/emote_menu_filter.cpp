@@ -1,4 +1,4 @@
-#include "emote_menu_filter.h"
+#include "widgets/emote_menu_filter.h"
 #include "aoemotebutton.h"
 #include "aoapplication.h"
 #include <QVBoxLayout>
