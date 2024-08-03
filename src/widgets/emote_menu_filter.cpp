@@ -73,7 +73,7 @@ void EmoteMenuFilter::removeCategory()
 
 void EmoteMenuFilter::loadButtons()
 {
-    int total_emotes = ao_app->get_emote_number(current_char);
+    int total_emotes = ao_app->get_emote_number(get_current_char());
 
     // Button size (width and height)
     int buttonSize = 40;
@@ -85,7 +85,7 @@ void EmoteMenuFilter::loadButtons()
     int row = 0, col = 0;
     for (int n = 0; n < total_emotes; ++n) {
         QString emotePath = ao_app->get_image_suffix(ao_app->get_character_path(
-            current_char, "emotions/button" + QString::number(n + 1) + "_off"));
+            get_current_char(), "emotions/button" + QString::number(n + 1) + "_off"));
         
         AOEmoteButton *spriteButton = new AOEmoteButton(this, ao_app, 0, 0, buttonSize, buttonSize);
         spriteButton->set_image(emotePath, "");
