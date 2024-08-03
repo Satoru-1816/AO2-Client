@@ -109,7 +109,9 @@ void EmoteMenuFilter::loadButtons() {
 void EmoteMenuFilter::arrangeButtons() {
     int buttonSize = 40;
     int containerWidth = scrollArea->viewport()->width();
-    int columns = containerWidth / buttonSize;
+    int spacing = gridLayout->horizontalSpacing();
+    int columns = (containerWidth + spacing) / (buttonSize + spacing);
+
 
     if (columns == 0) columns = 1;
 
@@ -131,13 +133,16 @@ void EmoteMenuFilter::arrangeButtons() {
         }
     }
     
-    // int totalHeight = (row + 1) * buttonSize;
-    // containerWidget->setMinimumSize(containerWidth, totalHeight);
+    int totalWidth = columns * (buttonSize + spacing) - spacing; 
+    int totalHeight = (row + 1) * (buttonSize + spacing) - spacing; 
 
-    // containerWidget->adjustSize();
+    containerWidget->setMinimumSize(totalWidth, totalHeight);
 
-    // scrollArea->setWidget(containerWidget);
-    // scrollArea->setWidgetResizable(true);
+    containerWidget->adjustSize();
+
+    scrollArea->setWidget(containerWidget);
+    scrollArea->setWidgetResizable(true);
+
 }
 
 
