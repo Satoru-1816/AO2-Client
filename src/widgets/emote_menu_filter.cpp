@@ -42,11 +42,6 @@ void EmoteMenuFilter::setupLayout()
     setLayout(mainLayout);
 }
 
-void EmoteMenuFilter::onCategoryChanged()
-{
-	return;
-}
-
 void EmoteMenuFilter::addCategory()
 {
     bool ok;
