@@ -41,7 +41,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
     // connect(searchBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
 
-    setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::Tool);
 
 }
 
