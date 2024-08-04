@@ -187,14 +187,6 @@ void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
     }
 }
 
-void EmoteMenuFilter::onCourtroomStateChanged(Qt::WindowStates windowState)
-{
-    if (windowState & Qt::WindowMinimized) {
-        // Minimize this window as well
-        this->showMinimized();
-    }
-}
-
 EmoteMenuFilter::~EmoteMenuFilter()
 {
     delete categoryList;
