@@ -3,6 +3,7 @@
 #include "aoapplication.h"
 #include "courtroom.h"
 #include <QResizeEvent>
+#include <QFocusEvent>
 #include <QVBoxLayout>
 #include <QInputDialog>
 #include <QMessageBox>
@@ -10,6 +11,7 @@
 EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Courtroom *p_courtroom)
     : QDialog(parent), ao_app(p_ao_app), courtroom(p_courtroom)
 {
+	setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     categoryList = new QListWidget(this);
     searchBox = new QLineEdit(this);
     scrollArea = new QScrollArea(this);
@@ -84,6 +86,17 @@ void EmoteMenuFilter::resizeEvent(QResizeEvent *event) {
     }
 }
 
+void EmoteMenuFilter::focusInEvent(QFocusEvent *event) {
+    QDialog::focusInEvent(event);
+    setWindowOpacity(1.0); // Fully opaque when in focus
+}
+
+void EmoteMenuFilter::focusOutEvent(QFocusEvent *event) {
+    QDialog::focusOutEvent(event);
+    setWindowOpacity(0.3); // 30% transparent when out of focus
+    // To-Do: Make a Slider to control this
+}
+
 void EmoteMenuFilter::loadButtons() {
     int total_emotes = ao_app->get_emote_number(courtroom->get_current_char());
 
@@ -101,7 +114,7 @@ void EmoteMenuFilter::loadButtons() {
         spriteButton->set_image(emotePath, "");
 
         spriteButtons.append(spriteButton);
-		spriteButton->setContextMenuPolicy(Qt::CustomContextMenu);
+        spriteButton->setContextMenuPolicy(Qt::CustomContextMenu);
 		
         connect(spriteButton, &AOEmoteButton::customContextMenuRequested, [this, spriteButton](const QPoint &pos) {
             QMenu menu;

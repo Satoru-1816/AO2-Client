@@ -4,6 +4,7 @@
 #include "aoemotebutton.h"
 #include "courtroom.h"
 #include <QResizeEvent>
+#include <QFocusEvent>
 #include <QDialog>
 #include <QListWidget>
 #include <QLineEdit>
@@ -33,6 +34,8 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void focusInEvent(QFocusEvent *event) override;
+    void focusOutEvent(QFocusEvent *event) override;
 
 private slots:
     // void onCategoryChanged();
