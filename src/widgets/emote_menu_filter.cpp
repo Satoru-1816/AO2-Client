@@ -40,7 +40,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     connect(addCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::addCategory);
     connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
     // connect(searchBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
-    connect(courtroom, &QWidget::windowStateChanged, this, &EmoteMenuFilter::onCourtroomStateChanged);
+    connect(courtroom->windowHandle(), &QWindow::windowStateChanged, this, &EmoteMenuFilter::onCourtroomStateChanged);
 
     setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
 }
