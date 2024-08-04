@@ -11,7 +11,7 @@
 EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Courtroom *p_courtroom)
     : QDialog(parent), ao_app(p_ao_app), courtroom(p_courtroom)
 {
-	setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+	setWindowFlag(Qt::Tool);
     categoryList = new QListWidget(this);
     searchBox = new QLineEdit(this);
     scrollArea = new QScrollArea(this);
@@ -88,12 +88,12 @@ void EmoteMenuFilter::resizeEvent(QResizeEvent *event) {
 
 void EmoteMenuFilter::focusInEvent(QFocusEvent *event) {
     QDialog::focusInEvent(event);
-    setWindowOpacity(1.0); // Fully opaque when in focus
+    this->setWindowOpacity(1.0); // Fully opaque when in focus
 }
 
 void EmoteMenuFilter::focusOutEvent(QFocusEvent *event) {
     QDialog::focusOutEvent(event);
-    setWindowOpacity(0.3); // 30% transparent when out of focus
+    this->setWindowOpacity(0.3); // 30% transparent when out of focus
     // To-Do: Make a Slider to control this
 }
 
