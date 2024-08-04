@@ -11,7 +11,6 @@
 EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Courtroom *p_courtroom)
     : QDialog(parent), ao_app(p_ao_app), courtroom(p_courtroom)
 {
-	setWindowFlag(Qt::Tool);
     categoryList = new QListWidget(this);
     searchBox = new QLineEdit(this);
     scrollArea = new QScrollArea(this);
@@ -41,6 +40,8 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     connect(addCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::addCategory);
     connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
     // connect(searchBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
+
+    setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
 
 }
 
