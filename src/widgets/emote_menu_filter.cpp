@@ -41,8 +41,8 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
     // connect(searchBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
 
-    setParent(courtroom);
-    setWindowFlags(Qt::Tool);
+    // setParent(courtroom); YEAH NO, uncomment this later and avoid the white text apocalypse
+    // setWindowFlags(Qt::Tool);
 }
 
 void EmoteMenuFilter::setupLayout()
@@ -202,6 +202,9 @@ TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
     : QDialog(parent), mainLayout(new QVBoxLayout(this)), groupBox(new QGroupBox("Emote Tags", this)), groupBoxLayout(new QVBoxLayout(groupBox)) {
 
     for (const QString &category : categories) {
+        if (category == "Default Emotes") {
+            continue; // Unneeded checkbox
+        }
         QCheckBox *checkBox = new QCheckBox(category, groupBox);
         groupBoxLayout->addWidget(checkBox);
         checkboxes.append(checkBox);
