@@ -34,8 +34,8 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
-    void focusInEvent(QFocusEvent *event) override;
-    void focusOutEvent(QFocusEvent *event) override;
+    // void focusInEvent(QFocusEvent *event) override;
+    // void focusOutEvent(QFocusEvent *event) override;
 
 private slots:
     // void onCategoryChanged();

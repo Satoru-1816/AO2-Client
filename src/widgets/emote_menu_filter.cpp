@@ -87,16 +87,16 @@ void EmoteMenuFilter::resizeEvent(QResizeEvent *event) {
     }
 }
 
-void EmoteMenuFilter::focusInEvent(QFocusEvent *event) {
-    QDialog::focusInEvent(event);
-    this->setWindowOpacity(1.0); // Fully opaque when in focus
-}
+//void EmoteMenuFilter::focusInEvent(QFocusEvent *event) {
+//    QDialog::focusInEvent(event);
+//    this->setWindowOpacity(1.0); // Fully opaque when in focus
+//}
 
-void EmoteMenuFilter::focusOutEvent(QFocusEvent *event) {
-    QDialog::focusOutEvent(event);
-    this->setWindowOpacity(0.3); // 30% transparent when out of focus
-    // To-Do: Make a Slider to control this
-}
+//void EmoteMenuFilter::focusOutEvent(QFocusEvent *event) {
+//    QDialog::focusOutEvent(event);
+//    this->setWindowOpacity(0.3); // 30% transparent when out of focus
+//    // To-Do: Make a Slider to control this
+//}
 
 void EmoteMenuFilter::loadButtons() {
     int total_emotes = ao_app->get_emote_number(courtroom->get_current_char());
