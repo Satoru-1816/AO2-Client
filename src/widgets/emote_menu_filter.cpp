@@ -40,9 +40,9 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     connect(addCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::addCategory);
     connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
     // connect(searchBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
+    connect(courtroom, &QMainWindow::windowStateChanged, this, &EmoteMenuFilter::onCourtroomStateChanged);
 
-    setWindowFlags(Qt::Tool);
-
+    setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
 }
 
 void EmoteMenuFilter::setupLayout()
@@ -187,6 +187,13 @@ void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
     }
 }
 
+void EmoteMenuFilter::onCourtroomStateChanged(Qt::WindowStates windowState)
+{
+    if (windowState & Qt::WindowMinimized) {
+        // Minimize this window as well
+        this->showMinimized();
+    }
+}
 
 EmoteMenuFilter::~EmoteMenuFilter()
 {

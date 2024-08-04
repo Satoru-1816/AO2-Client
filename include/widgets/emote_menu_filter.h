@@ -40,6 +40,7 @@ protected:
 private slots:
     // void onCategoryChanged();
     // void onSearchTextChanged(const QString &text);
+    void onCourtroomStateChanged(Qt::WindowStates windowState);
     void addCategory();
     void removeCategory();
 
