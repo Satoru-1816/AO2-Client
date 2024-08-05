@@ -473,7 +473,7 @@ QStringList AOApplication::read_char_sets(VPath p_path)
 
 QStringList read_emote_categories(VPath p_file)
 {
-    //QStringList r_values;
+    QStringList r_values = [];
     //QFile file(get_real_path(p_file));
     //
     //if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -499,8 +499,7 @@ QStringList read_emote_categories(VPath p_file)
     //}
     
     //file.close();
-    //return r_values;
-    return;
+    return r_values;
 }
 
 
