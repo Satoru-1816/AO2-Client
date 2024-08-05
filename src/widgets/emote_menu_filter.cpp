@@ -177,9 +177,10 @@ void EmoteMenuFilter::arrangeButtons() {
     int totalHeight = (row + 1) * (buttonSize + spacing) - spacing; 
 
     containerWidget->setMinimumSize(totalWidth, totalHeight);
-
     containerWidget->adjustSize();
 
+    gridLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    
     scrollArea->setWidget(containerWidget);
     scrollArea->setWidgetResizable(true);
 
