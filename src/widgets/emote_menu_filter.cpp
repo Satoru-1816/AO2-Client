@@ -209,7 +209,7 @@ void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
         QHash<QString, QStringList> tagsToSave;
 
         for (const QString &tag : selectedTags) {
-            tagsToSave[tag].append(QString::number(button->get_id()));
+            tagsToSave[tag].append(QString::number(button->get_id())); // change this
         }
 
         saveTagsToFile(tagsToSave);
@@ -217,13 +217,11 @@ void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
 }
 
 void EmoteMenuFilter::saveTagsToFile(const QHash<QString, QStringList> &tags) {
-    QString filePath = ao_app->get_real_path(
-        ao_app->get_character_path(courtroom->get_current_char(), "emote_tags.ini")
-    );
+    QString filePath = ao_app->get_real_path(VPath("characters/" + courtroom->get_current_char() + "/"));
     
     qDebug() << "File path:" << filePath;
 
-    QFile file(filePath);
+    QFile file(filePath + "emote_tags.ini");
     QHash<QString, QStringList> existingTags;
     
     // Read existing tags from the file if it exists
