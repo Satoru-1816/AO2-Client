@@ -19,6 +19,10 @@
 #include <QContextMenuEvent>
 #include <QMessageBox>
 
+#include <QFile>
+#include <QHash>
+#include <QTextStream>
+
 class AOApplication;
 class Courtroom;
 
@@ -47,7 +51,8 @@ private:
     void setupLayout();
     void loadButtons();
     void arrangeButtons();
-    
+    void saveTagsToFile(const QHash<QString, QStringList> &tags);
+
     AOApplication *ao_app;
     Courtroom *courtroom;
     QListWidget *categoryList;
@@ -66,7 +71,8 @@ class TagDialog : public QDialog {
     Q_OBJECT
 public:
     explicit TagDialog(const QStringList &categories, QWidget *parent = nullptr);
-
+    QStringList selectedTags() const;
+    
 private:
     QVBoxLayout *mainLayout;
     QGroupBox *groupBox;

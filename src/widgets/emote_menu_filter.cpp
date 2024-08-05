@@ -7,6 +7,9 @@
 #include <QVBoxLayout>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QFile>
+#include <QHash>
+#include <QTextStream>
 
 EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Courtroom *p_courtroom)
     : QDialog(parent), ao_app(p_ao_app), courtroom(p_courtroom)
@@ -113,10 +116,10 @@ void EmoteMenuFilter::loadButtons() {
         
         AOEmoteButton *spriteButton = new AOEmoteButton(this, ao_app, 0, 0, buttonSize, buttonSize);
         spriteButton->set_image(emotePath, "");
-
+        spriteButton->set_id(n + 1);
         spriteButtons.append(spriteButton);
         spriteButton->setContextMenuPolicy(Qt::CustomContextMenu);
-		
+
         connect(spriteButton, &AOEmoteButton::customContextMenuRequested, [this, spriteButton](const QPoint &pos) {
             QMenu menu;
             QAction *addTagsAction = menu.addAction("Add Tags...");
@@ -180,11 +183,41 @@ QStringList EmoteMenuFilter::getCategoryList() const {
 
 void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
     QStringList categories = getCategoryList();
+
     TagDialog dialog(categories, this);
     if (dialog.exec() == QDialog::Accepted) {
-        QStringList selectedTags;
-        // Do something with it
+        QStringList selectedTags = dialog.selectedTags();
+        QHash<QString, QStringList> tagsToSave;
+
+        for (const QString &tag : selectedTags) {
+            tagsToSave[tag].append(QString::number(button->get_id()));
+        }
+
+        saveTagsToFile(tagsToSave);
     }
+}
+
+void EmoteMenuFilter::saveTagsToFile(const QHash<QString, QStringList> &tags) {
+    QFile file(ao_app->get_real_path
+	          (ao_app->get_character_path
+			  (courtroom->get_current_char(), "emote_tags.ini"))); // To-Do: Make it cleaner
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        return;
+    }
+
+    QTextStream out(&file);
+    QHashIterator<QString, QStringList> i(tags);
+
+    while (i.hasNext()) {
+        i.next();
+        out << "[" << i.key() << "]\n";
+        for (const QString &value : i.value()) {
+            out << value << "\n";
+        }
+        out << "\n";
+    }
+
+    file.close();
 }
 
 EmoteMenuFilter::~EmoteMenuFilter()
@@ -199,7 +232,8 @@ EmoteMenuFilter::~EmoteMenuFilter()
 }
 
 TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
-    : QDialog(parent), mainLayout(new QVBoxLayout(this)), groupBox(new QGroupBox("Emote Tags", this)), groupBoxLayout(new QVBoxLayout(groupBox)) {
+    : QDialog(parent), mainLayout(new QVBoxLayout(this)), groupBox(new QGroupBox("Emote Tags", this)), groupBoxLayout(new QVBoxLayout(groupBox))
+{
 
     for (const QString &category : categories) {
         if (category == "Default Emotes") {
@@ -224,4 +258,15 @@ TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
 
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
+}
+
+QStringList TagDialog::selectedTags() const
+{
+    QStringList selected;
+    for (QCheckBox *checkBox : checkboxes) {
+        if (checkBox->isChecked()) {
+            selected.append(checkBox->text());
+        }
+    }
+    return selected;
 }

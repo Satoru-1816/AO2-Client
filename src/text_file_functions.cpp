@@ -471,6 +471,38 @@ QStringList AOApplication::read_char_sets(VPath p_path)
   return r_values;
 }
 
+QStringList read_emote_categories(VPath p_file)
+{
+    QStringList r_values;
+    QFile file(get_real_path(p_path));
+    
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return r_values;
+    }
+    
+    QTextStream in(&file);
+    QString currentCategory;
+
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+
+        if (line.isEmpty()) {
+            continue;
+        }
+
+        if (line.startsWith('[') && line.endsWith(']')) {
+            currentCategory = line.mid(1, line.length() - 2); // Extract the category name
+            r_values << "category=" + currentCategory;
+        } else {
+            r_values << currentCategory + "=" + line;
+        }
+    }
+    
+    file.close();
+    return r_values;
+}
+
+
 QString AOApplication::get_showname(QString p_char)
 {
   QString f_result = read_char_ini(p_char, "showname", "Options");

@@ -252,6 +252,9 @@ public:
   // Returns a QStringList of all key=value definitions on a given tag.
   QStringList read_ini_tags(VPath p_file, QString target_tag = "");
   QStringList read_char_sets(VPath p_file);
+  
+  // Returns a QStringList of the values inside every Emote category.
+  QStringList read_emote_categories(VPath p_file);
 
   // Sets the char.ini p_search_line key under tag target_tag to value.
   void set_char_ini(QString p_char, QString value, QString p_search_line,
