@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QHash>
 #include <QTextStream>
+#include <QDir>
 
 EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Courtroom *p_courtroom)
     : QDialog(parent), ao_app(p_ao_app), courtroom(p_courtroom)
@@ -198,9 +199,17 @@ void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
 }
 
 void EmoteMenuFilter::saveTagsToFile(const QHash<QString, QStringList> &tags) {
-    QFile file(ao_app->get_real_path
-	          (ao_app->get_character_path
-			  (courtroom->get_current_char(), "emote_tags.ini"))); // To-Do: Make it cleaner
+    QString filePath = ao_app->get_real_path
+	                   (ao_app->get_character_path
+			           (courtroom->get_current_char(), "emote_tags.ini"));
+    QFileInfo fileInfo(filePath);
+    QDir dir = fileInfo.dir();
+    if (!dir.exists()) {
+        dir.mkpath(".");
+    }
+    
+    QFile file(filePath);
+
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         return;
     }
