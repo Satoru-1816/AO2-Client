@@ -471,7 +471,7 @@ QStringList AOApplication::read_char_sets(VPath p_path)
   return r_values;
 }
 
-QStringList read_emote_categories(VPath p_file)
+QStringList AOApplication::read_emote_categories(VPath p_file)
 {
     QStringList r_values = [];
     //QFile file(get_real_path(p_file));
