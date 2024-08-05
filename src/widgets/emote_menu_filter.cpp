@@ -217,34 +217,51 @@ void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
 }
 
 void EmoteMenuFilter::saveTagsToFile(const QHash<QString, QStringList> &tags) {
-    QString filePath = ao_app->get_real_path
-	                   (ao_app->get_character_path
-			           (courtroom->get_current_char(), "emote_tags.ini"));
-    QFileInfo fileInfo(filePath);
-    QDir dir = fileInfo.dir();
-    if (!dir.exists()) {
-        dir.mkpath(".");
+    QString filePath = ao_app->get_real_path(
+        ao_app->get_character_path(courtroom->get_current_char(), "emote_tags.ini")
+    );
+    
+    qDebug() << "File path:" << filePath;
+
+    QFile file(filePath);
+    QHash<QString, QStringList> existingTags;
+    
+    // Read existing tags from the file if it exists
+    if (file.exists() && file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        QString currentCategory;
+        while (!in.atEnd()) {
+            QString line = in.readLine().trimmed();
+            if (line.isEmpty()) {
+                continue;
+            }
+            if (line.startsWith('[') && line.endsWith(']')) {
+                currentCategory = line.mid(1, line.length() - 2);
+                existingTags.insert(currentCategory, QStringList());
+            } else if (existingTags.contains(currentCategory)) {
+                existingTags[currentCategory] << line;
+            }
+        }
+        file.close();
     }
     
-    QFile file(filePath);
-
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        return;
+    // Append new tags to existing tags
+    for (auto it = tags.begin(); it != tags.end(); ++it) {
+        existingTags[it.key()] += it.value();
     }
 
-    QTextStream out(&file);
-    QHashIterator<QString, QStringList> i(tags);
-
-    while (i.hasNext()) {
-        i.next();
-        out << "[" << i.key() << "]\n";
-        for (const QString &value : i.value()) {
-            out << value << "\n";
+    // Write all tags (existing and new) to the file
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        for (auto it = existingTags.begin(); it != existingTags.end(); ++it) {
+            out << "[" << it.key() << "]\n";
+            for (const QString &value : it.value()) {
+                out << value << "\n";
+            }
+            out << "\n";
         }
-        out << "\n";
+        file.close();
     }
-
-    file.close();
 }
 
 EmoteMenuFilter::~EmoteMenuFilter()
