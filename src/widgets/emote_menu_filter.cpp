@@ -76,7 +76,12 @@ void EmoteMenuFilter::removeCategory()
 {
     QListWidgetItem *item = categoryList->currentItem();
     if (item) {
-        delete item;
+        QString itemText = item->text();
+        if (itemText != "Default Emotes" && itemText != "Favorites") {
+            delete item;
+        } else {
+            QMessageBox::warning(this, tr("Remove Category"), tr("Cannot delete this category"));
+        }
     } else {
         QMessageBox::warning(this, tr("Remove Category"), tr("No category selected"));
     }
