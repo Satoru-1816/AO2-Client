@@ -474,7 +474,8 @@ QStringList AOApplication::read_char_sets(VPath p_path)
 QStringList read_emote_categories(VPath p_file)
 {
     QStringList r_values;
-    QFile file(get_real_path(p_path));
+    QSettings settings(get_real_path(get_character_path(p_char, "emote_tags.ini")),
+                       QSettings::IniFormat);
     
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return r_values;
