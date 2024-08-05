@@ -102,7 +102,7 @@ void EmoteMenuFilter::resizeEvent(QResizeEvent *event) {
 //    // To-Do: Make a Slider to control this
 //}
 
-void EmoteMenuFilter::loadButtons(const QStringList &emoteIds = QStringList()) {
+void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
     int total_emotes = ao_app->get_emote_number(courtroom->get_current_char());
 
     // Button size (width and height)
