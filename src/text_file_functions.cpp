@@ -473,34 +473,34 @@ QStringList AOApplication::read_char_sets(VPath p_path)
 
 QStringList read_emote_categories(VPath p_file)
 {
-    QStringList r_values;
-    QSettings settings(get_real_path(get_character_path(p_char, "emote_tags.ini")),
-                       QSettings::IniFormat);
-    
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return r_values;
-    }
-    
-    QTextStream in(&file);
-    QString currentCategory;
+    //QStringList r_values;
+    //QFile file(get_real_path(p_file));
+    //
+    //if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    //    return r_values;
+    //}
+    //
+    //QTextStream in(&file);
+    //QString currentCategory;
 
-    while (!in.atEnd()) {
-        QString line = in.readLine().trimmed();
+    //while (!in.atEnd()) {
+    //    QString line = in.readLine().trimmed();
 
-        if (line.isEmpty()) {
-            continue;
-        }
+    //    if (line.isEmpty()) {
+    //        continue;
+    //    }
 
-        if (line.startsWith('[') && line.endsWith(']')) {
-            currentCategory = line.mid(1, line.length() - 2); // Extract the category name
-            r_values << "category=" + currentCategory;
-        } else {
-            r_values << currentCategory + "=" + line;
-        }
-    }
+    //    if (line.startsWith('[') && line.endsWith(']')) {
+    //        currentCategory = line.mid(1, line.length() - 2); // Extract the category name
+    //        r_values << "category=" + currentCategory;
+    //    } else {
+    //        r_values << currentCategory + "=" + line;
+    //    }
+    //}
     
-    file.close();
-    return r_values;
+    //file.close();
+    //return r_values;
+    return;
 }
 
 
