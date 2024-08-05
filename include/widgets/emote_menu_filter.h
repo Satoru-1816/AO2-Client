@@ -46,7 +46,7 @@ private slots:
     // void onSearchTextChanged(const QString &text);
     void addCategory();
     void removeCategory();
-    void onCategorySelected();
+    void onCategorySelected(QListWidgetItem *item);
 
 private:
     void setupLayout();

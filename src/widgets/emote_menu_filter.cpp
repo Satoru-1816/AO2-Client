@@ -40,7 +40,8 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
 
     loadButtons();
 
-    connect(categoryList, &QListWidget::itemSelectionChanged, this, &EmoteMenuFilter::onCategorySelected);
+    // connect(categoryList, &QListWidget::itemSelectionChanged, this, &EmoteMenuFilter::onCategorySelected);
+    connect(categoryList, &QListWidget::itemClicked, this, &EmoteMenuFilter::onCategorySelected);
     connect(addCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::addCategory);
     connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
     // connect(searchBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
@@ -187,7 +188,7 @@ QStringList EmoteMenuFilter::getCategoryList() const {
     return categories;
 }
 
-void EmoteMenuFilter::onCategorySelected() {
+void EmoteMenuFilter::onCategorySelected(QListWidgetItem *item) {
     QString selectedCategory = item->text();
     if (selectedCategory != "Default Emotes") {
         QString category = selectedItem->text();
