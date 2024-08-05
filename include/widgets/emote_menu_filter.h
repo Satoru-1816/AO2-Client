@@ -46,10 +46,11 @@ private slots:
     // void onSearchTextChanged(const QString &text);
     void addCategory();
     void removeCategory();
+    void onCategorySelected();
 
 private:
     void setupLayout();
-    void loadButtons();
+    void loadButtons(const QStringList &emoteIds = QStringList());
     void arrangeButtons();
     void saveTagsToFile(const QHash<QString, QStringList> &tags);
 

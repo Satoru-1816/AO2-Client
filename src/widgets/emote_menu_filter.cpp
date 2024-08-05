@@ -40,7 +40,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
 
     loadButtons();
 
-    // connect(categoryList, &QListWidget::currentTextChanged, this, &EmoteMenuFilter::onCategoryChanged);
+    connect(categoryList, &QListWidget::itemSelectionChanged, this, &EmoteMenuFilter::onCategorySelected);
     connect(addCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::addCategory);
     connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
     // connect(searchBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
@@ -102,16 +102,21 @@ void EmoteMenuFilter::resizeEvent(QResizeEvent *event) {
 //    // To-Do: Make a Slider to control this
 //}
 
-void EmoteMenuFilter::loadButtons() {
+void EmoteMenuFilter::loadButtons(const QStringList &emoteIds = QStringList()) {
     int total_emotes = ao_app->get_emote_number(courtroom->get_current_char());
 
     // Button size (width and height)
     int buttonSize = 40;
     
-    // qDeleteAll(spriteButtons);
-    // spriteButtons.clear();
+    qDeleteAll(spriteButtons);
+    spriteButtons.clear();
 
-    for (int n = 0; n < total_emotes; ++n) {
+    for (int n = 0; n < total_emotes; ++n) {    	
+        QString emoteId = QString::number(n + 1);
+        if (!emoteIds.isEmpty() && !emoteIds.contains(emoteId)) {
+            continue;
+        }
+        
         QString emotePath = ao_app->get_image_suffix(ao_app->get_character_path(
             courtroom->get_current_char(), "emotions/button" + QString::number(n + 1) + "_off"));
         
@@ -180,6 +185,19 @@ QStringList EmoteMenuFilter::getCategoryList() const {
         categories << categoryList->item(i)->text();
     }
     return categories;
+}
+
+void EmoteMenuFilter::onCategorySelected() {
+    QListWidgetItem *selectedItem = categoryList->currentItem();
+    if (selectedItem) {
+        QString category = selectedItem->text();
+        QHash<QString, QStringList> categories = ao_app->read_emote_categories(courtroom->get_current_char());
+        QStringList emoteIds = categories.value(category);
+        loadButtons(emoteIds);
+    } else {
+        // Load all buttons if no category is selected
+        loadButtons();
+    }
 }
 
 void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
