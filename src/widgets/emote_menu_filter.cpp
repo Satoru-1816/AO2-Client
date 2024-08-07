@@ -40,6 +40,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     scrollArea->setWidgetResizable(true);
 
     loadButtons();
+    setupCategories();
 
     // connect(categoryList, &QListWidget::itemSelectionChanged, this, &EmoteMenuFilter::onCategorySelected);
     connect(categoryList, &QListWidget::itemClicked, this, &EmoteMenuFilter::onCategorySelected);
@@ -200,6 +201,15 @@ QStringList EmoteMenuFilter::getCategoryList() const {
         categories << categoryList->item(i)->text();
     }
     return categories;
+}
+
+void EmoteMenuFilter::setupCategories() {
+    QString currentChar = courtroom->get_current_char();
+    QHash<QString, QStringList> categories = ao_app->read_emote_categories(currentChar);
+
+    for (const QString &category : categories.keys()) {
+        QListWidgetItem *item = new QListWidgetItem(category, categoryList);
+    }
 }
 
 void EmoteMenuFilter::onCategorySelected(QListWidgetItem *item) {

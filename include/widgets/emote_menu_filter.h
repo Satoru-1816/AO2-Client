@@ -50,6 +50,7 @@ private slots:
 
 private:
     void setupLayout();
+    void setupCategories();
     void loadButtons(const QStringList &emoteIds = QStringList());
     void arrangeButtons();
     void saveTagsToFile(const QHash<QString, QStringList> &tags);
