@@ -126,7 +126,7 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
         emoteId = QString::number(n + 1);
         emoteName = ao_app->get_emote_comment(charName, n);
         
-        if (!emoteIds.isEmpty() && (!emoteIds.contains(emoteId) || !emoteIds.contains(emoteName))) {
+        if (!emoteIds.isEmpty() && (!emoteIds.contains(emoteId) && !emoteIds.contains(emoteName))) {
             continue;
         }
         
