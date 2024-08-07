@@ -621,8 +621,9 @@ QString AOApplication::get_emote_comment(QString p_char, int p_emote)
   QStringList result_contents = f_result.split("#");
 
   if (result_contents.size() < 4) {
-    qWarning() << "misformatted char.ini: " << p_char << ", " << p_emote;
-    return "normal";
+      qWarning() << "Misformatted char.ini: " << p_char << ", Emote ID: " << p_emote << ", Entry: " << f_result;
+
+      return "normal";
   }
   return result_contents.at(0);
 }

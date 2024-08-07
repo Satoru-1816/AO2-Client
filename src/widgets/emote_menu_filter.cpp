@@ -31,7 +31,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
 
     categoryList->addItem("Default Emotes");
     categoryList->addItem("Favorites");
-    categoryList->setMaximumWidth(100);
+    categoryList->setMaximumHeight(150);
 
     containerWidget = new QWidget(this);
     containerWidget->setLayout(gridLayout);
@@ -124,7 +124,7 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
 
     for (int n = 0; n < total_emotes; ++n) {    	
         emoteId = QString::number(n + 1);
-        emoteName = ao_app->get_emote_comment(charName, n + 1);
+        emoteName = ao_app->get_emote_comment(charName, n);
         
         if (!emoteIds.isEmpty() && (!emoteIds.contains(emoteId) || !emoteIds.contains(emoteName))) {
             continue;
