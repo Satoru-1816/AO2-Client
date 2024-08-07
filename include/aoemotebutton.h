@@ -21,6 +21,9 @@ public:
 
   void set_id(int p_id) { m_id = p_id; }
   int get_id() { return m_id; }
+  
+  void set_comment(QString p_comment) { m_comment = p_comment; }
+  QString get_comment() { return m_comment; }
 
 private:
   QWidget *parent;
@@ -28,6 +31,8 @@ private:
   QLabel *ui_selected = nullptr;
 
   int m_id = 0;
+  QString m_comment;
+
 signals:
   void emote_clicked(int p_id);
 

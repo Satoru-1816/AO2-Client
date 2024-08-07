@@ -31,6 +31,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
 
     categoryList->addItem("Default Emotes");
     categoryList->addItem("Favorites");
+    categoryList->setMaximumWidth(100);
 
     containerWidget = new QWidget(this);
     containerWidget->setLayout(gridLayout);
@@ -109,7 +110,11 @@ void EmoteMenuFilter::resizeEvent(QResizeEvent *event) {
 //}
 
 void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
-    int total_emotes = ao_app->get_emote_number(courtroom->get_current_char());
+    QString charName = courtroom->get_current_char();
+    int total_emotes = ao_app->get_emote_number(charName);
+    QString emotePath;
+    QString emoteName;
+    QString emoteId;
 
     // Button size (width and height)
     int buttonSize = 40;
@@ -118,17 +123,20 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
     spriteButtons.clear();
 
     for (int n = 0; n < total_emotes; ++n) {    	
-        QString emoteId = QString::number(n + 1);
-        if (!emoteIds.isEmpty() && !emoteIds.contains(emoteId)) {
+        emoteId = QString::number(n + 1);
+        emoteName = ao_app->get_emote_comment(charName, emoteId);
+        
+        if (!emoteIds.isEmpty() && (!emoteIds.contains(emoteId) || !emoteIds.contains(emoteName))) {
             continue;
         }
         
-        QString emotePath = ao_app->get_image_suffix(ao_app->get_character_path(
-            courtroom->get_current_char(), "emotions/button" + QString::number(n + 1) + "_off"));
-        
+        emotePath = ao_app->get_image_suffix(ao_app->get_character_path(
+            charName, "emotions/button" + QString::number(n + 1) + "_off"));
+            
         AOEmoteButton *spriteButton = new AOEmoteButton(this, ao_app, 0, 0, buttonSize, buttonSize);
         spriteButton->set_image(emotePath, "");
         spriteButton->set_id(n + 1);
+        spriteButton->set_comment(emoteName);
         spriteButtons.append(spriteButton);
         spriteButton->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -215,7 +223,7 @@ void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
         QHash<QString, QStringList> tagsToSave;
 
         for (const QString &tag : selectedTags) {
-            tagsToSave[tag].append(QString::number(button->get_id())); // change this
+            tagsToSave[tag].append(button->get_comment());
         }
 
         saveTagsToFile(tagsToSave);
