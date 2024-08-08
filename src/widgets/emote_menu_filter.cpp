@@ -322,7 +322,7 @@ void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelect
 	                                                  "emotions/button" + QString::number(button->get_id())));
     QString imagePath = baseImagePath + (isSelected ? "_on" : "_off");
 
-    button->set_char_image(courtroom->get_current_char(), button->get_id(), isSelected);
+    button->set_char_image(courtroom->get_current_char(), button->get_id()-1, isSelected);
 }
 
 EmoteMenuFilter::~EmoteMenuFilter()
