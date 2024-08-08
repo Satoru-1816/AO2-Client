@@ -213,7 +213,7 @@ void EmoteMenuFilter::setupCategories() {
     QHash<QString, QStringList> categories = ao_app->read_emote_categories(currentChar);
 
     for (const QString &category : categories.keys()) {
-        new QListWidgetItem(category, categoryList);
+        QListWidgetItem *item = new QListWidgetItem(category, categoryList);
     }
 }
 
@@ -317,8 +317,8 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
 }
 
 void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelected) {
-    QString baseImagePath = ao_app->get_character_path(courtroom->get_current_char(), 
-	                                                  "emotions/button" + QString::number(button->get_id()));
+    QString baseImagePath = ao_app->get_real_path(ao_app->get_character_path(courtroom->get_current_char(), 
+	                                                  "emotions/button" + QString::number(button->get_id())));
     QString imagePath = baseImagePath + (isSelected ? "_on" : "_off");
 
     button->set_selected_image(imagePath);
