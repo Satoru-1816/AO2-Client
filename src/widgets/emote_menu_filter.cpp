@@ -142,7 +142,7 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
         spriteButtons.append(spriteButton);
         spriteButton->setContextMenuPolicy(Qt::CustomContextMenu);
 
-        connect(spriteButton, &AOEmoteButton::on_clicked, this, [this, spriteButton]() {
+        connect(spriteButton, &AOEmoteButton::clicked, this, [this, spriteButton]() {
             onButtonClicked(spriteButton);
         });
 
