@@ -213,7 +213,7 @@ void EmoteMenuFilter::setupCategories() {
     QHash<QString, QStringList> categories = ao_app->read_emote_categories(currentChar);
 
     for (const QString &category : categories.keys()) {
-        QListWidgetItem *item = new QListWidgetItem(category, categoryList);
+        new QListWidgetItem(category, categoryList);
     }
 }
 
