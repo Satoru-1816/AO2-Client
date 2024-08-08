@@ -310,6 +310,7 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
         }
         selectedButtons.clear();
 
+        qDebug() << "We select a new button";
         // Select a new button
         updateButtonSelection(button, true);
         selectedButtons.append(button);
@@ -317,7 +318,7 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
 }
 
 void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelected) {
-    QString baseImagePath = ao_app->get_real_path(ao_app->get_character_path(courtroom->get_current_char(), 
+    QString baseImagePath = ao_app->get_image_suffix(ao_app->get_character_path(courtroom->get_current_char(), 
 	                                                  "emotions/button" + QString::number(button->get_id())));
     QString imagePath = baseImagePath + (isSelected ? "_on" : "_off");
 
