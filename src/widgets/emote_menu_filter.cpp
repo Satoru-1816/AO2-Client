@@ -11,6 +11,7 @@
 #include <QHash>
 #include <QTextStream>
 #include <QDir>
+#include <QMouseEvent>
 
 EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Courtroom *p_courtroom)
     : QDialog(parent), ao_app(p_ao_app), courtroom(p_courtroom)
@@ -140,6 +141,10 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
         spriteButton->set_comment(emoteName);
         spriteButtons.append(spriteButton);
         spriteButton->setContextMenuPolicy(Qt::CustomContextMenu);
+
+        connect(spriteButton, &AOEmoteButton::on_clicked, this, [this, spriteButton]() {
+            onButtonClicked(spriteButton);
+        });
 
         connect(spriteButton, &AOEmoteButton::customContextMenuRequested, [this, spriteButton](const QPoint &pos) {
             QMenu menu;
@@ -284,6 +289,39 @@ void EmoteMenuFilter::saveTagsToFile(const QHash<QString, QStringList> &tags) {
         }
         file.close();
     }
+}
+
+void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
+    bool isCtrlPressed = (QApplication::keyboardModifiers() & Qt::ControlModifier) == Qt::ControlModifier;
+
+    if (isCtrlPressed) {
+        // Alternate selection
+        if (selectedButtons.contains(button)) {
+            updateButtonSelection(button, false);  // Deselect
+            selectedButtons.removeOne(button);
+        } else {
+            updateButtonSelection(button, true);  // Selecct
+            selectedButtons.append(button);
+        }
+    } else {
+        // Clear previous selection if Ctrl is not being held
+        for (AOEmoteButton *btn : selectedButtons) {
+            updateButtonSelection(btn, false);
+        }
+        selectedButtons.clear();
+
+        // Select a new button
+        updateButtonSelection(button, true);
+        selectedButtons.append(button);
+    }
+}
+
+void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelected) {
+    QString baseImagePath = ao_app->get_character_path(courtroom->get_current_char(), 
+	                                                  "emotions/button" + QString::number(button->get_id()));
+    QString imagePath = baseImagePath + (isSelected ? "_on" : "_off");
+
+    button->set_selected_image(imagePath);
 }
 
 EmoteMenuFilter::~EmoteMenuFilter()

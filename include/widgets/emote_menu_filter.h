@@ -47,6 +47,7 @@ private slots:
     void addCategory();
     void removeCategory();
     void onCategorySelected(QListWidgetItem *item);
+    void onButtonClicked(AOEmoteButton *button);
 
 private:
     void setupLayout();
@@ -54,6 +55,8 @@ private:
     void loadButtons(const QStringList &emoteIds = QStringList());
     void arrangeButtons();
     void saveTagsToFile(const QHash<QString, QStringList> &tags);
+    
+	void updateButtonSelection(AOEmoteButton *button, bool isSelected);
 
     AOApplication *ao_app;
     Courtroom *courtroom;
@@ -67,6 +70,7 @@ private:
     QPushButton *removeCategoryButton;
     
     QVector<AOEmoteButton*> spriteButtons;
+    QList<AOEmoteButton*> selectedButtons;
 };
 
 class TagDialog : public QDialog {
