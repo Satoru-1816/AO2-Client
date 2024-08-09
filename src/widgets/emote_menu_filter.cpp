@@ -328,7 +328,7 @@ void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelect
     QString baseImagePath = ao_app->get_image_suffix(ao_app->get_character_path(courtroom->get_current_char(), 
 	                                                  "emotions/button" + QString::number(button->get_id()) + state));
 
-    spriteButton->set_image(imagePath, "");
+    button->set_image(imagePath, "");
 }
 
 EmoteMenuFilter::~EmoteMenuFilter()
