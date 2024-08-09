@@ -214,6 +214,7 @@ QStringList EmoteMenuFilter::getCategoryList() const {
     for (int i = 0; i < categoryList->count(); ++i) {
         categories << categoryList->item(i)->text();
     }
+    categories.sort();
     return categories;
 }
 
