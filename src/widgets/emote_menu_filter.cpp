@@ -4,6 +4,7 @@
 #include "courtroom.h"
 #include <QResizeEvent>
 #include <QShowEvent>
+#include <algorithm>
 #include <QFocusEvent>
 #include <QVBoxLayout>
 #include <QInputDialog>
@@ -290,18 +291,23 @@ void EmoteMenuFilter::saveTagsToFile(const QHash<QString, QStringList> &tags) {
         }
         file.close();
     }
-    
+
     // Append new tags to existing tags
     for (auto it = tags.begin(); it != tags.end(); ++it) {
         existingTags[it.key()] += it.value();
     }
 
-    // Write all tags (existing and new) to the file
+    // Sort categories and write to file
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
-        for (auto it = existingTags.begin(); it != existingTags.end(); ++it) {
-            out << "[" << it.key() << "]\n";
-            for (const QString &value : it.value()) {
+        
+        // Get sorted category keys
+        QStringList sortedCategories = existingTags.keys();
+        std::sort(sortedCategories.begin(), sortedCategories.end());
+
+        for (const QString &category : sortedCategories) {
+            out << "[" << category << "]\n";
+            for (const QString &value : existingTags[category]) {
                 out << value << "\n";
             }
             out << "\n";
