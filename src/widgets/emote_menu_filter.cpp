@@ -311,9 +311,27 @@ void EmoteMenuFilter::saveTagsToFile(const QHash<QString, QStringList> &tags) {
 }
 
 void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
-    bool isCtrlPressed = (QApplication::keyboardModifiers() & Qt::ControlModifier) == Qt::ControlModifier;
+    bool shiftPressed = QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier);
+    bool ctrlPressed = QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
 
-    if (isCtrlPressed) {
+    if (shiftPressed && !selectedEmotes.isEmpty()) {
+        // Handle Shift + Click (select range)
+        int startIndex = spriteButtons.indexOf(selectedEmotes.last());
+        int endIndex = spriteButtons.indexOf(button);
+
+        if (startIndex > endIndex) {
+            qSwap(startIndex, endIndex);
+        }
+        
+        // Select all buttons in the chosen range
+        for (int i = startIndex; i <= endIndex; ++i) {
+            AOEmoteButton *btn = spriteButtons[i];
+            if (!selectedEmotes.contains(btn)) {
+                selectedEmotes.append(btn);
+                updateButtonSelection(btn, true);
+            }
+        }
+    } else if (ctrlPressed) {
         // Alternate selection
         if (selectedButtons.contains(button)) {
             updateButtonSelection(button, false);  // Deselect
@@ -329,7 +347,6 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
         }
         selectedButtons.clear();
 
-        qDebug() << "We select a new button";
         // Select a new button
         updateButtonSelection(button, true);
         selectedButtons.append(button);
