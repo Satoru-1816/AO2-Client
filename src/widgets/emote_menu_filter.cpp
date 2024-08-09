@@ -3,6 +3,7 @@
 #include "aoapplication.h"
 #include "courtroom.h"
 #include <QResizeEvent>
+#include <QShowEvent>
 #include <QFocusEvent>
 #include <QVBoxLayout>
 #include <QInputDialog>
@@ -100,6 +101,11 @@ void EmoteMenuFilter::resizeEvent(QResizeEvent *event) {
     }
 }
 
+void EmoteMenuFilter::showEvent(QShowEvent *event) {
+    QDialog::showEvent(event);
+    arrangeButtons();
+}
+
 //void EmoteMenuFilter::focusInEvent(QFocusEvent *event) {
 //    QDialog::focusInEvent(event);
 //    this->setWindowOpacity(1.0); // Fully opaque when in focus
@@ -141,6 +147,7 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
         spriteButton->set_comment(emoteName);
         spriteButtons.append(spriteButton);
         spriteButton->setContextMenuPolicy(Qt::CustomContextMenu);
+        spriteButton->setFixedSize(buttonSize, buttonSize);
 
         connect(spriteButton, &AOEmoteButton::clicked, this, [this, spriteButton]() {
             onButtonClicked(spriteButton);
@@ -179,6 +186,7 @@ void EmoteMenuFilter::arrangeButtons() {
 
     for (AOEmoteButton *spriteButton : qAsConst(spriteButtons)) {
         gridLayout->addWidget(spriteButton, row, col);
+        spriteButton->setFixedSize(buttonSize, buttonSize); // Ensure fixed size
 
         col++;
         if (col >= columns) {
@@ -218,6 +226,7 @@ void EmoteMenuFilter::setupCategories() {
 }
 
 void EmoteMenuFilter::onCategorySelected(QListWidgetItem *item) {
+	selectedButtons.clear();
     QString selectedCategory = item->text();
     if (selectedCategory != "Default Emotes") {
         QHash<QString, QStringList> categories = ao_app->read_emote_categories(courtroom->get_current_char());
