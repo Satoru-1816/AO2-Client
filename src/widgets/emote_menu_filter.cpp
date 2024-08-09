@@ -248,8 +248,8 @@ void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
 
         // Only save tags in group if more than one button
         // is selected
-        if (selectedEmotes.size() > 1) {
-            for (AOEmoteButton *selectedButton : selectedEmotes) {
+        if (selectedButtons.size() > 1) {
+            for (AOEmoteButton *selectedButton : selectedButtons) {
                 for (const QString &tag : selectedTags) {
                     tagsToSave[tag].append(selectedButton->get_comment());
                 }
@@ -314,9 +314,9 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
     bool shiftPressed = QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier);
     bool ctrlPressed = QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
 
-    if (shiftPressed && !selectedEmotes.isEmpty()) {
+    if (shiftPressed && !selectedButtons.isEmpty()) {
         // Handle Shift + Click (select range)
-        int startIndex = spriteButtons.indexOf(selectedEmotes.last());
+        int startIndex = spriteButtons.indexOf(selectedButtons.last());
         int endIndex = spriteButtons.indexOf(button);
 
         if (startIndex > endIndex) {
@@ -326,8 +326,8 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
         // Select all buttons in the chosen range
         for (int i = startIndex; i <= endIndex; ++i) {
             AOEmoteButton *btn = spriteButtons[i];
-            if (!selectedEmotes.contains(btn)) {
-                selectedEmotes.append(btn);
+            if (!selectedButtons.contains(btn)) {
+                selectedButtons.append(btn);
                 updateButtonSelection(btn, true);
             }
         }
