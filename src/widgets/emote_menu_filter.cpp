@@ -246,8 +246,18 @@ void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
         QStringList selectedTags = dialog.selectedTags();
         QHash<QString, QStringList> tagsToSave;
 
-        for (const QString &tag : selectedTags) {
-            tagsToSave[tag].append(button->get_comment());
+        // Only save tags in group if more than one button
+        // is selected
+        if (selectedEmotes.size() > 1) {
+            for (AOEmoteButton *selectedButton : selectedEmotes) {
+                for (const QString &tag : selectedTags) {
+                    tagsToSave[tag].append(selectedButton->get_comment());
+                }
+            }
+        } else {
+            for (const QString &tag : selectedTags) {
+                tagsToSave[tag].append(button->get_comment());
+            }
         }
 
         saveTagsToFile(tagsToSave);
