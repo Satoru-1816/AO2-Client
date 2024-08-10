@@ -121,6 +121,7 @@ void EmoteMenuFilter::showEvent(QShowEvent *event) {
 void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
     QString charName = courtroom->get_current_char();
     int total_emotes = ao_app->get_emote_number(charName);
+    QString selected_image = ao_app->get_image_suffix(ao_app->get_theme_path("emote_selected", ""), true);
     QString emotePath;
     QString emoteName;
     QString emoteId;
@@ -145,6 +146,7 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
         AOEmoteButton *spriteButton = new AOEmoteButton(this, ao_app, 0, 0, buttonSize, buttonSize);
         spriteButton->set_image(emotePath, "");
         spriteButton->set_id(n + 1);
+        spriteButton->set_selected_image(selected_image);
         spriteButton->set_comment(emoteName);
         spriteButtons.append(spriteButton);
         spriteButton->setContextMenuPolicy(Qt::CustomContextMenu);
