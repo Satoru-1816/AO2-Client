@@ -347,6 +347,11 @@ public:
     return ao_app->get_image_suffix(ao_app->get_character_path(charname, "emotions/button" + emotion_number + "_off")); 
   }
 
+  // TEST ONLY
+  void remote_select_emote(int p_id) {
+    select_emote(p_id);
+  };
+  
   QString server_overlay = "";
 
   void search_download_file(QString action);
