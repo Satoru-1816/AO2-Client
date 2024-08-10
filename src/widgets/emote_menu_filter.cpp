@@ -219,7 +219,7 @@ QStringList EmoteMenuFilter::getCategoryList() const {
 
 void EmoteMenuFilter::setupCategories() {
     QString currentChar = courtroom->get_current_char();
-    QHash<QString, QStringList> categories = ao_app->read_emote_categories(currentChar);
+    QMap<QString, QStringList> categories = ao_app->read_emote_categories(currentChar);
 
     qDebug() << (categories);
     for (const QString &category : categories.keys()) {

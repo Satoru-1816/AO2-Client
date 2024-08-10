@@ -471,9 +471,8 @@ QStringList AOApplication::read_char_sets(VPath p_path)
   return r_values;
 }
 
-QHash<QString, QStringList> AOApplication::read_emote_categories(QString p_char) {
-    QHash<QString, QStringList> categoryMap;
-    QList<QString> categoryOrder;
+QMap<QString, QStringList> AOApplication::read_emote_categories(QString p_char) {
+    QMap<QString, QStringList> categoryMap;
     QFile file(get_real_path(get_character_path(p_char, "emote_tags.ini")));
     
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -492,23 +491,19 @@ QHash<QString, QStringList> AOApplication::read_emote_categories(QString p_char)
 
         if (line.startsWith('[') && line.endsWith(']')) {
             currentCategory = line.mid(1, line.length() - 2);  // Extract the category name
+            // Ensure that the category is added to the QMap
             if (!categoryMap.contains(currentCategory)) {
-                categoryOrder.append(currentCategory);
+                categoryMap[currentCategory] = QStringList();
             }
         } else {
+            // Add content to the current category
             categoryMap[currentCategory].append(line);
         }
     }
     
     file.close();
-    
-    // We create a new QHash to preserve the insertion order
-    QHash<QString, QStringList> orderedCategoryMap;
-    for (const QString &category : qAsConst(categoryOrder)) {
-        orderedCategoryMap[category] = categoryMap[category];
-    }
-    
-    return orderedCategoryMap;
+
+    return categoryMap;
 }
 
 QString AOApplication::get_showname(QString p_char)
