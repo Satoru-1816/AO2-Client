@@ -362,7 +362,7 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
 
         // courtroom->ui_ic_chat_message->setFocus();        
         // courtroom->ui_emote_dropdown->setCurrentIndex(button->get_id());
-        courtroom->remote_select_emote(button->get_id());
+        courtroom->remote_select_emote(button->get_id()-1);
     }
 }
 
