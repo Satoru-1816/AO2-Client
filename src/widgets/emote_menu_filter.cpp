@@ -406,7 +406,10 @@ TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
     scrollWidget->setLayout(scrollLayout);
     scrollArea->setWidget(scrollWidget);
 
-    mainLayout->addWidget(scrollArea);
+    groupBoxLayout->addWidget(scrollArea);
+    groupBox->setLayout(groupBoxLayout);
+
+    mainLayout->addWidget(groupBox);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     QPushButton *okButton = new QPushButton("Save", this);
@@ -419,6 +422,7 @@ TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
 
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
+    adjustSize();
 }
 
 QStringList TagDialog::selectedTags() const
