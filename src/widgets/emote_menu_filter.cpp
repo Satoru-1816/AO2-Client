@@ -359,6 +359,7 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
         // Select a new button
         updateButtonSelection(button, true);
         selectedButtons.append(button);
+        courtroom->ui_ic_chat_message->setFocus();
     }
 }
 
