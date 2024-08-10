@@ -51,8 +51,9 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
     // connect(searchBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
 
-    // setParent(courtroom); YEAH NO, uncomment this later and avoid the white text apocalypse
-    // setWindowFlags(Qt::Tool);
+    setParent(courtroom);
+    setWindowFlags(Qt::Tool);
+    setStyleSheet("QLabel { } QScrollArea { } QListWidget { } QLineEdit { }");
 }
 
 void EmoteMenuFilter::setupLayout()
