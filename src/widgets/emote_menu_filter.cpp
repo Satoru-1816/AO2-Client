@@ -53,7 +53,12 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
 
     setParent(courtroom);
     setWindowFlags(Qt::Tool);
-    setStyleSheet("QLabel { } QScrollArea { } QListWidget { } QLineEdit { }");
+    
+    scrollArea->setStyleSheet("");
+    searchBox->setStyleSheet("");
+    categoryList->setStyleSheet("");
+    gridLayout->setStyleSheet("");
+    mainLayout->setStyleSheet("");
 }
 
 void EmoteMenuFilter::setupLayout()
@@ -427,6 +432,11 @@ TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
 
     connect(okButton, &QPushButton::clicked, this, &TagDialog::accept);
     connect(cancelButton, &QPushButton::clicked, this, &TagDialog::reject);
+
+    scrollArea->setStyleSheet("");
+    groupBox->setStyleSheet("");
+    setStyleSheet("");
+    mainLayout->setStyleSheet("");
 
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
