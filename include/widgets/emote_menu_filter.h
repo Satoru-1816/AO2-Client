@@ -86,6 +86,9 @@ private:
     QGroupBox *groupBox;
     QVBoxLayout *groupBoxLayout;
     QList<QCheckBox *> checkboxes;
+    QWidget *scrollWidget;
+    QVBoxLayout *scrollLayout;
+    QScrollArea *scrollArea;
 };
 
 #endif // EMOTE_MENU_FILTER_H
