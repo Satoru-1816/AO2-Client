@@ -54,10 +54,10 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     setParent(courtroom);
     setWindowFlags(Qt::Tool);
     
-    scrollArea->setStyleSheet("");
-    searchBox->setStyleSheet("");
-    categoryList->setStyleSheet("");
-    setStyleSheet("QLabel { color = black; } ");
+    scrollArea->setStyleSheet(" ");
+    categoryList->setStyleSheet(" ");
+    setStyleSheet("QLabel { color: black; } QLineEdit { background-color: white; }");
+    searchBox->setStyleSheet(" ");
 }
 
 void EmoteMenuFilter::setupLayout()
