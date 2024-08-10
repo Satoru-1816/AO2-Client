@@ -388,29 +388,23 @@ EmoteMenuFilter::~EmoteMenuFilter()
 TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
     : QDialog(parent), mainLayout(new QVBoxLayout(this)), groupBox(new QGroupBox("Emote Tags", this)), groupBoxLayout(new QVBoxLayout(groupBox))
 {
-    // Set up the scroll widget and its layout
-    scrollWidget->setLayout(scrollLayout);
-    
     // Set up the scroll area
+    scrollWidget->setLayout(groupBoxLayout);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(scrollWidget);
 
-    // Add checkboxes to the scroll layout
+    // Add checkboxes to the groupBoxLayout
     for (const QString &category : categories) {
         if (category == "Default Emotes") {
             continue; // Unneeded checkbox
         }
         QCheckBox *checkBox = new QCheckBox(category, scrollWidget);
-        scrollLayout->addWidget(checkBox);
+        groupBoxLayout->addWidget(checkBox);
         checkboxes.append(checkBox);
     }
 
-    // Add a scroll area to the group box
-    groupBox->setLayout(groupBoxLayout);
-    groupBoxLayout->addWidget(scrollArea);
-
-    // Add group box to the main layout
-    mainLayout->addWidget(groupBox);
+    // Add the scroll area to the group box
+    mainLayout->addWidget(scrollArea);
 
     // Add buttons
     QHBoxLayout *buttonLayout = new QHBoxLayout;
@@ -424,7 +418,6 @@ TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
 
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
-
 }
 
 QStringList TagDialog::selectedTags() const
