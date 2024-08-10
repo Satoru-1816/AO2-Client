@@ -435,7 +435,6 @@ TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
     scrollArea->setStyleSheet("");
     groupBox->setStyleSheet("");
     setStyleSheet("");
-    mainLayout->setStyleSheet("");
     setStyleSheet("QLabel { color = black; } ");
 
     mainLayout->addLayout(buttonLayout);
