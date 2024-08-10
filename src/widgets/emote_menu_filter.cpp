@@ -360,8 +360,8 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
         updateButtonSelection(button, true);
         selectedButtons.append(button);
 
-        courtroom->ui_ic_chat_message->setFocus();        
-        courtroom->ui_emote_dropdown->setCurrentIndex(button->get_id());
+        // courtroom->ui_ic_chat_message->setFocus();        
+        // courtroom->ui_emote_dropdown->setCurrentIndex(button->get_id());
         courtroom->current_button_selected = button->get_id();
     }
 }
