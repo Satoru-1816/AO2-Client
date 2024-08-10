@@ -57,8 +57,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     scrollArea->setStyleSheet("");
     searchBox->setStyleSheet("");
     categoryList->setStyleSheet("");
-    gridLayout->setStyleSheet("");
-    mainLayout->setStyleSheet("");
+    setStyleSheet("QLabel { color = black; } ");
 }
 
 void EmoteMenuFilter::setupLayout()
@@ -437,6 +436,7 @@ TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
     groupBox->setStyleSheet("");
     setStyleSheet("");
     mainLayout->setStyleSheet("");
+    setStyleSheet("QLabel { color = black; } ");
 
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
