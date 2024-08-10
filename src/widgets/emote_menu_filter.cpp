@@ -231,7 +231,7 @@ void EmoteMenuFilter::onCategorySelected(QListWidgetItem *item) {
 	selectedButtons.clear();
     QString selectedCategory = item->text();
     if (selectedCategory != "Default Emotes") {
-        QHash<QString, QStringList> categories = ao_app->read_emote_categories(courtroom->get_current_char());
+        QMap<QString, QStringList> categories = ao_app->read_emote_categories(courtroom->get_current_char());
         QStringList emoteIds = categories.value(selectedCategory);
         loadButtons(emoteIds);
     } else {
