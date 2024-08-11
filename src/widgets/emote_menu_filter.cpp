@@ -59,13 +59,12 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     
     emote_menu_ic_chat_filter = new QTextEditFilter();
     emote_menu_ic_chat_filter->text_edit_preserve_selection = true;
-    searchBox->installEventFilter(emote_menu_ic_chat);
+    searchBox->installEventFilter(emote_menu_ic_chat_filter);
     
     // When the "emit" signal is sent in eventfilters.h, we call on_chat_return_pressed
     connect(emote_menu_ic_chat_filter, &QTextEditFilter::chat_return_pressed, this,
             &Courtroom::on_chat_return_pressed);
 
-    searchBox->setDefault(true);
 }
 
 void EmoteMenuFilter::setupLayout()
@@ -394,7 +393,7 @@ void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelect
     button->set_char_image(courtroom->get_current_char(), button->get_id() - 1, isSelected);
 }
 
-QString getEmoteMenuChat() {
+QString EmoteMenuFilter::getEmoteMenuChat() {
     QString msgText = searchBox->toPlainText().replace("\n", "\\n");
     searchBox.clear();
     return msgText;
