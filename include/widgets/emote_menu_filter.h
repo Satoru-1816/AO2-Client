@@ -72,6 +72,7 @@ private:
     QGridLayout *gridLayout;
     QPushButton *addCategoryButton;
     QPushButton *removeCategoryButton;
+    QTextEditFilter *emote_menu_ic_chat_filter;
     
     QVector<AOEmoteButton*> spriteButtons;
     QList<AOEmoteButton*> selectedButtons;
