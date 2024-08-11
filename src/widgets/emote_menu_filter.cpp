@@ -53,7 +53,11 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     setParent(courtroom);
     setWindowFlags(Qt::Tool);
     
-    setStyleSheet("QLabel { color: black; } QLineEdit { background-color: white; }");
+    scrollArea->setStyleSheet(" ");
+    categoryList->setStyleSheet(" ");
+    setStyleSheet("QLabel { color: black; } QLineEdit { color: black; background-color: white; } QAbstractItemView { } QScrollBar { }");
+    searchBox->setStyleSheet(" ");
+    searchBox->setPlaceholderText("Search...");
 }
 
 void EmoteMenuFilter::setupLayout()
@@ -210,10 +214,6 @@ void EmoteMenuFilter::arrangeButtons() {
     scrollArea->setWidget(containerWidget);
     scrollArea->setWidgetResizable(true);
 
-    scrollArea->setStyleSheet(" ");
-    categoryList->setStyleSheet(" ");
-    searchBox->setStyleSheet(" ");
-    searchBox->setPlaceholderText("Search...");
 }
 
 QStringList EmoteMenuFilter::getCategoryList() const {
@@ -435,7 +435,7 @@ TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
     scrollArea->setStyleSheet("");
     groupBox->setStyleSheet("");
     setStyleSheet("");
-    setStyleSheet("QLabel { color = black; } ");
+    setStyleSheet("QLabel { color: black; } QLineEdit { color: black; background-color: white; } QAbstractItemView { } QScrollBar { }");
 
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
