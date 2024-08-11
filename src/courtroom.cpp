@@ -2160,8 +2160,6 @@ void Courtroom::on_chat_return_pressed()
   if (is_muted)
     return;
 
-  ao_app->send_server_packet(new AOPacket("TT", {"0", current_char}));
-
   ui_ic_chat_message->blockSignals(true);
   QTimer::singleShot(Options::getInstance().chatRateLimit(), this,
                      [this] { ui_ic_chat_message->blockSignals(false); });
@@ -2287,6 +2285,15 @@ void Courtroom::on_chat_return_pressed()
   }
 
   QString f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
+  
+   QObject* signalSender = sender();
+   QString f_message;
+
+   if (signalSender == ui_ic_chat_message) {
+       f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
+   } else {
+       f_message = getEmoteMenuChat();
+  }
   
   packet_contents.append(f_message);
 

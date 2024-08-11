@@ -19,7 +19,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     : QDialog(parent), ao_app(p_ao_app), courtroom(p_courtroom)
 {
     categoryList = new QListWidget(this);
-    searchBox = new QLineEdit(this);
+    searchBox = new QTextEdit(this);
     scrollArea = new QScrollArea(this);
     buttonContainer = new QWidget(this);
     gridLayout = new QGridLayout(buttonContainer);
@@ -53,16 +53,26 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     setParent(courtroom);
     setWindowFlags(Qt::Tool);
     
-    setStyleSheet("QLabel { color: black; } QLineEdit { color: black; background-color: white; } \
-	               QAbstractItemView { border: 1px solid gray; } QScrollBar { }");
+    setStyleSheet("QLabel { color: black; } QTextEdit { color: black; background-color: white; } \
+	               QAbstractItemView { border: 1px solid gray; } QGroupBox { color: black; } QCheckBox { color: black; }");
     searchBox->setPlaceholderText("Search...");
+    
+    emote_menu_ic_chat_filter = new QTextEditFilter();
+    emote_menu_ic_chat_filter->text_edit_preserve_selection = true;
+    searchBox->installEventFilter(emote_menu_ic_chat);
+    
+    // When the "emit" signal is sent in eventfilters.h, we call on_chat_return_pressed
+    connect(emote_menu_ic_chat_filter, &QTextEditFilter::chat_return_pressed, this,
+            &Courtroom::on_chat_return_pressed);
+
+    searchBox->setDefault(true);
 }
 
 void EmoteMenuFilter::setupLayout()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this); // maybe change this to something else?
-    mainLayout->addWidget(searchBox);
     mainLayout->addWidget(categoryList);
+    mainLayout->addWidget(searchBox);
     mainLayout->addWidget(scrollArea);
     mainLayout->addWidget(addCategoryButton);
     mainLayout->addWidget(removeCategoryButton);
@@ -429,8 +439,6 @@ TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
 
     connect(okButton, &QPushButton::clicked, this, &TagDialog::accept);
     connect(cancelButton, &QPushButton::clicked, this, &TagDialog::reject);
-
-    setStyleSheet("QLabel { color: black; } QCheckBox { color: black; } QGroupBox { color: black; }");
 
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);

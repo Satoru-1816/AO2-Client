@@ -9,6 +9,7 @@
 #include <QDialog>
 #include <QListWidget>
 #include <QLineEdit>
+#include <QTextEdit>
 #include <QScrollArea>
 #include <QPushButton>
 #include <QGridLayout>
@@ -36,6 +37,11 @@ public:
     ~EmoteMenuFilter();
     void showTagDialog(AOEmoteButton *button);
     QStringList getCategoryList() const;
+    QString getEmoteMenuChat() {
+    	QString msgText = searchBox->toPlainText()->replace("\n", "\\n");
+    	searchBox.clear();
+    	return msgText;
+	};
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -63,7 +69,7 @@ private:
     AOApplication *ao_app;
     Courtroom *courtroom;
     QListWidget *categoryList;
-    QLineEdit *searchBox;
+    QTextEdit *searchBox;
     QScrollArea *scrollArea;
     QWidget *buttonContainer;
     QWidget *containerWidget;
