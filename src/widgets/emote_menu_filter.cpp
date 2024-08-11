@@ -28,7 +28,6 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
 
     scrollArea->setWidget(buttonContainer);
     scrollArea->setWidgetResizable(true);
-    searchBox->setPlaceholderText("Search...");
 
     setupLayout();
 
@@ -54,10 +53,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     setParent(courtroom);
     setWindowFlags(Qt::Tool);
     
-    scrollArea->setStyleSheet(" ");
-    categoryList->setStyleSheet(" ");
     setStyleSheet("QLabel { color: black; } QLineEdit { background-color: white; }");
-    searchBox->setStyleSheet(" ");
 }
 
 void EmoteMenuFilter::setupLayout()
@@ -214,6 +210,10 @@ void EmoteMenuFilter::arrangeButtons() {
     scrollArea->setWidget(containerWidget);
     scrollArea->setWidgetResizable(true);
 
+    scrollArea->setStyleSheet(" ");
+    categoryList->setStyleSheet(" ");
+    searchBox->setStyleSheet(" ");
+    searchBox->setPlaceholderText("Search...");
 }
 
 QStringList EmoteMenuFilter::getCategoryList() const {
