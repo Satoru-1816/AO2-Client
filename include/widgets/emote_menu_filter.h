@@ -3,6 +3,7 @@
 
 #include "aoemotebutton.h"
 #include "courtroom.h"
+#include "eventfilters.h"
 #include <QResizeEvent>
 #include <QShowEvent>
 #include <QFocusEvent>
