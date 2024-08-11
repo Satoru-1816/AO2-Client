@@ -54,7 +54,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     setWindowFlags(Qt::Tool);
     
     setStyleSheet("QLabel { color: black; } QLineEdit { color: black; background-color: white; } \
-	               QAbstractItemView { border: 1px solid darkgray; } QScrollBar { }");
+	               QAbstractItemView { border: 1px solid gray; } QScrollBar { }");
     searchBox->setPlaceholderText("Search...");
 }
 
@@ -430,7 +430,7 @@ TagDialog::TagDialog(const QStringList &categories, QWidget *parent)
     connect(okButton, &QPushButton::clicked, this, &TagDialog::accept);
     connect(cancelButton, &QPushButton::clicked, this, &TagDialog::reject);
 
-    setStyleSheet("QLabel { color: black; } QCheckBox { color: black; }");
+    setStyleSheet("QLabel { color: black; } QCheckBox { color: black; } QGroupBox { color: black; }");
 
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
