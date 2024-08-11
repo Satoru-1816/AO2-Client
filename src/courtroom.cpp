@@ -2284,7 +2284,7 @@ void Courtroom::on_chat_return_pressed()
     packet_contents.append(ao_app->get_emote(current_char, current_emote)); 
   }
 
-  QString f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
+  // QString f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
   
    QObject* signalSender = sender();
    QString f_message;
@@ -2292,7 +2292,7 @@ void Courtroom::on_chat_return_pressed()
    if (signalSender == ui_ic_chat_message) {
        f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
    } else {
-       f_message = getEmoteMenuChat();
+       f_message = emoteFilterMenu->getEmoteMenuChat();
   }
   
   packet_contents.append(f_message);

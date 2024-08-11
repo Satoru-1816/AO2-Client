@@ -394,6 +394,12 @@ void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelect
     button->set_char_image(courtroom->get_current_char(), button->get_id() - 1, isSelected);
 }
 
+QString getEmoteMenuChat() {
+    QString msgText = searchBox->toPlainText().replace("\n", "\\n");
+    searchBox.clear();
+    return msgText;
+}
+
 EmoteMenuFilter::~EmoteMenuFilter()
 {
     delete categoryList;

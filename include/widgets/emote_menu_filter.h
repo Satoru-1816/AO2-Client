@@ -37,11 +37,7 @@ public:
     ~EmoteMenuFilter();
     void showTagDialog(AOEmoteButton *button);
     QStringList getCategoryList() const;
-    QString getEmoteMenuChat() {
-    	QString msgText = searchBox->toPlainText()->replace("\n", "\\n");
-    	searchBox.clear();
-    	return msgText;
-	};
+    QString getEmoteMenuChat();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
