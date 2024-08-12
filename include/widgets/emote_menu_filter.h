@@ -53,6 +53,7 @@ private slots:
     void removeCategory();
     void onCategorySelected(QListWidgetItem *item);
     void onButtonClicked(AOEmoteButton *button);
+    void onRemoveCategoryClicked();
 
 private:
     void setupLayout();
@@ -60,6 +61,7 @@ private:
     void loadButtons(const QStringList &emoteIds = QStringList());
     void arrangeButtons();
     void saveTagsToFile(const QHash<QString, QStringList> &tags);
+    void removeCategoryFromFile(const QString &category);
     
 	void updateButtonSelection(AOEmoteButton *button, bool isSelected);
 

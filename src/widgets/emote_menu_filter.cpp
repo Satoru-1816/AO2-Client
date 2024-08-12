@@ -47,7 +47,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     // connect(categoryList, &QListWidget::itemSelectionChanged, this, &EmoteMenuFilter::onCategorySelected);
     connect(categoryList, &QListWidget::itemClicked, this, &EmoteMenuFilter::onCategorySelected);
     connect(addCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::addCategory);
-    connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
+    connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::onRemoveCategoryClicked);
     // connect(messageBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
 
     setParent(courtroom);
@@ -329,6 +329,63 @@ void EmoteMenuFilter::saveTagsToFile(const QHash<QString, QStringList> &tags) {
             out << "\n";
         }
         file.close();
+    }
+}
+
+void EmoteMenuFilter::removeCategoryFromFile(const QString &category) {
+    QString filePath = ao_app->get_real_path(VPath("characters/" + ao_app->w_courtroom->get_current_char() + "/"));
+    QFile file(filePath + "emote_tags.ini");
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return;
+    }
+
+    QTextStream in(&file);
+    QString content;
+    QString currentCategory;
+    bool skipCategory = false;
+
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+
+        if (line.startsWith('[') && line.endsWith(']')) {
+            currentCategory = line.mid(1, line.length() - 2);
+            skipCategory = (currentCategory == category);
+        }
+
+        if (!skipCategory) {
+            content += line + "\n";
+        }
+    }
+
+    file.close();
+
+    // Write the updated content back to the file
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        out << content;
+        file.close();
+    }
+}
+
+void EmoteMenuFilter::onRemoveCategoryClicked() {
+    QListWidgetItem *selectedItem = categoryList->currentItem();
+    
+    if (!selectedItem) {
+        return;
+    }
+
+    QString categoryToRemove = selectedItem->text();
+    
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::warning(this, "Remove Category",
+                                 QString("Are you sure you want to remove the category '%1' and all its contents?").arg(categoryToRemove),
+                                 QMessageBox::Yes | QMessageBox::No);
+    
+    if (reply == QMessageBox::Yes) {
+        delete categoryListWidget->takeItem(categoryListWidget->row(selectedItem));
+
+        removeCategoryFromFile(categoryToRemove);
     }
 }
 
