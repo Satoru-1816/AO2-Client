@@ -2287,13 +2287,15 @@ void Courtroom::on_chat_return_pressed()
   // QString f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
   
    QObject* signalSender = sender();
+   qDebug() << "Signal sender:" << signalSender;
+
    QString f_message;
 
-   if (signalSender == ui_ic_chat_message) {
+   if (signalSender == ui_ic_chat_message_filter) {
        f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
    } else {
        f_message = emoteFilterMenu->getEmoteMenuChat();
-  }
+   }
   
   packet_contents.append(f_message);
 

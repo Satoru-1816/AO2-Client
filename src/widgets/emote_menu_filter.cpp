@@ -55,7 +55,8 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     
     setStyleSheet("QLabel { color: black; } QTextEdit { color: black; background-color: white; } \
 	               QAbstractItemView { border: 1px solid gray; } QGroupBox { color: black; } QCheckBox { color: black; }");
-    searchBox->setPlaceholderText("Search...");
+    searchBox->setPlaceholderText("Message in-character");
+    searchBox->setMinimumHeight(20);
     
     emote_menu_ic_chat_filter = new QTextEditFilter();
     emote_menu_ic_chat_filter->text_edit_preserve_selection = true;
