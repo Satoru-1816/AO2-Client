@@ -2,7 +2,6 @@
 #define EMOTE_MENU_FILTER_H
 
 #include "aoemotebutton.h"
-#include "courtroom.h"
 #include "eventfilters.h"
 #include <QResizeEvent>
 #include <QShowEvent>

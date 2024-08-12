@@ -13,7 +13,6 @@
 #include "aolayer.h"
 #include "aomusicplayer.h"
 #include "widgets/aooptionsdialog.h"
-#include "widgets/emote_menu_filter.h"
 #include "aopacket.h"
 #include "aosfxplayer.h"
 #include "aotextarea.h"
@@ -26,6 +25,7 @@
 #include "scrolltext.h"
 #include "eventfilters.h"
 #include "aoemotepreview.h"
+#include "widgets/emote_menu_filter.h"
 
 #include <QCheckBox>
 #include <QCloseEvent>

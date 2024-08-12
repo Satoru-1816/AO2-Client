@@ -62,7 +62,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     searchBox->installEventFilter(emote_menu_ic_chat_filter);
     
     // When the "emit" signal is sent in eventfilters.h, we call on_chat_return_pressed
-    connect(emote_menu_ic_chat_filter, &QTextEditFilter::chat_return_pressed, courtroom,
+    connect(emote_menu_ic_chat_filter, &QTextEditFilter::chat_return_pressed, ao_app->w_courtroom,
             &Courtroom::on_chat_return_pressed);
 
 }
@@ -131,7 +131,7 @@ void EmoteMenuFilter::showEvent(QShowEvent *event) {
 //}
 
 void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
-    QString charName = courtroom->get_current_char();
+    QString charName = ao_app->w_courtroom->get_current_char();
     int total_emotes = ao_app->get_emote_number(charName);
     QString selected_image = ao_app->get_image_suffix(ao_app->get_theme_path("emote_selected", ""), true);
     QString emotePath;
@@ -232,7 +232,7 @@ QStringList EmoteMenuFilter::getCategoryList() const {
 }
 
 void EmoteMenuFilter::setupCategories() {
-    QString currentChar = courtroom->get_current_char();
+    QString currentChar = ao_app->w_courtroom->get_current_char();
     QMap<QString, QStringList> categories = ao_app->read_emote_categories(currentChar);
 
     qDebug() << (categories);
@@ -245,7 +245,7 @@ void EmoteMenuFilter::onCategorySelected(QListWidgetItem *item) {
 	selectedButtons.clear();
     QString selectedCategory = item->text();
     if (selectedCategory != "Default Emotes") {
-        QMap<QString, QStringList> categories = ao_app->read_emote_categories(courtroom->get_current_char());
+        QMap<QString, QStringList> categories = ao_app->read_emote_categories(ao_app->w_courtroom->get_current_char());
         QStringList emoteIds = categories.value(selectedCategory);
         loadButtons(emoteIds);
     } else {
@@ -281,7 +281,7 @@ void EmoteMenuFilter::showTagDialog(AOEmoteButton *button) {
 }
 
 void EmoteMenuFilter::saveTagsToFile(const QHash<QString, QStringList> &tags) {
-    QString filePath = ao_app->get_real_path(VPath("characters/" + courtroom->get_current_char() + "/"));
+    QString filePath = ao_app->get_real_path(VPath("characters/" + ao_app->w_courtroom->get_current_char() + "/"));
     
     qDebug() << "File path:" << filePath;
 
@@ -374,7 +374,7 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
 
         // courtroom->ui_ic_chat_message->setFocus();        
         // courtroom->ui_emote_dropdown->setCurrentIndex(button->get_id());
-        courtroom->remote_select_emote(button->get_id()-1);
+        ao_app->w_courtroom->remote_select_emote(button->get_id()-1);
     }
 }
 
@@ -386,11 +386,11 @@ void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelect
       state = "_off";
 	}
 	  
-    QString baseImagePath = ao_app->get_image_suffix(ao_app->get_character_path(courtroom->get_current_char(), 
+    QString baseImagePath = ao_app->get_image_suffix(ao_app->get_character_path(ao_app->w_courtroom->get_current_char(), 
 	                                                  "emotions/button" + QString::number(button->get_id()) + state));
 
     // button->set_image(baseImagePath, "");
-    button->set_char_image(courtroom->get_current_char(), button->get_id() - 1, isSelected);
+    button->set_char_image(ao_app->w_courtroom->get_current_char(), button->get_id() - 1, isSelected);
 }
 
 QString EmoteMenuFilter::getEmoteMenuChat() {
