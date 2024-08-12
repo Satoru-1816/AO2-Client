@@ -715,6 +715,9 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   connect(chat_tick_timer, &QTimer::timeout, this, &Courtroom::chat_tick);
 
   connect(ui_ic_chat_message, &QTextEdit::textChanged, this, &Courtroom::onTextChanged);
+  
+  connect(emoteFilterMenu->getEmoteMenuMsgBox(), &QTextEdit::textChanged, this, &Courtroom::onTextChanged);
+  
   connect(typingTimer, &QTimer::timeout, this, &Courtroom::onTypingTimeout);
 
   connect(ui_pos_dropdown, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
@@ -2287,7 +2290,6 @@ void Courtroom::on_chat_return_pressed()
   // QString f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
   
    QObject* signalSender = sender();
-   qDebug() << "Signal sender:" << signalSender;
 
    QString f_message;
 
@@ -5959,7 +5961,14 @@ void Courtroom::on_hold_it_clicked()
 
 void Courtroom::onTextChanged()
 {
-  QString text = ui_ic_chat_message->toPlainText();
+  QObject* signalSender = sender();
+  QString text;
+
+  if (signalSender == ui_ic_chat_message) {
+    text = ui_ic_chat_message->toPlainText();
+  } else {
+    text = emoteFilterMenu->getEmoteMenuMsgBox();
+  }
   QString emotion_number = QString::number(current_button_selected + 1);
 
   if (!Options::getInstance().stopTypingIcon() /*&& ao_app->typing_timer_supported*/) {

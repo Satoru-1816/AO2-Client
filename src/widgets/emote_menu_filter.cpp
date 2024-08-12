@@ -19,7 +19,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     : QDialog(parent), ao_app(p_ao_app), courtroom(p_courtroom)
 {
     categoryList = new QListWidget(this);
-    searchBox = new QTextEdit(this);
+    messageBox = new QTextEdit(this);
     scrollArea = new QScrollArea(this);
     buttonContainer = new QWidget(this);
     gridLayout = new QGridLayout(buttonContainer);
@@ -48,19 +48,19 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     connect(categoryList, &QListWidget::itemClicked, this, &EmoteMenuFilter::onCategorySelected);
     connect(addCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::addCategory);
     connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
-    // connect(searchBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
+    // connect(messageBox, &QLineEdit::textChanged, this, &EmoteMenuFilter::onSearchTextChanged);
 
     setParent(courtroom);
     setWindowFlags(Qt::Tool);
     
-    setStyleSheet("QLabel { color: black; } QTextEdit { color: black; background-color: white; } \
+    setStyleSheet("QLabel { color: black; } QTextEdit { color: black; background-color: white; } QLineEdit { color: black; background-color: white; } \
 	               QAbstractItemView { border: 1px solid gray; } QGroupBox { color: black; } QCheckBox { color: black; }");
-    searchBox->setPlaceholderText("Message in-character");
-    searchBox->setMaximumHeight(24);
+    messageBox->setPlaceholderText("Message in-character");
+    messageBox->setMaximumHeight(24);
     
     emote_menu_ic_chat_filter = new QTextEditFilter();
     emote_menu_ic_chat_filter->text_edit_preserve_selection = true;
-    searchBox->installEventFilter(emote_menu_ic_chat_filter);
+    messageBox->installEventFilter(emote_menu_ic_chat_filter);
     
     // When the "emit" signal is sent in eventfilters.h, we call on_chat_return_pressed
     connect(emote_menu_ic_chat_filter, &QTextEditFilter::chat_return_pressed, ao_app->w_courtroom,
@@ -72,7 +72,7 @@ void EmoteMenuFilter::setupLayout()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this); // maybe change this to something else?
     mainLayout->addWidget(categoryList);
-    mainLayout->addWidget(searchBox);
+    mainLayout->addWidget(messageBox);
     mainLayout->addWidget(scrollArea);
     mainLayout->addWidget(addCategoryButton);
     mainLayout->addWidget(removeCategoryButton);
@@ -376,7 +376,7 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
         // courtroom->ui_ic_chat_message->setFocus();        
         // courtroom->ui_emote_dropdown->setCurrentIndex(button->get_id());
         ao_app->w_courtroom->remote_select_emote(button->get_id()-1);
-        searchBox->setFocus();
+        messageBox->setFocus();
     }
 }
 
@@ -396,15 +396,15 @@ void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelect
 }
 
 QString EmoteMenuFilter::getEmoteMenuChat() {
-    QString msgText = searchBox->toPlainText().replace("\n", "\\n");
-    searchBox->clear();
+    QString msgText = messageBox->toPlainText().replace("\n", "\\n");
+    messageBox->clear();
     return msgText;
 }
 
 EmoteMenuFilter::~EmoteMenuFilter()
 {
     delete categoryList;
-    delete searchBox;
+    delete messageBox;
     delete scrollArea;
     delete buttonContainer;
     delete gridLayout;

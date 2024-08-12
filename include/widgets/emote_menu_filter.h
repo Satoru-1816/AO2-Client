@@ -38,6 +38,7 @@ public:
     void showTagDialog(AOEmoteButton *button);
     QStringList getCategoryList() const;
     QString getEmoteMenuChat();
+    QTextEdit* getEmoteMenuMsgBox() const { return messageBox; }
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -65,7 +66,7 @@ private:
     AOApplication *ao_app;
     Courtroom *courtroom;
     QListWidget *categoryList;
-    QTextEdit *searchBox;
+    QTextEdit *messageBox;
     QScrollArea *scrollArea;
     QWidget *buttonContainer;
     QWidget *containerWidget;
