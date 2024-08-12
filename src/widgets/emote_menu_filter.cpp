@@ -395,7 +395,7 @@ void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelect
 
 QString EmoteMenuFilter::getEmoteMenuChat() {
     QString msgText = searchBox->toPlainText().replace("\n", "\\n");
-    searchBox.clear();
+    searchBox->clear();
     return msgText;
 }
 
