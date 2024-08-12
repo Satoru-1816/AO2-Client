@@ -62,7 +62,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     searchBox->installEventFilter(emote_menu_ic_chat_filter);
     
     // When the "emit" signal is sent in eventfilters.h, we call on_chat_return_pressed
-    connect(emote_menu_ic_chat_filter, &QTextEditFilter::chat_return_pressed, this,
+    connect(emote_menu_ic_chat_filter, &QTextEditFilter::chat_return_pressed, courtroom,
             &Courtroom::on_chat_return_pressed);
 
 }
