@@ -56,7 +56,7 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     setStyleSheet("QLabel { color: black; } QTextEdit { color: black; background-color: white; } \
 	               QAbstractItemView { border: 1px solid gray; } QGroupBox { color: black; } QCheckBox { color: black; }");
     searchBox->setPlaceholderText("Message in-character");
-    searchBox->setMaximumHeight(20);
+    searchBox->setMaximumHeight(24);
     
     emote_menu_ic_chat_filter = new QTextEditFilter();
     emote_menu_ic_chat_filter->text_edit_preserve_selection = true;
@@ -376,6 +376,7 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
         // courtroom->ui_ic_chat_message->setFocus();        
         // courtroom->ui_emote_dropdown->setCurrentIndex(button->get_id());
         ao_app->w_courtroom->remote_select_emote(button->get_id()-1);
+        searchBox->setFocus();
     }
 }
 
