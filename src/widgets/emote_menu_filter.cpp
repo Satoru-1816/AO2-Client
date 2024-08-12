@@ -386,7 +386,7 @@ void EmoteMenuFilter::onRemoveCategoryClicked() {
                                  QMessageBox::Yes | QMessageBox::No);
     
     if (reply == QMessageBox::Yes) {
-        delete categoryListWidget->takeItem(categoryList->row(selectedItem));
+        delete categoryList->takeItem(categoryList->row(selectedItem));
 
         removeCategoryFromFile(categoryToRemove);
     }
