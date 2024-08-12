@@ -5967,7 +5967,7 @@ void Courtroom::onTextChanged()
   if (signalSender == ui_ic_chat_message) {
     text = ui_ic_chat_message->toPlainText();
   } else {
-    text = emoteFilterMenu->getEmoteMenuMsgBox();
+    text = emoteFilterMenu->getEmoteMenuChat();
   }
   QString emotion_number = QString::number(current_button_selected + 1);
 
