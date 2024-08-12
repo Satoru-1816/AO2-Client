@@ -71,11 +71,14 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
 void EmoteMenuFilter::setupLayout()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this); // maybe change this to something else?
+    QHBoxLayout *buttonLayout = new QHBoxLayout(); // For "add/remove category" buttons
+    buttonLayout->addWidget(addCategoryButton);
+    buttonLayout->addWidget(removeCategoryButton);
+    
     mainLayout->addWidget(categoryList);
     mainLayout->addWidget(messageBox);
     mainLayout->addWidget(scrollArea);
-    mainLayout->addWidget(addCategoryButton);
-    mainLayout->addWidget(removeCategoryButton);
+    mainLayout->addWidget(buttonLayout);
     setLayout(mainLayout);
 }
 
