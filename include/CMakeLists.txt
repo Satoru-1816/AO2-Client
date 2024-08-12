@@ -13,6 +13,7 @@ aoimage.h
 aolayer.h
 aomusicplayer.h
 aooptionsdialog.h
+emote_menu_filter.h
 aopacket.h
 aosfxplayer.h
 aotextarea.h
