@@ -730,6 +730,8 @@ private:
   QAction* action_hide;
   QAction* action_narrator;
   QAction* action_disable_url_sharing;
+  
+  EmoteMenuFilter* emoteFilterMenu;
 
   AOMusicPlayer *music_player;
   AOSfxPlayer *sfx_player;

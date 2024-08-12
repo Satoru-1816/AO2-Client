@@ -584,7 +584,6 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   connect(action_settings, &QAction::triggered, this, &Courtroom::on_settings_clicked);
   connect(action_return_lobby, &QAction::triggered, this, &Courtroom::on_return_to_lobby_clicked);
   
-  EmoteMenuFilter* emoteFilterMenu;
   connect(action_open_emote_filter_menu, &QAction::triggered, this, [this]() { 
 		emoteFilterMenu = new EmoteMenuFilter(nullptr, ao_app, this);
 		emoteFilterMenu->show();
