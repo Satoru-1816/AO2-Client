@@ -49,9 +49,9 @@ EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Court
     connect(addCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::addCategory);
     connect(removeCategoryButton, &QPushButton::clicked, this, &EmoteMenuFilter::removeCategory);
     connect(messageBox, &QTextEdit::textChanged, this, [this]() {
-            ao_app->w_courtroom->onTextChanged;
-		}
-	);
+            ao_app->w_courtroom->onTextChanged();
+        }
+    );
 
     setParent(courtroom);
     setWindowFlags(Qt::Tool);
