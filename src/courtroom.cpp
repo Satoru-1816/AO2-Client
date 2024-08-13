@@ -2294,7 +2294,7 @@ void Courtroom::on_chat_return_pressed()
    if (signalSender == ui_ic_chat_message_filter) {
        f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
    } else {
-       f_message = emoteFilterMenu->getEmoteMenuChat();
+       f_message = emoteFilterMenu->getEmoteMenuChat(true);
    }
   
   packet_contents.append(f_message);
@@ -5965,8 +5965,7 @@ void Courtroom::onTextChanged()
   if (signalSender == ui_ic_chat_message) {
     text = ui_ic_chat_message->toPlainText();
   } else {
-    qDebug() << "pass";
-    return;
+    text = emoteFilterMenu->getEmoteMenuChat(false);
   }
   QString emotion_number = QString::number(current_button_selected + 1);
 

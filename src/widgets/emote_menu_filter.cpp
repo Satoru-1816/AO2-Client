@@ -541,9 +541,12 @@ void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelect
     button->set_char_image(ao_app->w_courtroom->get_current_char(), button->get_id() - 1, isSelected);
 }
 
-QString EmoteMenuFilter::getEmoteMenuChat() {
-    QString msgText = messageBox->toPlainText().replace("\n", "\\n");
-    messageBox->clear();
+QString EmoteMenuFilter::getEmoteMenuChat(bool clear) {
+    QString msgText = messageBox->toPlainText();
+    if (clear) {
+    	msgText.replace("\n", "\\n")
+    	messageBox->clear();
+	}
     return msgText;
 }
 

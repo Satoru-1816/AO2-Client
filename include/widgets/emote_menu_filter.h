@@ -37,7 +37,7 @@ public:
     ~EmoteMenuFilter();
     void showTagDialog(AOEmoteButton *button);
     QStringList getCategoryList() const;
-    QString getEmoteMenuChat();
+    QString getEmoteMenuChat(bool clear);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
