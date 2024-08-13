@@ -56,7 +56,7 @@ private slots:
 private:
     void setupLayout();
     void setupCategories();
-    void loadButtons(const QStringList &emoteIds = QStringList(), bool isIniswap = false, const QString &subfolderPath = "") {
+    void loadButtons(const QStringList &emoteIds = QStringList(), bool isIniswap = false, const QString &subfolderPath = "");
     void arrangeButtons();
     void saveTagsToFile(const QHash<QString, QStringList> &tags);
     void removeCategoryFromFile(const QString &category);
