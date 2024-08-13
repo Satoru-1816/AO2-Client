@@ -61,6 +61,8 @@ private:
     void arrangeButtons();
     void saveTagsToFile(const QHash<QString, QStringList> &tags);
     void removeCategoryFromFile(const QString &category);
+    void removeFromCurrentTag(AOEmoteButton *button);
+    void removeButtonsFromCategory(const QString &category, const QHash<QString, QStringList> &buttonsToRemove);
     
 	void updateButtonSelection(AOEmoteButton *button, bool isSelected);
 

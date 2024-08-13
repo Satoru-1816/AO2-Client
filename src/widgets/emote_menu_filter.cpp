@@ -191,14 +191,16 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
         connect(spriteButton, &AOEmoteButton::customContextMenuRequested, [this, spriteButton](const QPoint &pos) {
             QMenu menu;
             QAction *addTagsAction = menu.addAction("Add Tags...");
+            QAction *removeFromTagAction = menu.addAction("Remove from Current Tag");
             connect(addTagsAction, &QAction::triggered, [this, spriteButton]() {
                 showTagDialog(spriteButton);
             });
+            connect(removeFromTagAction, &QAction::triggered, [this, spriteButton]() {
+                removeFromCurrentTag(spriteButton);
+            });
             menu.exec(spriteButton->mapToGlobal(pos));
         });
-
     }
-
     arrangeButtons();
 }
 
@@ -351,6 +353,43 @@ void EmoteMenuFilter::saveTagsToFile(const QHash<QString, QStringList> &tags) {
     }
 }
 
+void EmoteMenuFilter::removeFromCurrentTag(AOEmoteButton *button) {
+    QString buttonText = button->get_comment();
+    QString categoryToRemove;
+    QMap<QString, QStringList> categories = ao_app->read_emote_categories(ao_app->w_courtroom->get_current_char());
+
+    for (auto it = categories.begin(); it != categories.end(); ++it) {
+        if (it.value().contains(buttonText)) {
+            categoryToRemove = it.key();
+            break;
+        }
+    }
+    
+    if (categoryToRemove.isEmpty()) {
+        QMessageBox::warning(this, tr("Remove from Tag"), tr("Button is not part of any category."));
+        return;
+    }
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::warning(this, tr("Remove from Tag"),
+                                 tr("Are you sure you want to remove the button(s)\nfrom category '%1'?").arg(categoryToRemove),
+                                 QMessageBox::Yes | QMessageBox::No);
+    
+    if (reply == QMessageBox::Yes) {
+        QHash<QString, QStringList> tagsToRemove;
+        
+        if (selectedButtons.size() > 1) {
+            for (AOEmoteButton *selectedButton : selectedButtons) {
+                tagsToRemove[categoryToRemove].append(selectedButton->get_comment());
+            }
+        } else {
+            tagsToRemove[categoryToRemove].append(buttonText);
+        }
+        
+        removeButtonsFromCategory(categoryToRemove, tagsToRemove);
+    }
+}
+
 void EmoteMenuFilter::removeCategoryFromFile(const QString &category) {
     QString filePath = ao_app->get_real_path(VPath("characters/" + ao_app->w_courtroom->get_current_char() + "/"));
     QFile file(filePath + "emote_tags.ini");
@@ -385,6 +424,61 @@ void EmoteMenuFilter::removeCategoryFromFile(const QString &category) {
         out << content;
         file.close();
     }
+}
+
+void EmoteMenuFilter::removeButtonsFromCategory(const QString &category, const QHash<QString, QStringList> &buttonsToRemove)
+{
+    QString filePath = ao_app->get_real_path(VPath("characters/" + ao_app->w_courtroom->get_current_char() + "/"));
+    QFile file(filePath + "emote_tags.ini");
+
+    // Check if the file can be opened for reading
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Failed to open file for reading:" << file.errorString();
+        return;
+    }
+
+    QTextStream in(&file);
+    QStringList lines;
+    QString currentCategory;
+    QStringList buttonsToRemoveForCategory;
+
+    // Read the file and process the lines
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        
+        // Handle category headers
+        if (line.startsWith('[') && line.endsWith(']')) {
+            currentCategory = line.mid(1, line.length() - 2);
+            // Check if we are in the right category
+            if (currentCategory == category) {
+                buttonsToRemoveForCategory = buttonsToRemove.value(category);
+            } else {
+                buttonsToRemoveForCategory.clear();
+            }
+            lines.append(line); // Always add category headers
+        } else {
+            // Remove buttons if we're in the correct category
+            if (currentCategory == category) {
+                QString trimmedLine = line.trimmed();
+                if (!buttonsToRemoveForCategory.contains(trimmedLine)) {
+                    lines.append(line);
+                }
+            } else {
+                lines.append(line);
+            }
+        }
+    }
+    
+    file.close();
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning() << "Failed to open file for writing:" << file.errorString();
+        return;
+    }
+
+    QTextStream out(&file);
+    out << lines.join('\n'); // Write all lines back to the file
+    file.close(); 
 }
 
 void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
