@@ -378,11 +378,9 @@ void EmoteMenuFilter::removeFromCurrentTag(AOEmoteButton *button) {
         removeButtonsFromCategory(categoryToRemove, tagsToRemove);
         
         // Reload the buttons
-        int currentRow = categoryList->row(selectedItem);
-        QListWidgetItem *currentItem = categoryList->item(currentRow);
-        categoryList->setCurrentItem(currentItem);
-        onCategorySelected(currentItem);
-        }
+        QListWidgetItem *selectedItem = categoryList->currentItem();
+        categoryList->setCurrentItem(selectedItem);
+        onCategorySelected(selectedItem);
     }
 }
 
