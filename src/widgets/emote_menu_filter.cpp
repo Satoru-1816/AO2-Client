@@ -166,14 +166,11 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds, bool isIniswap, c
         
         if (isIniswap && !subfolderPath.isEmpty()) {
             // Load from the iniswap subfolder
-            emotePath = ao_app->get_image_suffix(subfolderPath + "emotions/button" + QString::number(n + 1) + "_off");
+            emotePath = ao_app->get_image_suffix(ao_app->get_character_path(subfolderPath, "emotions/button" + QString::number(n + 1) + "_off"));
         } else {
             // Load from the default path
             emotePath = ao_app->get_image_suffix(ao_app->get_character_path(charName, "emotions/button" + QString::number(n + 1) + "_off"));
         }
-        
-        emotePath = ao_app->get_image_suffix(ao_app->get_character_path(
-            charName, "emotions/button" + QString::number(n + 1) + "_off"));
             
         AOEmoteButton *spriteButton = new AOEmoteButton(this, ao_app, 0, 0, buttonSize, buttonSize);
         spriteButton->set_image(emotePath, "");
@@ -276,8 +273,8 @@ void EmoteMenuFilter::onCategorySelected(QListWidgetItem *item) {
     if (selectedCategory.startsWith("[?] ")) {
         // Subfolder category
         QString subfolderName = selectedCategory.mid(4); // Delete the prefix
-        QString charName = ao_app->w_courtroom->get_current_char();                   // If I'm doing Global Emotes, 
-        QString subfolderPath = ao_app->get_character_path(charName, subfolderName);  // this needs to get redone, probably
+        QString charName = ao_app->w_courtroom->get_current_char();  // If I'm doing Global Emotes, 
+        QString subfolderPath = charName + "/" + subfolderName;     // this needs to get redone, probably
 
         loadButtons(QStringList(), true, subfolderPath);
    } else if (selectedCategory != "Default Emotes") {
