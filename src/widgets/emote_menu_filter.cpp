@@ -78,7 +78,7 @@ void EmoteMenuFilter::setupLayout()
     mainLayout->addWidget(categoryList);
     mainLayout->addWidget(messageBox);
     mainLayout->addWidget(scrollArea);
-    mainLayout->addWidget(buttonLayout);
+    mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
 }
 
