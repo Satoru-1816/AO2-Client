@@ -118,9 +118,9 @@ void EmoteMenuFilter::removeCategory()
         delete categoryList->takeItem(categoryList->row(selectedItem));
         removeCategoryFromFile(categoryToRemove);
         
-        if (categoryList->count() > 0) {
-            categoryList->setCurrentRow(0);
-        }
+        QListWidgetItem *firstItem = categoryList->item(0);
+        categoryList->setCurrentItem(firstItem);
+        onCategorySelected(firstItem);
     }
 }
 
@@ -138,17 +138,6 @@ void EmoteMenuFilter::showEvent(QShowEvent *event) {
     QDialog::showEvent(event);
     arrangeButtons();
 }
-
-//void EmoteMenuFilter::focusInEvent(QFocusEvent *event) {
-//    QDialog::focusInEvent(event);
-//    this->setWindowOpacity(1.0); // Fully opaque when in focus
-//}
-
-//void EmoteMenuFilter::focusOutEvent(QFocusEvent *event) {
-//    QDialog::focusOutEvent(event);
-//    this->setWindowOpacity(0.3); // 30% transparent when out of focus
-//    // To-Do: Make a Slider to control this
-//}
 
 void EmoteMenuFilter::loadButtons(const QStringList &emoteIds) {
     QString charName = ao_app->w_courtroom->get_current_char();
@@ -387,6 +376,13 @@ void EmoteMenuFilter::removeFromCurrentTag(AOEmoteButton *button) {
         }
         
         removeButtonsFromCategory(categoryToRemove, tagsToRemove);
+        
+        // Reload the buttons
+        int currentRow = categoryList->row(selectedItem);
+        QListWidgetItem *currentItem = categoryList->item(currentRow);
+        categoryList->setCurrentItem(currentItem);
+        onCategorySelected(currentItem);
+        }
     }
 }
 
