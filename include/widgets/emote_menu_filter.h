@@ -53,7 +53,6 @@ private slots:
     void removeCategory();
     void onCategorySelected(QListWidgetItem *item);
     void onButtonClicked(AOEmoteButton *button);
-    void onRemoveCategoryClicked();
 
 private:
     void setupLayout();
