@@ -715,9 +715,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   connect(chat_tick_timer, &QTimer::timeout, this, &Courtroom::chat_tick);
 
   connect(ui_ic_chat_message, &QTextEdit::textChanged, this, &Courtroom::onTextChanged);
-  
-  // connect(emoteFilterMenu->getEmoteMenuMsgBox(), &QTextEdit::textChanged, this, &Courtroom::onTextChanged);
-  
+   
   connect(typingTimer, &QTimer::timeout, this, &Courtroom::onTypingTimeout);
 
   connect(ui_pos_dropdown, QOverload<int>::of(&QComboBox::currentIndexChanged), this,

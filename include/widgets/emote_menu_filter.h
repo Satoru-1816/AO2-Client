@@ -38,7 +38,6 @@ public:
     void showTagDialog(AOEmoteButton *button);
     QStringList getCategoryList() const;
     QString getEmoteMenuChat();
-    QTextEdit* getEmoteMenuMsgBox() const { return messageBox; }
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
