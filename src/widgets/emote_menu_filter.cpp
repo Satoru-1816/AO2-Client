@@ -262,7 +262,7 @@ void EmoteMenuFilter::setupCategories() {
     QStringList subfolderPaths = ao_app->get_list_file(charFolder + "iniswaps.ini");
     if (!subfolderPaths.isEmpty()) {
         for (const QString &subfolder : subfolderPaths) {
-            categoryList->addItem("[?] " + subfolder);
+            categoryList->addItem("[>] " + subfolder);
         }
 	}
 }
@@ -270,13 +270,14 @@ void EmoteMenuFilter::setupCategories() {
 void EmoteMenuFilter::onCategorySelected(QListWidgetItem *item) {
 	selectedButtons.clear();
     QString selectedCategory = item->text();
-    if (selectedCategory.startsWith("[?] ")) {
+    if (selectedCategory.startsWith("[>] ")) {
         // Subfolder category
         QString subfolderName = selectedCategory.mid(4); // Delete the prefix
         QString charName = ao_app->w_courtroom->get_current_char();  // If I'm doing Global Emotes, 
         QString subfolderPath = charName + "/" + subfolderName;     // this needs to get redone, probably
-
-        loadButtons(QStringList(), true, subfolderPath);
+        qDebug() << subfolderName;
+        
+        loadButtons(QStringList(), true, subfolderName);
    } else if (selectedCategory != "Default Emotes") {
         QMap<QString, QStringList> categories = ao_app->read_emote_categories(ao_app->w_courtroom->get_current_char());
         QStringList emoteIds = categories.value(selectedCategory);
