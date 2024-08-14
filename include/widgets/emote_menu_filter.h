@@ -105,7 +105,7 @@ class ButtonLoader : public QObject {
     Q_OBJECT
 
 public:
-    ButtonLoader(QObject *parent = nullptr) : QObject(parent) {}
+    ButtonLoader(QObject *parent = nullptr, AOApplication *p_ao_app = nullptr) : QObject(parent) {}
 
     void setParams(const QStringList &emoteIds, bool isIniswap, const QString &subfolderPath, QString charName, int buttonSize) {
         this->emoteIds = emoteIds;
@@ -148,6 +148,7 @@ signals:
     void finished();
 
 private:
+	AOApplication *ao_app;
     QStringList emoteIds;
     bool isIniswap;
     QString subfolderPath;

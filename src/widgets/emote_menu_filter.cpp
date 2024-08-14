@@ -154,7 +154,7 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds, bool isIniswap, c
     qDeleteAll(spriteButtons);
     spriteButtons.clear();
 
-    ButtonLoader *loader = new ButtonLoader;
+    ButtonLoader *loader = new ButtonLoader(nullptr, ao_app);
     loader->setParams(emoteIds, isIniswap, subfolderPath, charName, 40);
 
     QThread *thread = new QThread;
