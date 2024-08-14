@@ -2277,6 +2277,7 @@ void Courtroom::on_chat_return_pressed()
 
   packet_contents.append(f_pre);
 
+  QObject* signalSender = sender();
   QString charName = current_char;
   
   if (signalSender != ui_ic_chat_message_filter) {
@@ -2292,8 +2293,7 @@ void Courtroom::on_chat_return_pressed()
   } else {
     packet_contents.append(ao_app->get_emote(current_char, current_emote)); 
   }
-  
-   QObject* signalSender = sender();
+
 
    QString f_message;
 
