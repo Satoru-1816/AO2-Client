@@ -147,11 +147,7 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds, bool isIniswap, c
 	
     if (isIniswap && !subfolderPath.isEmpty()) {
         charName = subfolderPath;
-        ao_app->w_courtroom->remote_char_update(subfolderPath);
-    } else {
-        if (charName.contains("/")) {
-            charName = charName.split('/').first();
-        }
+        emoteMenu_charName = subfolderPath;
     }
     int total_emotes = ao_app->get_emote_number(charName);
     QString selected_image = ao_app->get_image_suffix(ao_app->get_theme_path("emote_selected", ""), true);
@@ -256,9 +252,6 @@ QStringList EmoteMenuFilter::getCategoryList() const {
 
 void EmoteMenuFilter::setupCategories() {
 	QString currentChar = ao_app->w_courtroom->get_current_char();
-	if (currentChar.contains("/")) {
-        currentChar = currentChar.split("/").first();
-	}
 
     QMap<QString, QStringList> categories = ao_app->read_emote_categories(currentChar);
 
@@ -270,7 +263,7 @@ void EmoteMenuFilter::setupCategories() {
     QStringList subfolderPaths = ao_app->get_list_file(charFolder + "iniswaps.ini");
     if (!subfolderPaths.isEmpty()) {
         for (const QString &subfolder : subfolderPaths) {
-            categoryList->addItem("[>] " + subfolder);
+            categoryList->addItem("[>] " + subfolder.split("/").first());
         }
 	}
 }
@@ -286,13 +279,12 @@ void EmoteMenuFilter::onCategorySelected(QListWidgetItem *item) {
         
         loadButtons(QStringList(), true, subfolderName);
     } else if (selectedCategory != "Default Emotes") {
-	    if (currentChar.contains("/")) { // ugly workaround for NOW (maybe)
-            currentChar = currentChar.split("/").first();
-	    }
+    	emoteMenu_charName.clear();
         QMap<QString, QStringList> categories = ao_app->read_emote_categories(currentChar);
         QStringList emoteIds = categories.value(selectedCategory);
         loadButtons(emoteIds);
     } else {
+    	emoteMenu_charName.clear();
         // Load all buttons if no category is selected
         loadButtons();
     }
@@ -549,8 +541,8 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
         updateButtonSelection(button, true);
         selectedButtons.append(button);
         
-        if (button->get_button_char_name().contains("/")) {
-        	ao_app->w_courtroom->remote_emote_update(button->get_id());
+        if (!emoteMenu_charName.isEmpty()) {
+        	ao_app->w_courtroom->remote_emote_update(button->get_id()-1);
 		} else {
             ao_app->w_courtroom->remote_select_emote(button->get_id()-1);
 		}
@@ -583,6 +575,7 @@ QString EmoteMenuFilter::getEmoteMenuChat(bool clear) {
 
 EmoteMenuFilter::~EmoteMenuFilter()
 {
+	emoteMenu_charName.clear();
     delete categoryList;
     delete messageBox;
     delete scrollArea;

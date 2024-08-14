@@ -2282,7 +2282,12 @@ void Courtroom::on_chat_return_pressed()
   if (action_narrator->isChecked()) {
     packet_contents.append("");
   } else {
-    packet_contents.append(ao_app->get_emote(current_char, current_emote)); 
+    if (!emoteFilterMenu->emoteMenu_charName.isEmpty()) {
+    	// If we're using the Emote Menu ini-swap
+        packet_contents.append(ao_app->get_emote(emoteFilterMenu->emoteMenu_charName, current_emote));  
+	} else {
+        packet_contents.append(ao_app->get_emote(current_char, current_emote)); 		
+	}
   }
 
   // QString f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");

@@ -38,6 +38,7 @@ public:
     void showTagDialog(AOEmoteButton *button);
     QStringList getCategoryList() const;
     QString getEmoteMenuChat(bool clear);
+    QString emoteMenu_charName;
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -79,7 +80,6 @@ private:
     
     QVector<AOEmoteButton*> spriteButtons;
     QList<AOEmoteButton*> selectedButtons;
-    // QString original_charName;
 };
 
 class TagDialog : public QDialog {
