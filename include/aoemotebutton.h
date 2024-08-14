@@ -25,7 +25,7 @@ public:
   void set_comment(QString p_comment) { m_comment = p_comment; }
   QString get_comment() { return m_comment; }
   
-  QString set_button_char_name(QString name) { m_char_name = name; }
+  void set_button_char_name(QString name) { m_char_name = name; }
   QString get_button_char_name() { return m_char_name; }
 
 private:
