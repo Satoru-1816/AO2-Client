@@ -79,7 +79,6 @@ private:
     
     QVector<AOEmoteButton*> spriteButtons;
     QList<AOEmoteButton*> selectedButtons;
-    bool inSubfolder = false;
     // QString original_charName;
 };
 

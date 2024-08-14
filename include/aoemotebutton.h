@@ -24,6 +24,9 @@ public:
   
   void set_comment(QString p_comment) { m_comment = p_comment; }
   QString get_comment() { return m_comment; }
+  
+  QString set_button_char_name(QString name) { m_char_name = name; }
+  QString get_button_char_name() { return m_char_name; }
 
 private:
   QWidget *parent;
@@ -32,6 +35,7 @@ private:
 
   int m_id = 0;
   QString m_comment;
+  QString m_char_name; // DON'T TOUCH THIS
 
 signals:
   void emote_clicked(int p_id);

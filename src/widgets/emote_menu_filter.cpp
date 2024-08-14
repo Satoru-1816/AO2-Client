@@ -148,12 +148,10 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds, bool isIniswap, c
     if (isIniswap && !subfolderPath.isEmpty()) {
         charName = subfolderPath;
         ao_app->w_courtroom->remote_char_update(subfolderPath);
-        inSubfolder = true;
     } else {
         if (charName.contains("/")) {
             charName = charName.split('/').first();
         }
-        inSubfolder = false;
     }
     int total_emotes = ao_app->get_emote_number(charName);
     QString selected_image = ao_app->get_image_suffix(ao_app->get_theme_path("emote_selected", ""), true);
@@ -182,6 +180,7 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds, bool isIniswap, c
         spriteButton->set_id(n + 1);
         spriteButton->set_selected_image(selected_image);
         spriteButton->set_comment(emoteName);
+        spriteButton->set_button_char_name(charName);
         spriteButtons.append(spriteButton);
         spriteButton->setContextMenuPolicy(Qt::CustomContextMenu);
         spriteButton->setFixedSize(buttonSize, buttonSize);
@@ -256,7 +255,11 @@ QStringList EmoteMenuFilter::getCategoryList() const {
 }
 
 void EmoteMenuFilter::setupCategories() {
-    QString currentChar = ao_app->w_courtroom->get_current_char();
+	QString currentChar = ao_app->w_courtroom->get_current_char();
+	if (currentChar.contains("/")) {
+        currentChar = currentChar.split("/").first();
+	}
+
     QMap<QString, QStringList> categories = ao_app->read_emote_categories(currentChar);
 
     for (const QString &category : categories.keys()) {
@@ -275,16 +278,18 @@ void EmoteMenuFilter::setupCategories() {
 void EmoteMenuFilter::onCategorySelected(QListWidgetItem *item) {
 	selectedButtons.clear();
     QString selectedCategory = item->text();
+    QString currentChar = ao_app->w_courtroom->get_current_char();
     if (selectedCategory.startsWith("[>] ")) {
         // Subfolder category
         QString subfolderName = selectedCategory.mid(4); // Delete the prefix
-        QString charName = ao_app->w_courtroom->get_current_char();  // If I'm doing Global Emotes, 
-        QString subfolderPath = charName + "/" + subfolderName;     // this needs to get redone, probably
         qDebug() << subfolderName;
         
         loadButtons(QStringList(), true, subfolderName);
     } else if (selectedCategory != "Default Emotes") {
-        QMap<QString, QStringList> categories = ao_app->read_emote_categories(ao_app->w_courtroom->get_current_char());
+	    if (currentChar.contains("/")) { // ugly workaround for NOW (maybe)
+            currentChar = currentChar.split("/").first();
+	    }
+        QMap<QString, QStringList> categories = ao_app->read_emote_categories(currentChar);
         QStringList emoteIds = categories.value(selectedCategory);
         loadButtons(emoteIds);
     } else {
@@ -543,29 +548,28 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
         // Select a new button
         updateButtonSelection(button, true);
         selectedButtons.append(button);
-
-        ao_app->w_courtroom->remote_select_emote(button->get_id()-1);
+        
+        if (button->get_button_char_name().contains("/")) {
+        	ao_app->w_courtroom->remote_emote_update(button->get_id());
+		} else {
+            ao_app->w_courtroom->remote_select_emote(button->get_id()-1);
+		}
         messageBox->setFocus();
     }
 }
 
 void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelected) {
 	QString state;
-	QString charName;
 	if (isSelected) {
 	  state = "_on";
 	} else {
       state = "_off";
 	}
-    if (!categoryList->currentItem()->text().contains("[>]")) {
-      charName = ao_app->w_courtroom->get_current_char(); // If this isn't a sub-folder
-	} else {
-      charName = categoryList->currentItem()->text().mid(4); // Change this once it works
-	}
-    QString baseImagePath = ao_app->get_image_suffix(ao_app->get_character_path(charName, 
+    
+    QString baseImagePath = ao_app->get_image_suffix(ao_app->get_character_path(button->get_button_char_name(), 
 	                                                  "emotions/button" + QString::number(button->get_id()) + state));
 
-    button->set_char_image(charName, button->get_id() - 1, isSelected);
+    button->set_char_image(button->get_button_char_name(), button->get_id() - 1, isSelected);
 }
 
 QString EmoteMenuFilter::getEmoteMenuChat(bool clear) {
