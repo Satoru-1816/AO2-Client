@@ -105,7 +105,7 @@ class ButtonLoader : public QObject {
     Q_OBJECT
 
 public:
-    ButtonLoader(QObject *parent = nullptr, AOApplication *p_ao_app = nullptr) : QObject(parent) {}
+    ButtonLoader(AOApplication *p_ao_app, EmoteMenuFilter *parent = nullptr);
 
     void setParams(const QStringList &emoteIds, bool isIniswap, const QString &subfolderPath, QString charName, int buttonSize) {
         this->emoteIds = emoteIds;
@@ -116,32 +116,7 @@ public:
     }
 
 public slots:
-    void process() {
-        QString currentCharName = charName;
-        if (isIniswap && !subfolderPath.isEmpty()) {
-            currentCharName = subfolderPath;
-        }
-
-        int total_emotes = ao_app->get_emote_number(currentCharName);
-
-        for (int n = 0; n < total_emotes; ++n) {
-            QString emoteId = QString::number(n + 1);
-            QString emoteName = ao_app->get_emote_comment(currentCharName, n);
-
-            if (!emoteIds.isEmpty() && (!emoteIds.contains(emoteId) && !emoteIds.contains(emoteName))) {
-                continue;
-            }
-
-            QString emotePath = ao_app->get_image_suffix(ao_app->get_character_path(currentCharName, "emotions/button" + QString::number(n + 1) + "_off"));
-
-            emit buttonLoaded(emotePath, emoteId, emoteName, currentCharName, buttonSize);
-
-            // Small sleep to simulate batch processing and prevent overloading UI
-            QThread::msleep(10);
-        }
-
-        emit finished();
-    }
+    void process();
 
 signals:
     void buttonLoaded(const QString &emotePath, const QString &emoteId, const QString &emoteName, const QString &charName, int buttonSize);
@@ -149,6 +124,7 @@ signals:
 
 private:
 	AOApplication *ao_app;
+    EmoteMenuFilter *emoteMenuFilter;
     QStringList emoteIds;
     bool isIniswap;
     QString subfolderPath;

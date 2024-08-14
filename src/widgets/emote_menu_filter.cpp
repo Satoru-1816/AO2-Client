@@ -154,7 +154,7 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds, bool isIniswap, c
     qDeleteAll(spriteButtons);
     spriteButtons.clear();
 
-    ButtonLoader *loader = new ButtonLoader(nullptr, ao_app);
+    ButtonLoader *loader = new ButtonLoader(ao_app, this);
     loader->setParams(emoteIds, isIniswap, subfolderPath, charName, 40);
 
     QThread *thread = new QThread;
@@ -633,3 +633,34 @@ QStringList TagDialog::selectedTags() const
     }
     return selected;
 }
+
+ButtonLoader::ButtonLoader(AOApplication *p_ao_app, EmoteMenuFilter *parent)
+    : QObject(parent), ao_app(p_ao_app), emoteMenuFilter(parent) { }
+
+void ButtonLoader::process() {
+    QString currentCharName = charName;
+    if (isIniswap && !subfolderPath.isEmpty()) {
+        currentCharName = subfolderPath;
+    }
+
+    int total_emotes = ao_app->get_emote_number(currentCharName);
+
+    for (int n = 0; n < total_emotes; ++n) {
+        QString emoteId = QString::number(n + 1);
+        QString emoteName = ao_app->get_emote_comment(currentCharName, n);
+
+        if (!emoteIds.isEmpty() && (!emoteIds.contains(emoteId) && !emoteIds.contains(emoteName))) {
+            continue;
+        }
+
+        QString emotePath = ao_app->get_image_suffix(ao_app->get_character_path(currentCharName, "emotions/button" + QString::number(n + 1) + "_off"));
+
+        emit buttonLoaded(emotePath, emoteId, emoteName, currentCharName, buttonSize);
+
+        // Small sleep to simulate batch processing and prevent overloading UI
+        QThread::msleep(10);
+    }
+
+    emit finished();
+}
+
