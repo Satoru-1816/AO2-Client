@@ -350,7 +350,18 @@ public:
   // TEST ONLY
   void remote_select_emote(int p_id) {
     select_emote(p_id);
-  };
+  }
+  
+  // i'm sorry
+  void remote_char_update(QString char_name) {
+    if (char_name != current_char) {
+      current_char = char_name;
+    }
+  }
+  
+  void remote_emote_update(int id) {
+    current_emote = id;
+  }
   
   QString server_overlay = "";
 

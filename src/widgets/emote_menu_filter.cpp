@@ -143,7 +143,18 @@ void EmoteMenuFilter::showEvent(QShowEvent *event) {
 }
 
 void EmoteMenuFilter::loadButtons(const QStringList &emoteIds, bool isIniswap, const QString &subfolderPath) {
-    QString charName = ao_app->w_courtroom->get_current_char();
+	QString charName = ao_app->w_courtroom->get_current_char();
+	
+    if (isIniswap && !subfolderPath.isEmpty()) {
+        charName = subfolderPath;
+        ao_app->w_courtroom->remote_char_update(subfolderPath);
+        inSubfolder = true;
+    } else {
+        if (charName.contains("/")) {
+            charName = charName.split('/').first();
+        }
+        inSubfolder = false;
+    }
     int total_emotes = ao_app->get_emote_number(charName);
     QString selected_image = ao_app->get_image_suffix(ao_app->get_theme_path("emote_selected", ""), true);
     QString emotePath;
@@ -164,13 +175,7 @@ void EmoteMenuFilter::loadButtons(const QStringList &emoteIds, bool isIniswap, c
             continue;
         }
         
-        if (isIniswap && !subfolderPath.isEmpty()) {
-            // Load from the iniswap subfolder
-            emotePath = ao_app->get_image_suffix(ao_app->get_character_path(subfolderPath, "emotions/button" + QString::number(n + 1) + "_off"));
-        } else {
-            // Load from the default path
-            emotePath = ao_app->get_image_suffix(ao_app->get_character_path(charName, "emotions/button" + QString::number(n + 1) + "_off"));
-        }
+        emotePath = ao_app->get_image_suffix(ao_app->get_character_path(charName, "emotions/button" + QString::number(n + 1) + "_off"));
             
         AOEmoteButton *spriteButton = new AOEmoteButton(this, ao_app, 0, 0, buttonSize, buttonSize);
         spriteButton->set_image(emotePath, "");
@@ -278,7 +283,7 @@ void EmoteMenuFilter::onCategorySelected(QListWidgetItem *item) {
         qDebug() << subfolderName;
         
         loadButtons(QStringList(), true, subfolderName);
-   } else if (selectedCategory != "Default Emotes") {
+    } else if (selectedCategory != "Default Emotes") {
         QMap<QString, QStringList> categories = ao_app->read_emote_categories(ao_app->w_courtroom->get_current_char());
         QStringList emoteIds = categories.value(selectedCategory);
         loadButtons(emoteIds);
@@ -539,8 +544,6 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
         updateButtonSelection(button, true);
         selectedButtons.append(button);
 
-        // courtroom->ui_ic_chat_message->setFocus();        
-        // courtroom->ui_emote_dropdown->setCurrentIndex(button->get_id());
         ao_app->w_courtroom->remote_select_emote(button->get_id()-1);
         messageBox->setFocus();
     }
@@ -548,17 +551,21 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
 
 void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelected) {
 	QString state;
+	QString charName;
 	if (isSelected) {
 	  state = "_on";
 	} else {
       state = "_off";
 	}
-	  
-    QString baseImagePath = ao_app->get_image_suffix(ao_app->get_character_path(ao_app->w_courtroom->get_current_char(), 
+    if (!categoryList->currentItem()->text().contains("[>]")) {
+      charName = ao_app->w_courtroom->get_current_char(); // If this isn't a sub-folder
+	} else {
+      charName = categoryList->currentItem()->text().mid(4); // Change this once it works
+	}
+    QString baseImagePath = ao_app->get_image_suffix(ao_app->get_character_path(charName, 
 	                                                  "emotions/button" + QString::number(button->get_id()) + state));
 
-    // button->set_image(baseImagePath, "");
-    button->set_char_image(ao_app->w_courtroom->get_current_char(), button->get_id() - 1, isSelected);
+    button->set_char_image(charName, button->get_id() - 1, isSelected);
 }
 
 QString EmoteMenuFilter::getEmoteMenuChat(bool clear) {
