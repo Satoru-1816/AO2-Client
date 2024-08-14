@@ -263,7 +263,7 @@ void EmoteMenuFilter::setupCategories() {
     QStringList subfolderPaths = ao_app->get_list_file(charFolder + "iniswaps.ini");
     if (!subfolderPaths.isEmpty()) {
         for (const QString &subfolder : subfolderPaths) {
-            categoryList->addItem("[>] " + subfolder.section('/', 1));
+            categoryList->addItem("[⤷] " + subfolder.section('/', 1));
         }
 	}
 }
@@ -272,7 +272,7 @@ void EmoteMenuFilter::onCategorySelected(QListWidgetItem *item) {
 	selectedButtons.clear();
     QString selectedCategory = item->text();
     QString currentChar = ao_app->w_courtroom->get_current_char();
-    if (selectedCategory.startsWith("[>] ")) {
+    if (selectedCategory.startsWith("[⤷] ")) {
         // Subfolder category
         QString subfolderName = selectedCategory.mid(4); // Delete the prefix
         qDebug() << subfolderName;
@@ -542,21 +542,21 @@ void EmoteMenuFilter::onButtonClicked(AOEmoteButton *button) {
         selectedButtons.append(button);
         
         if (!emoteMenu_charName.isEmpty()) {
-        	ao_app->w_courtroom->remote_emote_update(button->get_id()-1);
-		} else {
+            ao_app->w_courtroom->remote_emote_update(button->get_id()-1);
+	} else {
             ao_app->w_courtroom->remote_select_emote(button->get_id()-1);
-		}
+	}
         messageBox->setFocus();
     }
 }
 
 void EmoteMenuFilter::updateButtonSelection(AOEmoteButton *button, bool isSelected) {
-	QString state;
-	if (isSelected) {
-	  state = "_on";
-	} else {
-      state = "_off";
-	}
+    QString state;
+    if (isSelected) {
+        state = "_on";
+    } else {
+        state = "_off";
+    }
     
     QString baseImagePath = ao_app->get_image_suffix(ao_app->get_character_path(button->get_button_char_name(), 
 	                                                  "emotions/button" + QString::number(button->get_id()) + state));
@@ -575,7 +575,7 @@ QString EmoteMenuFilter::getEmoteMenuChat(bool clear) {
 
 EmoteMenuFilter::~EmoteMenuFilter()
 {
-	emoteMenu_charName.clear();
+    emoteMenu_charName.clear();
     delete categoryList;
     delete messageBox;
     delete scrollArea;
