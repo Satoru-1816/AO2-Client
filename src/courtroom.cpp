@@ -2291,17 +2291,16 @@ void Courtroom::on_chat_return_pressed()
   if (action_narrator->isChecked()) {
     packet_contents.append("");
   } else {
-    packet_contents.append(ao_app->get_emote(current_char, current_emote)); 
+    packet_contents.append(ao_app->get_emote(charName, current_emote)); 
   }
-
 
    QString f_message;
 
-   if (signalSender == ui_ic_chat_message_filter) {
-     f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
-   } else {
-     f_message = emoteFilterMenu->getEmoteMenuChat(true);
-   }
+  if (signalSender == ui_ic_chat_message_filter) {
+    f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
+  } else {
+    f_message = emoteFilterMenu->getEmoteMenuChat(true);
+  }
   
   packet_contents.append(f_message);
 
