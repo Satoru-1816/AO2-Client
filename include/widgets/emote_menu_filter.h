@@ -99,8 +99,6 @@ private:
     QScrollArea *scrollArea;
 };
 
-#endif // EMOTE_MENU_FILTER_H
-
 class ButtonLoader : public QObject {
     Q_OBJECT
 
@@ -131,3 +129,5 @@ private:
     QString charName;
     int buttonSize;
 };
+
+#endif // EMOTE_MENU_FILTER_H
