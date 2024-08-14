@@ -263,7 +263,7 @@ void EmoteMenuFilter::setupCategories() {
     QStringList subfolderPaths = ao_app->get_list_file(charFolder + "iniswaps.ini");
     if (!subfolderPaths.isEmpty()) {
         for (const QString &subfolder : subfolderPaths) {
-            categoryList->addItem("[>] " + subfolder.split("/").first());
+            categoryList->addItem("[>] ");
         }
 	}
 }

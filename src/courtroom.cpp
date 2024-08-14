@@ -2277,29 +2277,30 @@ void Courtroom::on_chat_return_pressed()
 
   packet_contents.append(f_pre);
 
-  packet_contents.append(current_char);
+  QString charName = current_char;
+  
+  if (signalSender != ui_ic_chat_message_filter) {
+    if (emoteFilterMenu && !emoteFilterMenu->emoteMenu_charName.isEmpty()) {
+      charName = emoteFilterMenu->emoteMenu_charName;
+	}
+  }
+  
+  packet_contents.append(charName);
 
   if (action_narrator->isChecked()) {
     packet_contents.append("");
   } else {
-    if (!emoteFilterMenu->emoteMenu_charName.isEmpty()) {
-    	// If we're using the Emote Menu ini-swap
-        packet_contents.append(ao_app->get_emote(emoteFilterMenu->emoteMenu_charName, current_emote));  
-	} else {
-        packet_contents.append(ao_app->get_emote(current_char, current_emote)); 		
-	}
+    packet_contents.append(ao_app->get_emote(current_char, current_emote)); 
   }
-
-  // QString f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
   
    QObject* signalSender = sender();
 
    QString f_message;
 
    if (signalSender == ui_ic_chat_message_filter) {
-       f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
+     f_message = ui_ic_chat_message->toPlainText().replace("\n", "\\n");
    } else {
-       f_message = emoteFilterMenu->getEmoteMenuChat(true);
+     f_message = emoteFilterMenu->getEmoteMenuChat(true);
    }
   
   packet_contents.append(f_message);
