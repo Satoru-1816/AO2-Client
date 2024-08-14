@@ -14,7 +14,6 @@
 #include <QTextStream>
 #include <QDir>
 #include <QMouseEvent>
-#include <QThread>
 
 EmoteMenuFilter::EmoteMenuFilter(QDialog *parent, AOApplication *p_ao_app, Courtroom *p_courtroom)
     : QDialog(parent), ao_app(p_ao_app), courtroom(p_courtroom)
@@ -144,58 +143,61 @@ void EmoteMenuFilter::showEvent(QShowEvent *event) {
 }
 
 void EmoteMenuFilter::loadButtons(const QStringList &emoteIds, bool isIniswap, const QString &subfolderPath) {
-    QString charName = ao_app->w_courtroom->get_current_char();
-
+	QString charName = ao_app->w_courtroom->get_current_char();
+	
     if (isIniswap && !subfolderPath.isEmpty()) {
         charName = subfolderPath;
         emoteMenu_charName = subfolderPath;
     }
+    int total_emotes = ao_app->get_emote_number(charName);
+    QString selected_image = ao_app->get_image_suffix(ao_app->get_theme_path("emote_selected", ""), true);
+    QString emotePath;
+    QString emoteName;
+    QString emoteId;
 
+    // Button size (width and height)
+    int buttonSize = 40;
+    
     qDeleteAll(spriteButtons);
     spriteButtons.clear();
 
-    ButtonLoader *loader = new ButtonLoader(ao_app, this);
-    loader->setParams(emoteIds, isIniswap, subfolderPath, charName, 40);
+    for (int n = 0; n < total_emotes; ++n) {    	
+        emoteId = QString::number(n + 1);
+        emoteName = ao_app->get_emote_comment(charName, n);
+        
+        if (!emoteIds.isEmpty() && (!emoteIds.contains(emoteId) && !emoteIds.contains(emoteName))) {
+            continue;
+        }
+        
+        emotePath = ao_app->get_image_suffix(ao_app->get_character_path(charName, "emotions/button" + QString::number(n + 1) + "_off"));
+            
+        AOEmoteButton *spriteButton = new AOEmoteButton(this, ao_app, 0, 0, buttonSize, buttonSize);
+        spriteButton->set_image(emotePath, "");
+        spriteButton->set_id(n + 1);
+        spriteButton->set_selected_image(selected_image);
+        spriteButton->set_comment(emoteName);
+        spriteButton->set_button_char_name(charName);
+        spriteButtons.append(spriteButton);
+        spriteButton->setContextMenuPolicy(Qt::CustomContextMenu);
+        spriteButton->setFixedSize(buttonSize, buttonSize);
 
-    QThread *thread = new QThread;
-    loader->moveToThread(thread);
-
-    connect(thread, &QThread::started, loader, &ButtonLoader::process);
-    connect(loader, &ButtonLoader::buttonLoaded, this, &EmoteMenuFilter::onButtonLoaded);
-    connect(loader, &ButtonLoader::finished, thread, &QThread::quit);
-    connect(loader, &ButtonLoader::finished, loader, &ButtonLoader::deleteLater);
-    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
-
-    thread->start();
-}
-
-void EmoteMenuFilter::onButtonLoaded(const QString &emotePath, const QString &emoteId, const QString &emoteName, const QString &charName, int buttonSize) {
-    AOEmoteButton *spriteButton = new AOEmoteButton(this, ao_app, 0, 0, buttonSize, buttonSize);
-    spriteButton->set_image(emotePath, "");
-    spriteButton->set_id(emoteId.toInt());
-    spriteButton->set_comment(emoteName);
-    spriteButton->set_button_char_name(charName);
-    spriteButtons.append(spriteButton);
-    spriteButton->setContextMenuPolicy(Qt::CustomContextMenu);
-    spriteButton->setFixedSize(buttonSize, buttonSize);
-
-    connect(spriteButton, &AOEmoteButton::clicked, this, [this, spriteButton]() {
-        onButtonClicked(spriteButton);
-    });
-
-    connect(spriteButton, &AOEmoteButton::customContextMenuRequested, [this, spriteButton](const QPoint &pos) {
-        QMenu menu;
-        QAction *addTagsAction = menu.addAction("Add Tags...");
-        QAction *removeFromTagAction = menu.addAction("Remove from Current Tag");
-        connect(addTagsAction, &QAction::triggered, [this, spriteButton]() {
-            showTagDialog(spriteButton);
+        connect(spriteButton, &AOEmoteButton::clicked, this, [this, spriteButton]() {
+            onButtonClicked(spriteButton);
         });
-        connect(removeFromTagAction, &QAction::triggered, [this, spriteButton]() {
-            removeFromCurrentTag(spriteButton);
-        });
-        menu.exec(spriteButton->mapToGlobal(pos));
-    });
 
+        connect(spriteButton, &AOEmoteButton::customContextMenuRequested, [this, spriteButton](const QPoint &pos) {
+            QMenu menu;
+            QAction *addTagsAction = menu.addAction("Add Tags...");
+            QAction *removeFromTagAction = menu.addAction("Remove from Current Tag");
+            connect(addTagsAction, &QAction::triggered, [this, spriteButton]() {
+                showTagDialog(spriteButton);
+            });
+            connect(removeFromTagAction, &QAction::triggered, [this, spriteButton]() {
+                removeFromCurrentTag(spriteButton);
+            });
+            menu.exec(spriteButton->mapToGlobal(pos));
+        });
+    }
     arrangeButtons();
 }
 
@@ -261,7 +263,7 @@ void EmoteMenuFilter::setupCategories() {
     QStringList subfolderPaths = ao_app->get_list_file(charFolder + "iniswaps.ini");
     if (!subfolderPaths.isEmpty()) {
         for (const QString &subfolder : subfolderPaths) {
-            categoryList->addItem("[>] " + subfolder);
+            categoryList->addItem("[>] " + subfolder.section('/', 1));
         }
 	}
 }
@@ -275,7 +277,7 @@ void EmoteMenuFilter::onCategorySelected(QListWidgetItem *item) {
         QString subfolderName = selectedCategory.mid(4); // Delete the prefix
         qDebug() << subfolderName;
         
-        loadButtons(QStringList(), true, subfolderName);
+        loadButtons(QStringList(), true, currentChar + "/" + subfolderName);
     } else if (selectedCategory != "Default Emotes") {
     	emoteMenu_charName.clear();
         QMap<QString, QStringList> categories = ao_app->read_emote_categories(currentChar);
@@ -633,34 +635,3 @@ QStringList TagDialog::selectedTags() const
     }
     return selected;
 }
-
-ButtonLoader::ButtonLoader(AOApplication *p_ao_app, EmoteMenuFilter *parent)
-    : QObject(parent), ao_app(p_ao_app), emoteMenuFilter(parent) { }
-
-void ButtonLoader::process() {
-    QString currentCharName = charName;
-    if (isIniswap && !subfolderPath.isEmpty()) {
-        currentCharName = subfolderPath;
-    }
-
-    int total_emotes = ao_app->get_emote_number(currentCharName);
-
-    for (int n = 0; n < total_emotes; ++n) {
-        QString emoteId = QString::number(n + 1);
-        QString emoteName = ao_app->get_emote_comment(currentCharName, n);
-
-        if (!emoteIds.isEmpty() && (!emoteIds.contains(emoteId) && !emoteIds.contains(emoteName))) {
-            continue;
-        }
-
-        QString emotePath = ao_app->get_image_suffix(ao_app->get_character_path(currentCharName, "emotions/button" + QString::number(n + 1) + "_off"));
-
-        emit buttonLoaded(emotePath, emoteId, emoteName, currentCharName, buttonSize);
-
-        // Small sleep to simulate batch processing and prevent overloading UI
-        QThread::msleep(10);
-    }
-
-    emit finished();
-}
-

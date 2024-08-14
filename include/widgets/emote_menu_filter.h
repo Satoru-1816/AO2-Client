@@ -53,7 +53,6 @@ private slots:
     void removeCategory();
     void onCategorySelected(QListWidgetItem *item);
     void onButtonClicked(AOEmoteButton *button);
-    void onButtonLoaded(const QString &emotePath, const QString &emoteId, const QString &emoteName, const QString &charName, int buttonSize);
 
 private:
     void setupLayout();
@@ -97,37 +96,6 @@ private:
     QWidget *scrollWidget;
     QVBoxLayout *scrollLayout;
     QScrollArea *scrollArea;
-};
-
-class ButtonLoader : public QObject {
-    Q_OBJECT
-
-public:
-    ButtonLoader(AOApplication *p_ao_app, EmoteMenuFilter *parent = nullptr);
-
-    void setParams(const QStringList &emoteIds, bool isIniswap, const QString &subfolderPath, QString charName, int buttonSize) {
-        this->emoteIds = emoteIds;
-        this->isIniswap = isIniswap;
-        this->subfolderPath = subfolderPath;
-        this->charName = charName;
-        this->buttonSize = buttonSize;
-    }
-
-public slots:
-    void process();
-
-signals:
-    void buttonLoaded(const QString &emotePath, const QString &emoteId, const QString &emoteName, const QString &charName, int buttonSize);
-    void finished();
-
-private:
-	AOApplication *ao_app;
-    EmoteMenuFilter *emoteMenuFilter;
-    QStringList emoteIds;
-    bool isIniswap;
-    QString subfolderPath;
-    QString charName;
-    int buttonSize;
 };
 
 #endif // EMOTE_MENU_FILTER_H
