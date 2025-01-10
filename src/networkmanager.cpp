@@ -18,7 +18,6 @@ NetworkManager::NetworkManager(AOApplication *parent) : QObject(parent)
   ao_app = parent;
 
   http = new QNetworkAccessManager(this);
-  heartbeat_timer = new QTimer(this);
   stream = new QNetworkAccessManager(this);
   download = new QNetworkAccessManager(this);
   
@@ -29,8 +28,6 @@ NetworkManager::NetworkManager(AOApplication *parent) : QObject(parent)
     ms_baseurl = master_config;
   }
 
-  connect(heartbeat_timer, &QTimer::timeout, this, &NetworkManager::send_heartbeat);
-  heartbeat_timer->start(heartbeat_interval);
   connect(stream, &QNetworkAccessManager::finished, this, &NetworkManager::image_reply_finished);
 }
 
@@ -80,21 +77,6 @@ void NetworkManager::ms_request_finished(QNetworkReply *reply,
   cb();
 
   reply->deleteLater();
-}
-
-void NetworkManager::send_heartbeat()
-{
-  // Ping the server periodically to tell the MS that you've been playing
-  // within a 5 minute window, so that the the number of people playing within
-  // that time period can be counted and an accurate player count be displayed.
-  // What do I care about your personal information, I really don't want it.
-  if (Options::getInstance().playerCountOptout())
-    return;
-
-  QNetworkRequest req(QUrl(ms_baseurl + "/playing"));
-  req.setRawHeader("User-Agent", get_user_agent().toUtf8());
-
-  http->post(req, QByteArray());
 }
 
 void NetworkManager::request_document(MSDocumentType document_type,
