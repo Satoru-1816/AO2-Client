@@ -36,12 +36,8 @@ private:
   connection_type active_connection_type;
   bool connected = false;
 
-  QTimer *heartbeat_timer;
-
   const QString DEFAULT_MS_BASEURL = "http://servers.aceattorneyonline.com";
   QString ms_baseurl = DEFAULT_MS_BASEURL;
-
-  const int heartbeat_interval = 60 * 5 * 1000;
 
   bool partial_packet = false;
   QString temp_packet = "";
@@ -81,7 +77,6 @@ public slots:
   void start_image_streaming(QString path, QString prefix);
   void download_folder(const QStringList& paths);
 
-  void send_heartbeat();
 private slots:
   void ms_request_finished(QNetworkReply *reply,
                            const std::function<void()> &cb);
