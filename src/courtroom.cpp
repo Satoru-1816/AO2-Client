@@ -3586,11 +3586,8 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
   bool parse_escape_seq = false;
   std::stack<int> ic_color_stack;
 
-  bool markdown_bold = false;
   bool is_bold_active = false;
-  bool markdown_italic = false;
   bool is_italic_active = false;
-  bool markdown_header = false;
   bool is_header_active = false;
 
   // Text alignment shenanigans. Could make a dropdown for this later, too!
@@ -3625,7 +3622,6 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
     if (!align.isEmpty())
       appendage.prepend("<div align=" + align + ">");
     
-    appendage.prepend("<b>");
     p_text_escaped.insert(check_pos_escaped, appendage);
     check_pos_escaped += appendage.size();
   }
@@ -3689,9 +3685,6 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
           // Clear the stored optimization information
           QString markdown_start = color_markdown_start_list.at(c);
           QString markdown_end = color_markdown_end_list.at(c);
-				  markdown_bold = color_markdown_bold_list.at(c);
-          markdown_italic = color_markdown_italic_list.at(c);
-          markdown_header = color_markdown_header_list.at(c);
 
           if (html) {
             markdown_start = markdown_start.toHtmlEscaped();
@@ -3730,18 +3723,6 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
               }
               else if (f_character == markdown_start) {
                 ic_color_stack.push(c); // Begin our coloring
-								if (markdown_bold && !is_bold_active) {
-									p_text.append("<b>");
-									is_bold_active = true;
-								}
-								if (markdown_italic && !is_italic_active) {
-									p_text.append("<i>");
-									is_italic_active = true;
-								}
-								if (markdown_header && !is_header_active) {
-									p_text.append("<h1>");
-									is_header_active = true;
-								}
               }
               color_update = true;
             }
@@ -3753,34 +3734,10 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
         if (color_update && (target_pos <= -1 || check_pos < target_pos)) {
           if (!parse_escape_seq) {
             QString appendage = "</font>";
-				    if (is_bold_active) {
-				      appendage.prepend("</b>");
-				      is_bold_active = false;
-				    }
-				    if (is_italic_active) {
-				      appendage.prepend("</i>");
-				      is_italic_active = false;
-				    }
-				    if (is_header_active) {
-				      appendage.prepend("</h1>");
-				      is_header_active = false;
-				    }
             if (!ic_color_stack.empty()) {
               appendage +=
                   "<font color=\"$c" + QString::number(ic_color_stack.top()) +
                   "\">";
-				      if (markdown_bold && !is_bold_active) {
-				        appendage.prepend("<b>");
-				        is_bold_active = true;
-				      }
-				      if (markdown_italic && !is_italic_active) {
-				        appendage.prepend("<i>");
-				        is_italic_active = true;
-				      }
-				      if (markdown_header && !is_header_active) {
-				        appendage.prepend("<h1>");
-				        is_header_active = true;
-				      }
 						}
             if (is_end && !skip) {
               p_text_escaped.insert(check_pos_escaped,
@@ -3813,6 +3770,34 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
       if (f_character == "s" || f_character == "f" || f_character == "p") // screenshake/flash/pause
         skip = true;
 
+      if (f_character == "b" || f_character == "h" || f_character == "i") // bold/header/italic
+      {
+        QString appendage;
+        if (f_character == "b")
+          if (is_bold_active)
+            appendage = "</b>";
+            is_bold_active = false;
+          else
+            appendage = "<b>";
+            is_bold_active = true;
+        else if (f_character == "h")
+          if (is_header_active)
+            appendage = "</h1>";
+            is_header_active = false;
+          else
+            appendage = "<h1>";
+            is_header_active = true;
+        else if (f_character == "i")
+          if (is_italic_active)
+            appendage = "</i>";
+            is_italic_active = false;
+          else
+            appendage = "<i>";
+            is_italic_active = true;
+        p_text_escaped.insert(check_pos_escaped, appendage);
+        check_pos_escaped += appendage.size();
+        skip = true;
+      }
       parse_escape_seq = false;
     }
 
@@ -3833,21 +3818,12 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
         while (!ic_color_stack.empty()) {
             // Pop the color stack and close respective tags
             int current_tag = ic_color_stack.top();
-						if (color_markdown_bold_list.at(current_tag) && is_bold_active) {
-			        appendage += "</b>";
-			        is_bold_active = false;
-			      }
-			      if (color_markdown_italic_list.at(current_tag) && is_italic_active) {
-			        appendage += "</i>";
-			        is_italic_active = false;
-			      }
-			      if (color_markdown_header_list.at(current_tag) && is_header_active) {
-			        appendage += "</h1>";
-			        is_header_active = false;
-			      }
             ic_color_stack.pop(); // Pop after closing each tag
         }
 
+        appendage += "</b>";
+        appendage += "</i>";
+        appendage += "</h1>";
         appendage += "</font>";
     }
 
@@ -3871,18 +3847,6 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
 		while (!ic_color_stack.empty()) {
 				// Pop and close tags
 				int current_tag = ic_color_stack.top();
-		    if (color_markdown_bold_list.at(current_tag) && is_bold_active) {
-		      p_text_escaped.append("</b>");
-		      is_bold_active = false;
-		    }
-		    if (color_markdown_italic_list.at(current_tag) && is_italic_active) {
-		      p_text_escaped.append("</i>");
-		      is_italic_active = false;
-		    }
-		    if (color_markdown_header_list.at(current_tag) && is_header_active) {
-		      p_text_escaped.append("</h1>");
-		      is_header_active = false;
-		    }
 				ic_color_stack.pop();
 		}
 
