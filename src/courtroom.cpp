@@ -3681,6 +3681,10 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
           // Clear the stored optimization information
           QString markdown_start = color_markdown_start_list.at(c);
           QString markdown_end = color_markdown_end_list.at(c);
+          bool markdown_bold = color_markdown_bold_list.at(c);
+          bool markdown_italic = color_markdown_italic_list.at(c);
+          bool markdown_header = color_markdown_header_list.at(c);
+
           if (html) {
             markdown_start = markdown_start.toHtmlEscaped();
             markdown_end = markdown_end.toHtmlEscaped();
@@ -3744,6 +3748,22 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
             }
             p_text_escaped.insert(check_pos_escaped, appendage);
             check_pos_escaped += appendage.size();
+          }
+            p_text_escaped.insert(check_pos_escaped, appendage);
+            check_pos_escaped += appendage.size();
+          }
+
+          if (markdown_bold) {
+            p_text_escaped.insert(check_pos_escaped, "<b>");
+            check_pos_escaped += 3;
+          }
+          if (markdown_italic) {
+            p_text_escaped.insert(check_pos_escaped, "<i>");
+            check_pos_escaped += 3;
+          }
+          if (markdown_header) {
+            p_text_escaped.insert(check_pos_escaped, "<h1>");
+            check_pos_escaped += 4;
           }
         }
       }
@@ -6258,6 +6278,9 @@ void Courtroom::set_text_color_dropdown()
   color_markdown_end_list.clear();
   color_markdown_remove_list.clear();
   color_markdown_talking_list.clear();
+  color_markdown_bold_list.clear();
+  color_markdown_italic_list.clear();
+  color_markdown_header_list.clear();
 
   // Update markdown colors. TODO: make a loading function that only loads the
   // config file once instead of several times
@@ -6275,6 +6298,14 @@ void Courtroom::set_text_color_dropdown()
     color_markdown_talking_list.append(
         ao_app->get_chat_markup("c" + QString::number(c) + "_talking",
                                 ao_app->get_chat(current_char)) != "0");
+    color_markdown_bold_list.append(
+        ao_app->get_chat_markup("c" + QString::number(c) + "_bold", ao_app->get_chat(current_char)) == "1");
+
+    color_markdown_italic_list.append(
+        ao_app->get_chat_markup("c" + QString::number(c) + "_italic", ao_app->get_chat(current_char)) == "1");
+
+    color_markdown_header_list.append(
+        ao_app->get_chat_markup("c" + QString::number(c) + "_header", ao_app->get_chat(current_char)) == "1");
 
     QString color_name = ao_app->get_chat_markup(
         "c" + QString::number(c) + "_name", ao_app->get_chat(current_char));
