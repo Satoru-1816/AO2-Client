@@ -3586,6 +3586,13 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
   bool parse_escape_seq = false;
   std::stack<int> ic_color_stack;
 
+  bool markdown_bold = false;
+  bool is_bold_active = false;
+  bool markdown_italic = false;
+  bool is_italic_active = false;
+  bool markdown_header = false;
+  bool is_header_active = false;
+
   // Text alignment shenanigans. Could make a dropdown for this later, too!
   QString align;
   if (p_text.trimmed().startsWith("~~")) {
@@ -3662,12 +3669,6 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
     bool color_update = false;
     bool is_end = false;
     bool skip = false;
-    bool markdown_bold = false;
-    bool is_bold_active = false;
-    bool markdown_italic = false;
-    bool is_italic_active = false;
-    bool markdown_header = false;
-    bool is_header_active = false;
 	
     if (!parse_escape_seq) {
       if (f_character == "\\") {
@@ -3708,31 +3709,31 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
                     default_color != c) {
                   ic_color_stack.pop(); // Cease our coloring
                   is_end = true;
-						      if (markdown_bold && is_bold_active) {
-						        f_message.append("</b>");
-						        is_bold_active = false;
-						      }
-						      if (markdown_italic && is_italic_active) {
-						        f_message.append("</i>");
-						        is_italic_active = false;
-						      }
-									if (markdown_header && is_header_active) {
-						        f_message.append("</h1>");
-						        is_header_active = false;
-						      }
+    	            if (markdown_bold && is_bold_active) {
+                		p_text.append("</b>");
+                		is_bold_active = false;
+                  }
+          	      if (markdown_italic && is_italic_active) {
+                		p_text.append("</i>");
+                		is_italic_active = false;
+                  }
+          	      if (markdown_header && is_header_active) {
+                		p_text.append("</h1>");
+                 		is_header_active = false;
+           	      }
                 }
                 else {
                   ic_color_stack.push(c); // Begin our coloring
 						      if (markdown_bold && !is_bold_active) {
-						        f_message.append("<b>");
+						        p_text.append("<b>");
 										is_bold_active = true;
 						      }
 						      if (markdown_italic && !is_italic_active) {
-						        f_message.append("<i>");
+						        p_text.append("<i>");
 										is_italic_active = true;
 						      }
 									if (markdown_header && !is_header_active) {
-						        f_message.append("<h1>");
+						        p_text.append("<h1>");
 										is_header_active = true;
 						      }
                 }
@@ -3750,30 +3751,30 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
                 ic_color_stack.pop(); // Cease our coloring
                 is_end = true;
 								if (is_bold_active) {
-									f_message.append("</b>");
+									p_text.append("</b>");
 									is_bold_active = false;
 								}
 								if (is_italic_active) {
-									f_message.append("</i>");
+									p_text.append("</i>");
 									is_italic_active = false;
 								}
 								if (is_header_active) {
-									f_message.append("</h1>");
+									p_text.append("</h1>");
 									is_header_active = false;
 								}
               }
               else if (f_character == markdown_start) {
                 ic_color_stack.push(c); // Begin our coloring
 								if (markdown_bold && !is_bold_active) {
-									f_message.append("<b>");
+									p_text.append("<b>");
 									is_bold_active = true;
 								}
 								if (markdown_italic && !is_italic_active) {
-									f_message.append("<i>");
+									p_text.append("<i>");
 									is_italic_active = true;
 								}
 								if (markdown_header && !is_header_active) {
-									f_message.append("<h1>");
+									p_text.append("<h1>");
 									is_header_active = true;
 								}
               }
