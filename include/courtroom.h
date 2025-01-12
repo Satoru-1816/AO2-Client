@@ -964,6 +964,7 @@ private:
 public slots:
   void objection_done();
   void preanim_done();
+  void do_character_bounce();
   void do_screenshake();
   void do_flash();
   void do_effect(QString fx_path, QString fx_sound, QString p_char,
