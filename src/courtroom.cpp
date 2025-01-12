@@ -3191,7 +3191,7 @@ void Courtroom::do_character_bounce()
 
     // Configure the animation
     bounce_animation->setDuration(300);
-    bounce_animation->setEasingCurve(QEasingCurve::OutBounce);
+    bounce_animation->setEasingCurve(QEasingCurve::OutQuad);
 
     int bounce_height = 10;
     bounce_animation->setKeyValueAt(0.0, pos_default); // Start at the original position
