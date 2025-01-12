@@ -3773,27 +3773,31 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
       if (f_character == "b" || f_character == "h" || f_character == "i") // bold/header/italic
       {
         QString appendage;
-        if (f_character == "b")
-          if (is_bold_active)
+        if (f_character == "b") {
+          if (is_bold_active) {
             appendage = "</b>";
             is_bold_active = false;
-          else
+	  } else {
             appendage = "<b>";
             is_bold_active = true;
-        else if (f_character == "h")
-          if (is_header_active)
+	  }
+	} else if (f_character == "h") {
+          if (is_header_active) {
             appendage = "</h1>";
             is_header_active = false;
-          else
+	  } else {
             appendage = "<h1>";
             is_header_active = true;
-        else if (f_character == "i")
-          if (is_italic_active)
+	  }
+	} else if (f_character == "i") {
+          if (is_italic_active) {
             appendage = "</i>";
             is_italic_active = false;
-          else
+	  } else {
             appendage = "<i>";
             is_italic_active = true;
+	  }
+	}
         p_text_escaped.insert(check_pos_escaped, appendage);
         check_pos_escaped += appendage.size();
         skip = true;
