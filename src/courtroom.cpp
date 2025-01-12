@@ -3749,9 +3749,6 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
             p_text_escaped.insert(check_pos_escaped, appendage);
             check_pos_escaped += appendage.size();
           }
-            p_text_escaped.insert(check_pos_escaped, appendage);
-            check_pos_escaped += appendage.size();
-          }
 
           if (markdown_bold) {
             p_text_escaped.insert(check_pos_escaped, "<b>");
@@ -3835,6 +3832,7 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
 	}
 	
 	check_pos += f_char_bytes;
+	}
 	
 	if (html) {
 		// Check if any tags are still open and close them
