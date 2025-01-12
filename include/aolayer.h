@@ -234,6 +234,7 @@ private slots:
   void movie_ticker() override; // overridden so we can play effects
 
 signals:
+  void bounce();
   void shake();
   void flash();
   void play_sfx(QString sfx);
