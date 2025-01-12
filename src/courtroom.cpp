@@ -3783,10 +3783,10 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
 	  }
 	} else if (f_character == "h") {
           if (is_header_active) {
-            appendage = "</h1>";
+            appendage = "</h2>";
             is_header_active = false;
 	  } else {
-            appendage = "<h1>";
+            appendage = "<h2>";
             is_header_active = true;
 	  }
 	} else if (f_character == "i") {
