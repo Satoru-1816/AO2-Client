@@ -3662,12 +3662,12 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
     bool color_update = false;
     bool is_end = false;
     bool skip = false;
-		bool markdown_bold = false;
-		bool is_bold_active = false;
-		bool markdown_italic = false;;
-		bool is_italic_active = false;
-		bool markdown_header = false;;
-		bool is_header_active = false:
+    bool markdown_bold = false;
+    bool is_bold_active = false;
+    bool markdown_italic = false;
+    bool is_italic_active = false;
+    bool markdown_header = false;
+    bool is_header_active = false;
 	
     if (!parse_escape_seq) {
       if (f_character == "\\") {
