@@ -658,9 +658,9 @@ private:
   // Whether or not this color allows us to play the talking animation
   QVector<bool> color_markdown_talking_list;
 
-  QVector<bool> color_markdown_bold_list
-  QVector<bool> color_markdown_italic_list
-  QVector<bool> color_markdown_header_list
+  QVector<bool> color_markdown_bold_list;
+  QVector<bool> color_markdown_italic_list;
+  QVector<bool> color_markdown_header_list;
 
   // Text Color-related optimization END
 
