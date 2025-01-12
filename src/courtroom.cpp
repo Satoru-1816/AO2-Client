@@ -3624,7 +3624,8 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
 
     if (!align.isEmpty())
       appendage.prepend("<div align=" + align + ">");
-
+    
+    appendage.prepend("<b>");
     p_text_escaped.insert(check_pos_escaped, appendage);
     check_pos_escaped += appendage.size();
   }
@@ -3709,33 +3710,9 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
                     default_color != c) {
                   ic_color_stack.pop(); // Cease our coloring
                   is_end = true;
-    	            if (markdown_bold && is_bold_active) {
-                		p_text.append("</b>");
-                		is_bold_active = false;
-                  }
-          	      if (markdown_italic && is_italic_active) {
-                		p_text.append("</i>");
-                		is_italic_active = false;
-                  }
-          	      if (markdown_header && is_header_active) {
-                		p_text.append("</h1>");
-                 		is_header_active = false;
-           	      }
                 }
                 else {
                   ic_color_stack.push(c); // Begin our coloring
-						      if (markdown_bold && !is_bold_active) {
-						        p_text.append("<b>");
-										is_bold_active = true;
-						      }
-						      if (markdown_italic && !is_italic_active) {
-						        p_text.append("<i>");
-										is_italic_active = true;
-						      }
-									if (markdown_header && !is_header_active) {
-						        p_text.append("<h1>");
-										is_header_active = true;
-						      }
                 }
                 color_update = true;
               }
@@ -3750,18 +3727,6 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
               if (f_character == markdown_end) {
                 ic_color_stack.pop(); // Cease our coloring
                 is_end = true;
-								if (is_bold_active) {
-									p_text.append("</b>");
-									is_bold_active = false;
-								}
-								if (is_italic_active) {
-									p_text.append("</i>");
-									is_italic_active = false;
-								}
-								if (is_header_active) {
-									p_text.append("</h1>");
-									is_header_active = false;
-								}
               }
               else if (f_character == markdown_start) {
                 ic_color_stack.push(c); // Begin our coloring
@@ -3933,6 +3898,7 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
     p_text_escaped.replace(QRegularExpression("^\\s|(?<=\\s)\\s"), "&nbsp;");
     if (!align.isEmpty())
       p_text_escaped.append("</div>");
+    p_text_escaped.append("</b>");
   }
 
   p_text_escaped = scan_for_filtered_words(p_text_escaped);
