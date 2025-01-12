@@ -3803,28 +3803,63 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
         }
 
         // Clean it up, we're done here
-        while (!ic_color_stack.empty())
-          ic_color_stack.pop();
+        while (!ic_color_stack.empty()) {
+            // Pop the color stack and close respective tags
+            int current_tag = ic_color_stack.top();
+            if (current_tag == markdown_bold) {
+                appendage += "</b>";
+            }
+            if (current_tag == markdown_italic) {
+                appendage += "</i>";
+            }
+            if (current_tag == markdown_header) {
+                appendage += "</h1>";
+            }
+
+            ic_color_stack.pop(); // Pop after closing each tag
+        }
 
         appendage += "</font>";
-      }
-      ic_color_stack.push(
-          -1); // Dummy colorstack push for maximum </font> appendage
-      appendage += "<font color=\"#00000000\">";
-      p_text_escaped.insert(check_pos_escaped, appendage);
-      check_pos_escaped += appendage.size();
     }
-    if (!skip) {
-      p_text_escaped.insert(check_pos_escaped, f_character);
-      check_pos_escaped += f_char_length;
-    }
-    check_pos += f_char_bytes;
-  }
 
-  if (!ic_color_stack.empty() && html) {
-    p_text_escaped.append("</font>");
-  }
+    // Dummy colorstack push for maximum </font> appendage
+    ic_color_stack.push(-1); 
+    appendage += "<font color=\"#00000000\">"; // Invisible font
+    p_text_escaped.insert(check_pos_escaped, appendage);
+    check_pos_escaped += appendage.size();
+	}
 
+	if (!skip) {
+		p_text_escaped.insert(check_pos_escaped, f_character);
+		check_pos_escaped += f_char_length;
+	}
+	
+	check_pos += f_char_bytes;
+	
+	if (html) {
+		// Check if any tags are still open and close them
+		while (!ic_color_stack.empty()) {
+				// Pop and close tags
+				int current_tag = ic_color_stack.top();
+				if (current_tag == markdown_bold) {
+						p_text_escaped.insert(check_pos_escaped, "</b>");
+						check_pos_escaped += 4;
+				}
+				if (current_tag == markdown_italic) {
+						p_text_escaped.insert(check_pos_escaped, "</i>");
+						check_pos_escaped += 4;
+				}
+				if (current_tag == markdown_header) {
+						p_text_escaped.insert(check_pos_escaped, "</h1>");
+						check_pos_escaped += 5;
+				}
+
+				ic_color_stack.pop();
+		}
+
+		// Close the last font tag
+		p_text_escaped.append("</font>");
+	}
   if (html) {
     // Example: https://regex101.com/r/oL4nM9/37 - this replaces
     // excessive/trailing/etc. whitespace with non-breaking space. I WOULD use
