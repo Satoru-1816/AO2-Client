@@ -700,6 +700,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   connect(ui_vp_objection, &SplashLayer::done, this, &Courtroom::objection_done);
   connect(ui_vp_player_char, &CharLayer::done, this, &Courtroom::preanim_done);
   connect(ui_vp_player_char, &CharLayer::shake, this, &Courtroom::do_screenshake);
+  connect(ui_vp_player_char, &CharLayer::bounce, this, &Courtroom::do_character_bounce);
   connect(ui_vp_player_char, &CharLayer::flash, this, &Courtroom::do_flash);
   connect(ui_vp_player_char, &CharLayer::play_sfx, this,
           &Courtroom::play_char_sfx);
@@ -3180,6 +3181,28 @@ void Courtroom::do_flash()
   do_effect("realization", "", f_char, f_custom_theme);
 }
 
+void Courtroom::do_character_bounce()
+{
+    QWidget *ui_element = ui_vp_player_char;
+
+    // Create animation on the "pos" property
+    QPropertyAnimation *bounce_animation = new QPropertyAnimation(ui_element, "pos", this);
+    QPoint pos_default = QPoint(ui_element->x(), ui_element->y()); // Original position
+
+    // Configure the animation
+    bounce_animation->setDuration(300);
+    bounce_animation->setEasingCurve(QEasingCurve::OutBounce);
+
+    int bounce_height = 10;
+    bounce_animation->setKeyValueAt(0.0, pos_default); // Start at the original position
+    bounce_animation->setKeyValueAt(0.5, QPoint(pos_default.x(), pos_default.y() + bounce_height)); // Lowest point
+    bounce_animation->setKeyValueAt(1.0, pos_default); // Return to the original position
+
+    // Start the animation and automatically delete it when finished
+    bounce_animation->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+
 void Courtroom::do_effect(QString fx_path, QString fx_sound, QString p_char,
                           QString p_folder)
 {
@@ -3827,7 +3850,7 @@ QString Courtroom::filter_ic_text(QString p_text, bool html, int target_pos,
 
         appendage += "</b>";
         appendage += "</i>";
-        appendage += "</h1>";
+        appendage += "</h2>";
         appendage += "</font>";
     }
 
@@ -4143,6 +4166,8 @@ void Courtroom::start_chat_ticking()
 
   // Display the evidence
   display_evidence_image();
+
+	this->do_character_bounce();
 
   // handle expanded desk mods
   switch(m_chatmessage[DESK_MOD].toInt()) {
