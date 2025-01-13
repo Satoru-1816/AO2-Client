@@ -701,7 +701,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   connect(ui_vp_player_char, &CharLayer::done, this, &Courtroom::preanim_done);
   connect(ui_vp_player_char, &CharLayer::shake, this, &Courtroom::do_screenshake);
   connect(ui_vp_player_char, &CharLayer::bounce, this, &Courtroom::do_character_bounce);
-  connect(ui_vp_player_char, &CharLayer::slide, this, &Courtroom::do_character_slide);
+  // connect(ui_vp_player_char, &CharLayer::slide, this, &Courtroom::do_character_slide);
   connect(ui_vp_player_char, &CharLayer::flash, this, &Courtroom::do_flash);
   connect(ui_vp_player_char, &CharLayer::play_sfx, this,
           &Courtroom::play_char_sfx);
