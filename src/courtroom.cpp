@@ -3620,8 +3620,8 @@ void Courtroom::handle_ic_speaking()
       self_offset_v = self_offsets[1].toInt();
     }
     
-    last_x_offset = ui_viewport->width() * self_offset / 100;
-    last_y_offset = ui_viewport->height() * self_offset_v / 100;
+    // last_x_offset = ui_viewport->width() * self_offset / 100;
+    // last_y_offset = ui_viewport->height() * self_offset_v / 100;
   }
   // Begin parsing through the chatbox message
   start_chat_ticking();
