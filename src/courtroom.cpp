@@ -3220,6 +3220,8 @@ void Courtroom::do_character_slide(QWidget *widget)
   QPoint new_pos_player = QPoint(
   ui_viewport->width() * self_offset / 100,
   ui_viewport->height() * self_offset_v / 100);
+
+  qDebug() << "ui_viewport width: " << QString::number(ui_viewport->width());
   
   QPropertyAnimation *slide_animation = new QPropertyAnimation(widget, "pos", this);
   slide_animation->setDuration(500);
@@ -4190,9 +4192,6 @@ void Courtroom::start_chat_ticking()
 
   if (last_x_offset == char_offset)
     this->do_character_bounce();
-  
-  if (char_offset != last_x_offset)
-    this->do_character_slide(ui_vp_player_char);
 
   // handle expanded desk mods
   switch(m_chatmessage[DESK_MOD].toInt()) {
@@ -4265,6 +4264,9 @@ void Courtroom::start_chat_ticking()
       text_queue_timer->start(delay);
     return;
   }
+
+  if (char_offset != last_x_offset)
+    this->do_character_slide(ui_vp_player_char);
 
   ui_vp_chatbox->show();
   ui_vp_message->show();
