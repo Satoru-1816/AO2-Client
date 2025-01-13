@@ -3203,10 +3203,24 @@ void Courtroom::do_character_bounce()
   bounce_animation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void Courtroom::do_character_slide(QWidget *widget, const QPoint &start_pos, const QPoint &end_pos)
+void Courtroom::do_character_slide(QWidget *widget)
 {
   qDebug() << "Slide og pos: " + QString::number(last_x_offset) + 
              " Slide new pos: " + QString::number(char_offset);
+
+  QStringList self_offsets = m_chatmessage[SELF_OFFSET].split("&");
+  int self_offset = self_offsets[0].toInt();
+  int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
+
+  QPoint old_pos_player = QPoint(
+  ui_viewport->width() * last_x_offset / 100,
+  ui_viewport->height() * (self_offsets.length() > 1 ? char_vert_offset : 0) / 100);
+  
+  // Calculate the new position
+  QPoint new_pos_player = QPoint(
+  ui_viewport->width() * self_offset / 100,
+  ui_viewport->height() * self_offset_v / 100);
+  
   QPropertyAnimation *slide_animation = new QPropertyAnimation(widget, "pos", this);
   slide_animation->setDuration(500);
   slide_animation->setStartValue(start_pos); // Start at the current position
@@ -4179,9 +4193,12 @@ void Courtroom::start_chat_ticking()
   // Display the evidence
   display_evidence_image();
 
-  if (last_x_offset == char_offset)
+  if (last_x_offset == char_offset) {
     this->do_character_bounce();
-
+  } else {
+    this->do_character_slide(ui_vp_player_char);
+  }
+  
   // handle expanded desk mods
   switch(m_chatmessage[DESK_MOD].toInt()) {
     case DESK_EMOTE_ONLY_EX:
@@ -4590,19 +4607,7 @@ void Courtroom::set_self_offset(const QString& p_list) {
     QStringList self_offsets = p_list.split("&");
     int self_offset = self_offsets[0].toInt();
     int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
-    QPoint old_pos_player = QPoint(
-        ui_viewport->width() * last_x_offset / 100,
-        ui_viewport->height() * (self_offsets.length() > 1 ? char_vert_offset : 0) / 100);
-
-    // Calculate the new position
-    QPoint new_pos_player = QPoint(
-        ui_viewport->width() * self_offset / 100,
-        ui_viewport->height() * self_offset_v / 100);
-
-    // Create animations for smooth sliding
-    this->do_character_slide(ui_vp_player_char, old_pos_player, new_pos_player);
-    // this->do_character_slide(ui_vp_crossfade_char, old_pos_player, new_pos_player);
-
+	
     ui_vp_player_char->move_and_center(ui_viewport->width() * self_offset / 100,
                                        ui_viewport->height() * self_offset_v / 100);
     ui_vp_crossfade_char->move_and_center(ui_viewport->width() * self_offset / 100,
