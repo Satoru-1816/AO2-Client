@@ -3223,8 +3223,8 @@ void Courtroom::do_character_slide(QWidget *widget)
   
   QPropertyAnimation *slide_animation = new QPropertyAnimation(widget, "pos", this);
   slide_animation->setDuration(500);
-  slide_animation->setStartValue(start_pos); // Start at the current position
-  slide_animation->setEndValue(end_pos);
+  slide_animation->setStartValue(old_pos_player); // Start at the current position
+  slide_animation->setEndValue(new_pos_player);
   slide_animation->setEasingCurve(QEasingCurve::InOutQuad);
   slide_animation->start(QAbstractAnimation::DeleteWhenStopped); 
 }
