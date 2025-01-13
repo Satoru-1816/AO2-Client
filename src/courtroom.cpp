@@ -3205,7 +3205,8 @@ void Courtroom::do_character_bounce()
 
 void Courtroom::do_character_slide(QWidget *widget, const QPoint &start_pos, const QPoint &end_pos)
 {
-	  qDebug() << "Slide og pos: " + last_x_offset + "\nSlide new pos: " + char_offset;
+    qDebug() << "Slide og pos: " + QString::number(last_x_offset) + 
+               " Slide new pos: " + QString::number(char_offset);
     QPropertyAnimation *slide_animation = new QPropertyAnimation(widget, "pos", this);
     slide_animation->setDuration(500);
     slide_animation->setStartValue(start_pos); // Start at the current position
