@@ -2401,8 +2401,6 @@ void Courtroom::on_chat_return_pressed()
         else
           packet_contents.append(QString::number(100));
 
-    last_x_offset = char_offset;
-
     // Finally, we send over if we want our pres to not interrupt.
     if ((ui_immediate->isChecked() || action_immediate->isChecked()) && (ui_pre->isChecked() || action_preanim->isChecked())) {
       packet_contents.append("1");
@@ -3123,6 +3121,7 @@ void Courtroom::handle_ic_message()
     if (is_objection)
       text_queue_timer->start(objection_threshold);
   }
+	last_x_offset = char_offset;
 }
 
 void Courtroom::do_screenshake()
@@ -3206,12 +3205,13 @@ void Courtroom::do_character_bounce()
 
 void Courtroom::do_character_slide(QWidget *widget, const QPoint &start_pos, const QPoint &end_pos)
 {
-    QPropertyAnimation *animation = new QPropertyAnimation(widget, "pos", this);
-    animation->setDuration(500);
-    animation->setStartValue(start_pos); // Start at the current position
-    animation->setEndValue(end_pos);
-    animation->setEasingCurve(QEasingCurve::InOutQuad);
-    animation->start(QAbstractAnimation::DeleteWhenStopped); 
+	  qDebug() << "Slide og pos: " + last_x_offset + "\nSlide new pos: " + char_offset;
+    QPropertyAnimation *slide_animation = new QPropertyAnimation(widget, "pos", this);
+    slide_animation->setDuration(500);
+    slide_animation->setStartValue(start_pos); // Start at the current position
+    slide_animation->setEndValue(end_pos);
+    slide_animation->setEasingCurve(QEasingCurve::InOutQuad);
+    slide_animation->start(QAbstractAnimation::DeleteWhenStopped); 
 }
 
 void Courtroom::do_effect(QString fx_path, QString fx_sound, QString p_char,
