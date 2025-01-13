@@ -3183,25 +3183,33 @@ void Courtroom::do_flash()
 
 void Courtroom::do_character_bounce()
 {
-    QWidget *ui_element = ui_vp_player_char;
+	QWidget *ui_element = ui_vp_player_char;
 
-    // Create animation on the "pos" property
-    QPropertyAnimation *bounce_animation = new QPropertyAnimation(ui_element, "pos", this);
-    QPoint pos_default = QPoint(ui_element->x(), ui_element->y()); // Original position
+	// Create animation on the "pos" property
+	QPropertyAnimation *bounce_animation = new QPropertyAnimation(ui_element, "pos", this);
+	QPoint pos_default = QPoint(ui_element->x(), ui_element->y()); // Original position
 
-    // Configure the animation
-    bounce_animation->setDuration(300);
-    bounce_animation->setEasingCurve(QEasingCurve::OutQuad);
+	// Configure the animation
+	bounce_animation->setDuration(300);
+	bounce_animation->setEasingCurve(QEasingCurve::OutQuad);
 
-    int bounce_height = 10;
-    bounce_animation->setKeyValueAt(0.0, pos_default); // Start at the original position
-    bounce_animation->setKeyValueAt(0.5, QPoint(pos_default.x(), pos_default.y() + bounce_height)); // Lowest point
-    bounce_animation->setKeyValueAt(1.0, pos_default); // Return to the original position
+	int bounce_height = 10;
+	bounce_animation->setKeyValueAt(0.0, pos_default); // Start at the original position
+	bounce_animation->setKeyValueAt(0.5, QPoint(pos_default.x(), pos_default.y() + bounce_height)); // Lowest point
+	bounce_animation->setKeyValueAt(1.0, pos_default); // Return to the original position
 
-    // Start the animation and automatically delete it when finished
-    bounce_animation->start(QAbstractAnimation::DeleteWhenStopped);
+	bounce_animation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
+void Courtroom::do_character_slide(QWidget *widget, const QPoint &target_pos)
+{
+    QPropertyAnimation *animation = new QPropertyAnimation(widget, "pos", this);
+    animation->setDuration(500);
+    animation->setStartValue(widget->pos()); // Start at the current position
+    animation->setEndValue(target_pos);
+    animation->setEasingCurve(QEasingCurve::InOutQuad);
+    animation->start(QAbstractAnimation::DeleteWhenStopped); 
+}
 
 void Courtroom::do_effect(QString fx_path, QString fx_sound, QString p_char,
                           QString p_folder)
@@ -4576,17 +4584,21 @@ void Courtroom::set_scene(bool show_desk, const QString f_side)
 void Courtroom::set_self_offset(const QString& p_list) {
     QStringList self_offsets = p_list.split("&");
     int self_offset = self_offsets[0].toInt();
-    int self_offset_v;
-    if (self_offsets.length() <= 1) {
-      self_offset_v = 0;
-    }
-    else {
-      self_offset_v = self_offsets[1].toInt();
-    }
-    ui_vp_player_char->move_and_center(ui_viewport->width() * self_offset / 100,
-                                       ui_viewport->height() * self_offset_v / 100);
-    ui_vp_crossfade_char->move_and_center(ui_viewport->width() * self_offset / 100,
-                                       ui_viewport->height() * self_offset_v / 100);
+		int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
+    QPoint target_pos_player = QPoint(
+        ui_viewport->width() * self_offset / 100,
+        ui_viewport->height() * self_offset_v / 100);
+
+    QPoint target_pos_crossfade = target_pos_player; // Same target position
+
+    // Create animations for smooth sliding
+    this->do_character_slide(ui_vp_player_char, target_pos_player);
+    this->do_character_slide(ui_vp_crossfade_char, target_pos_crossfade);
+
+    //ui_vp_player_char->move_and_center(ui_viewport->width() * self_offset / 100,
+    //                                   ui_viewport->height() * self_offset_v / 100);
+    //ui_vp_crossfade_char->move_and_center(ui_viewport->width() * self_offset / 100,
+    //                                   ui_viewport->height() * self_offset_v / 100);
 }
 
 void Courtroom::set_ip_list(QString p_list)
