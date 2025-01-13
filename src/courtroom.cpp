@@ -3121,9 +3121,6 @@ void Courtroom::handle_ic_message()
     if (is_objection)
       text_queue_timer->start(objection_threshold);
   }
-  qDebug() << "last x offset: " << QString::number(last_x_offset);
-  last_x_offset = char_offset;
-  qDebug() << "and now it's: " << QString::number(last_x_offset);
 }
 
 void Courtroom::do_screenshake()
@@ -3210,13 +3207,14 @@ void Courtroom::do_character_slide(QWidget *widget)
   QStringList self_offsets = m_chatmessage[SELF_OFFSET].split("&");
   int self_offset = self_offsets[0].toInt();
   int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
+  qDebug() << "last x offset: " << QString::number(last_x_offset);
 
   qDebug() << "Slide og pos: " << QString::number(last_x_offset) << 
              " Slide new pos: " << QString::number(self_offset);
 	
   QPoint old_pos_player = QPoint(
   ui_viewport->width() * last_x_offset / 100,
-  ui_viewport->height() * (self_offsets.length() > 1 ? char_vert_offset : 0) / 100);
+  ui_viewport->height() * last_y_offset / 100);
   
   // Calculate the new position
   QPoint new_pos_player = QPoint(
@@ -3229,6 +3227,11 @@ void Courtroom::do_character_slide(QWidget *widget)
   slide_animation->setEndValue(new_pos_player);
   slide_animation->setEasingCurve(QEasingCurve::InOutQuad);
   slide_animation->start(QAbstractAnimation::DeleteWhenStopped); 
+
+  last_x_offset = self_offset;
+  last_y_offset = self_offset_v;
+  qDebug() << "and now it's: " << QString::number(last_x_offset);
+
 }
 
 void Courtroom::do_effect(QString fx_path, QString fx_sound, QString p_char,
@@ -3609,16 +3612,6 @@ void Courtroom::handle_ic_speaking()
       last_sprite = m_chatmessage[EMOTE];
     }
     last_charname = m_chatmessage[CHAR_NAME];
-    
-    QStringList self_offsets = m_chatmessage[SELF_OFFSET].split("&");
-    int self_offset = self_offsets[0].toInt();
-    int self_offset_v;
-    if (self_offsets.length() <= 1) {
-      self_offset_v = 0;
-    }
-    else {
-      self_offset_v = self_offsets[1].toInt();
-    }
     
     // last_x_offset = ui_viewport->width() * self_offset / 100;
     // last_y_offset = ui_viewport->height() * self_offset_v / 100;
