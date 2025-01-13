@@ -3121,7 +3121,7 @@ void Courtroom::handle_ic_message()
     if (is_objection)
       text_queue_timer->start(objection_threshold);
   }
-	last_x_offset = char_offset;
+  last_x_offset = char_offset;
 }
 
 void Courtroom::do_screenshake()
@@ -4193,12 +4193,12 @@ void Courtroom::start_chat_ticking()
   // Display the evidence
   display_evidence_image();
 
-  if (last_x_offset == char_offset) {
+  if (last_x_offset == char_offset)
     this->do_character_bounce();
-  } else {
-    this->do_character_slide(ui_vp_player_char);
-  }
   
+  if (char_offset != last_x_offset)
+    this->do_character_slide(ui_vp_player_char);
+
   // handle expanded desk mods
   switch(m_chatmessage[DESK_MOD].toInt()) {
     case DESK_EMOTE_ONLY_EX:
