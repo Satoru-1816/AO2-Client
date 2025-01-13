@@ -235,6 +235,7 @@ private slots:
 
 signals:
   void bounce();
+  void slide();
   void shake();
   void flash();
   void play_sfx(QString sfx);
