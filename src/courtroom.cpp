@@ -701,6 +701,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   connect(ui_vp_player_char, &CharLayer::done, this, &Courtroom::preanim_done);
   connect(ui_vp_player_char, &CharLayer::shake, this, &Courtroom::do_screenshake);
   connect(ui_vp_player_char, &CharLayer::bounce, this, &Courtroom::do_character_bounce);
+  connect(ui_vp_player_char, &CharLayer::slide, this, &Courtroom::do_character_slide);
   connect(ui_vp_player_char, &CharLayer::flash, this, &Courtroom::do_flash);
   connect(ui_vp_player_char, &CharLayer::play_sfx, this,
           &Courtroom::play_char_sfx);
@@ -4584,7 +4585,7 @@ void Courtroom::set_scene(bool show_desk, const QString f_side)
 void Courtroom::set_self_offset(const QString& p_list) {
     QStringList self_offsets = p_list.split("&");
     int self_offset = self_offsets[0].toInt();
-		int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
+    int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
     QPoint target_pos_player = QPoint(
         ui_viewport->width() * self_offset / 100,
         ui_viewport->height() * self_offset_v / 100);
@@ -4595,10 +4596,10 @@ void Courtroom::set_self_offset(const QString& p_list) {
     this->do_character_slide(ui_vp_player_char, target_pos_player);
     this->do_character_slide(ui_vp_crossfade_char, target_pos_crossfade);
 
-    //ui_vp_player_char->move_and_center(ui_viewport->width() * self_offset / 100,
-    //                                   ui_viewport->height() * self_offset_v / 100);
-    //ui_vp_crossfade_char->move_and_center(ui_viewport->width() * self_offset / 100,
-    //                                   ui_viewport->height() * self_offset_v / 100);
+    ui_vp_player_char->move_and_center(ui_viewport->width() * self_offset / 100,
+                                       ui_viewport->height() * self_offset_v / 100);
+    ui_vp_crossfade_char->move_and_center(ui_viewport->width() * self_offset / 100,
+                                       ui_viewport->height() * self_offset_v / 100);
 }
 
 void Courtroom::set_ip_list(QString p_list)
