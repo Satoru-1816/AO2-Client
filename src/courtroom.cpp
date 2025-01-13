@@ -4599,7 +4599,7 @@ void Courtroom::set_self_offset(const QString& p_list) {
 
     // Create animations for smooth sliding
     this->do_character_slide(ui_vp_player_char, old_pos_player, new_pos_player);
-    this->do_character_slide(ui_vp_crossfade_char, target_pos_crossfade, last_x_offset);
+    this->do_character_slide(ui_vp_crossfade_char, old_pos_player, new_pos_player);
 
     ui_vp_player_char->move_and_center(ui_viewport->width() * self_offset / 100,
                                        ui_viewport->height() * self_offset_v / 100);
