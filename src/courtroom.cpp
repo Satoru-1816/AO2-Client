@@ -3185,34 +3185,34 @@ void Courtroom::do_flash()
 
 void Courtroom::do_character_bounce()
 {
-	QWidget *ui_element = ui_vp_player_char;
-
-	// Create animation on the "pos" property
-	QPropertyAnimation *bounce_animation = new QPropertyAnimation(ui_element, "pos", this);
-	QPoint pos_default = QPoint(ui_element->x(), ui_element->y()); // Original position
-
-	// Configure the animation
-	bounce_animation->setDuration(300);
-	bounce_animation->setEasingCurve(QEasingCurve::OutQuad);
-
-	int bounce_height = 10;
-	bounce_animation->setKeyValueAt(0.0, pos_default); // Start at the original position
-	bounce_animation->setKeyValueAt(0.5, QPoint(pos_default.x(), pos_default.y() + bounce_height)); // Lowest point
-	bounce_animation->setKeyValueAt(1.0, pos_default); // Return to the original position
-
-	bounce_animation->start(QAbstractAnimation::DeleteWhenStopped);
+  QWidget *ui_element = ui_vp_player_char;
+  
+  // Create animation on the "pos" property
+  QPropertyAnimation *bounce_animation = new QPropertyAnimation(ui_element, "pos", this);
+  QPoint pos_default = QPoint(ui_element->x(), ui_element->y()); // Original position
+  
+  // Configure the animation
+  bounce_animation->setDuration(300);
+  bounce_animation->setEasingCurve(QEasingCurve::OutQuad);
+  
+  int bounce_height = 10;
+  bounce_animation->setKeyValueAt(0.0, pos_default); // Start at the original position
+  bounce_animation->setKeyValueAt(0.5, QPoint(pos_default.x(), pos_default.y() + bounce_height)); // Lowest point
+  bounce_animation->setKeyValueAt(1.0, pos_default); // Return to the original position
+  
+  bounce_animation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 void Courtroom::do_character_slide(QWidget *widget, const QPoint &start_pos, const QPoint &end_pos)
 {
-    qDebug() << "Slide og pos: " + QString::number(last_x_offset) + 
-               " Slide new pos: " + QString::number(char_offset);
-    QPropertyAnimation *slide_animation = new QPropertyAnimation(widget, "pos", this);
-    slide_animation->setDuration(500);
-    slide_animation->setStartValue(start_pos); // Start at the current position
-    slide_animation->setEndValue(end_pos);
-    slide_animation->setEasingCurve(QEasingCurve::InOutQuad);
-    slide_animation->start(QAbstractAnimation::DeleteWhenStopped); 
+  qDebug() << "Slide og pos: " + QString::number(last_x_offset) + 
+             " Slide new pos: " + QString::number(char_offset);
+  QPropertyAnimation *slide_animation = new QPropertyAnimation(widget, "pos", this);
+  slide_animation->setDuration(500);
+  slide_animation->setStartValue(start_pos); // Start at the current position
+  slide_animation->setEndValue(end_pos);
+  slide_animation->setEasingCurve(QEasingCurve::InOutQuad);
+  slide_animation->start(QAbstractAnimation::DeleteWhenStopped); 
 }
 
 void Courtroom::do_effect(QString fx_path, QString fx_sound, QString p_char,
@@ -4179,7 +4179,8 @@ void Courtroom::start_chat_ticking()
   // Display the evidence
   display_evidence_image();
 
-  this->do_character_bounce();
+  if (last_x_offset == char_offset)
+    this->do_character_bounce();
 
   // handle expanded desk mods
   switch(m_chatmessage[DESK_MOD].toInt()) {
@@ -4600,7 +4601,7 @@ void Courtroom::set_self_offset(const QString& p_list) {
 
     // Create animations for smooth sliding
     this->do_character_slide(ui_vp_player_char, old_pos_player, new_pos_player);
-    this->do_character_slide(ui_vp_crossfade_char, old_pos_player, new_pos_player);
+    // this->do_character_slide(ui_vp_crossfade_char, old_pos_player, new_pos_player);
 
     ui_vp_player_char->move_and_center(ui_viewport->width() * self_offset / 100,
                                        ui_viewport->height() * self_offset_v / 100);
