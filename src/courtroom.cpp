@@ -3121,7 +3121,9 @@ void Courtroom::handle_ic_message()
     if (is_objection)
       text_queue_timer->start(objection_threshold);
   }
+  qDebug() << "last x offset: " << QString::number(last_x_offset);
   last_x_offset = char_offset;
+  qDebug() << "and now it's: " << QString::number(last_x_offset);
 }
 
 void Courtroom::do_screenshake()
@@ -3205,13 +3207,13 @@ void Courtroom::do_character_bounce()
 
 void Courtroom::do_character_slide(QWidget *widget)
 {
-  qDebug() << "Slide og pos: " + QString::number(last_x_offset) + 
-             " Slide new pos: " + QString::number(char_offset);
-
   QStringList self_offsets = m_chatmessage[SELF_OFFSET].split("&");
   int self_offset = self_offsets[0].toInt();
   int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
 
+  qDebug() << "Slide og pos: " << QString::number(last_x_offset) << 
+             " Slide new pos: " << QString::number(self_offset);
+	
   QPoint old_pos_player = QPoint(
   ui_viewport->width() * last_x_offset / 100,
   ui_viewport->height() * (self_offsets.length() > 1 ? char_vert_offset : 0) / 100);
@@ -4606,8 +4608,13 @@ void Courtroom::set_scene(bool show_desk, const QString f_side)
 void Courtroom::set_self_offset(const QString& p_list) {
     QStringList self_offsets = p_list.split("&");
     int self_offset = self_offsets[0].toInt();
-    int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
-	
+    if (self_offsets.length() <= 1) {
+      self_offset_v = 0;
+    }
+    else {
+      self_offset_v = self_offsets[1].toInt();
+    }
+
     ui_vp_player_char->move_and_center(ui_viewport->width() * self_offset / 100,
                                        ui_viewport->height() * self_offset_v / 100);
     ui_vp_crossfade_char->move_and_center(ui_viewport->width() * self_offset / 100,
