@@ -3204,7 +3204,7 @@ void Courtroom::do_character_bounce()
 
 void Courtroom::do_character_slide()
 {
-    QWidget *ui_element = ui_vp_player_char;
+    AOLayer *ui_element = ui_vp_player_char;
     QStringList self_offsets = m_chatmessage[SELF_OFFSET].split("&");
     int self_offset = self_offsets[0].toInt();
     int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
