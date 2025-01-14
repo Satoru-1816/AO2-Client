@@ -3213,13 +3213,13 @@ void Courtroom::do_character_slide(AOLayer *widget)
         ui_viewport->width() * last_x_offset / 100,
         ui_viewport->height() * char_vert_offset / 100
     );
-    QPoint old_pos(widget->getX(), widget->getY());
+    QPoint old_pos(widget->centeredX, widget->centeredY);
 
     widget->move_and_center(
         ui_viewport->width() * self_offset / 100,
         ui_viewport->height() * self_offset_v / 100
     );
-    QPoint new_pos(widget->getX(), widget->getY());
+    QPoint new_pos(widget->centeredX, widget->centeredY);
 
     QPropertyAnimation *slide_animation = new QPropertyAnimation(widget, "pos", this);
     slide_animation->setDuration(500);
