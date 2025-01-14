@@ -3204,36 +3204,36 @@ void Courtroom::do_character_bounce()
 
 void Courtroom::do_character_slide(QWidget *widget)
 {
-  QStringList self_offsets = m_chatmessage[SELF_OFFSET].split("&");
-  int self_offset = self_offsets[0].toInt();
-  int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
-  qDebug() << "last x offset: " << QString::number(last_x_offset);
+    QStringList self_offsets = m_chatmessage[SELF_OFFSET].split("&");
+    int self_offset = self_offsets[0].toInt();
+    int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
 
-  qDebug() << "Slide og pos: " << QString::number(last_x_offset) << 
-             " Slide new pos: " << QString::number(self_offset);
-	
-  QPoint old_pos_player = QPoint(
-  ui_viewport->width() * last_x_offset / 100,
-  ui_viewport->height() * last_y_offset / 100);
-  
-  // Calculate the new position
-  QPoint new_pos_player = QPoint(
-  ui_viewport->width() * self_offset / 100,
-  ui_viewport->height() * self_offset_v / 100);
+    AOLayer *layer = dynamic_cast<AOLayer *>(widget);
+    if (!layer) return;
 
-  qDebug() << "ui_viewport width: " << QString::number(ui_viewport->width());
-  
-  QPropertyAnimation *slide_animation = new QPropertyAnimation(widget, "pos", this);
-  slide_animation->setDuration(500);
-  slide_animation->setStartValue(old_pos_player); // Start at the current position
-  slide_animation->setEndValue(new_pos_player);
-  slide_animation->setEasingCurve(QEasingCurve::InOutQuad);
-  slide_animation->start(QAbstractAnimation::DeleteWhenStopped); 
+    // Calcula las posiciones centradas
+    layer->move_and_center(
+        ui_viewport->width() * last_x_offset / 100,
+        ui_viewport->height() * char_vert_offset / 100
+    );
+    QPoint old_pos(layer->x, layer->y);
 
-  last_x_offset = self_offset;
-  last_y_offset = self_offset_v;
-  qDebug() << "and now it's: " << QString::number(last_x_offset);
+    layer->move_and_center(
+        ui_viewport->width() * self_offset / 100,
+        ui_viewport->height() * self_offset_v / 100
+    );
+    QPoint new_pos(layer->x, layer->y);
 
+    QPropertyAnimation *slide_animation = new QPropertyAnimation(widget, "pos", this);
+    slide_animation->setDuration(500);
+    slide_animation->setStartValue(old_pos);
+    slide_animation->setEndValue(new_pos);
+    slide_animation->setEasingCurve(QEasingCurve::InOutQuad);
+
+    slide_animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+    last_x_offset = self_offset;
+    last_y_offset = self_offset_v;
 }
 
 void Courtroom::do_effect(QString fx_path, QString fx_sound, QString p_char,
@@ -4193,6 +4193,9 @@ void Courtroom::start_chat_ticking()
   if (last_x_offset == char_offset)
     this->do_character_bounce();
 
+  if (char_offset != last_x_offset)
+    this->do_character_slide(ui_vp_player_char);
+
   // handle expanded desk mods
   switch(m_chatmessage[DESK_MOD].toInt()) {
     case DESK_EMOTE_ONLY_EX:
@@ -4264,9 +4267,6 @@ void Courtroom::start_chat_ticking()
       text_queue_timer->start(delay);
     return;
   }
-
-  if (char_offset != last_x_offset)
-    this->do_character_slide(ui_vp_player_char);
 
   ui_vp_chatbox->show();
   ui_vp_message->show();
