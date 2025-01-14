@@ -108,6 +108,9 @@ public:
   int getX() const { return x; }
   int getY() const { return y; }
 
+  int centeredX;
+  int centeredY;
+
 protected:
   AOApplication *ao_app;
   NetworkManager *net_manager;
