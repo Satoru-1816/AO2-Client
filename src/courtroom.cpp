@@ -3208,21 +3208,18 @@ void Courtroom::do_character_slide(QWidget *widget)
     int self_offset = self_offsets[0].toInt();
     int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
 
-    AOLayer *layer = dynamic_cast<AOLayer *>(widget);
-    if (!layer) return;
-
     // Calcula las posiciones centradas
-    layer->move_and_center(
+    widget->move_and_center(
         ui_viewport->width() * last_x_offset / 100,
         ui_viewport->height() * char_vert_offset / 100
     );
-    QPoint old_pos(layer->x, layer->y);
+    QPoint old_pos(widget->x, widget->y);
 
-    layer->move_and_center(
+    widget->move_and_center(
         ui_viewport->width() * self_offset / 100,
         ui_viewport->height() * self_offset_v / 100
     );
-    QPoint new_pos(layer->x, layer->y);
+    QPoint new_pos(widget->x, widget->y);
 
     QPropertyAnimation *slide_animation = new QPropertyAnimation(widget, "pos", this);
     slide_animation->setDuration(500);
