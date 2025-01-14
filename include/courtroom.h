@@ -464,9 +464,6 @@ private:
 
   int last_y_offset = 0;
 
-  QPoint old_pos;
-  QPoint new_pos;
-
   // 0 = in front, 1 = behind
   int pair_order = 0;
 
