@@ -110,7 +110,8 @@ public:
 
   int centeredX;
   int centeredY;
-
+  int old_x_offset;
+  int old_y_offset;
 protected:
   AOApplication *ao_app;
   NetworkManager *net_manager;
