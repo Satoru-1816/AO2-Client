@@ -701,7 +701,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app) : QMainWindow()
   connect(ui_vp_player_char, &CharLayer::done, this, &Courtroom::preanim_done);
   connect(ui_vp_player_char, &CharLayer::shake, this, &Courtroom::do_screenshake);
   connect(ui_vp_player_char, &CharLayer::bounce, this, &Courtroom::do_character_bounce);
-  // connect(ui_vp_player_char, &CharLayer::slide, this, &Courtroom::do_character_slide);
+  connect(ui_vp_player_char, &CharLayer::slide, this, &Courtroom::do_character_slide);
   connect(ui_vp_player_char, &CharLayer::flash, this, &Courtroom::do_flash);
   connect(ui_vp_player_char, &CharLayer::play_sfx, this,
           &Courtroom::play_char_sfx);
@@ -3202,26 +3202,27 @@ void Courtroom::do_character_bounce()
   bounce_animation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void Courtroom::do_character_slide(AOLayer *widget)
+void Courtroom::do_character_slide()
 {
+    QWidget *ui_element = ui_vp_player_char;
     QStringList self_offsets = m_chatmessage[SELF_OFFSET].split("&");
     int self_offset = self_offsets[0].toInt();
     int self_offset_v = (self_offsets.length() > 1) ? self_offsets[1].toInt() : 0;
 
     // Calcula las posiciones centradas
-    widget->move_and_center(
+    ui_element->move_and_center(
         ui_viewport->width() * last_x_offset / 100,
         ui_viewport->height() * last_y_offset / 100
     );
-    QPoint old_pos(widget->centeredX, widget->centeredY);
+    QPoint old_pos(ui_element->centeredX, ui_element->centeredY);
 
-    widget->move_and_center(
+    ui_element->move_and_center(
         ui_viewport->width() * self_offset / 100,
         ui_viewport->height() * self_offset_v / 100
     );
-    QPoint new_pos(widget->centeredX, widget->centeredY);
+    QPoint new_pos(ui_element->centeredX, ui_element->centeredY);
 
-    QPropertyAnimation *slide_animation = new QPropertyAnimation(widget, "pos", this);
+    QPropertyAnimation *slide_animation = new QPropertyAnimation(ui_element, "pos", this);
     slide_animation->setDuration(500);
     slide_animation->setStartValue(old_pos);
     slide_animation->setEndValue(new_pos);
@@ -4189,9 +4190,10 @@ void Courtroom::start_chat_ticking()
 
   if (last_x_offset == char_offset)
     this->do_character_bounce();
-
-  if (char_offset != last_x_offset || char_vert_offset != last_y_offset)
-    this->do_character_slide(ui_vp_player_char);
+  qDebug() << "char offset: " << char_offset;
+  qDebug() << "last x offset: " << last_x_offset;
+  //if (char_offset != last_x_offset || char_vert_offset != last_y_offset)
+  this->do_character_slide();
 
   // handle expanded desk mods
   switch(m_chatmessage[DESK_MOD].toInt()) {
