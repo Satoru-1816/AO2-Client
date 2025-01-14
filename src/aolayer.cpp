@@ -108,6 +108,8 @@ void AOLayer::center_pixmap(QPixmap f_pixmap) {
       x + (f_w - f_pixmap.width()) / 2,
       y + (f_h - f_pixmap.height())); // Always center horizontally, always put
                                       // at the bottom vertically
+  centeredX = x + (f_w - f_pixmap.width()) / 2;
+  centeredY = y + (f_h - f_pixmap.height()));
   if (masked)
       this->setMask(
           QRegion((f_pixmap.width() - f_w) / 2, (f_pixmap.height() - f_h) / 2, f_w,
