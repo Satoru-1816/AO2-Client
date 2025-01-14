@@ -3211,7 +3211,7 @@ void Courtroom::do_character_slide(AOLayer *widget)
     // Calcula las posiciones centradas
     widget->move_and_center(
         ui_viewport->width() * last_x_offset / 100,
-        ui_viewport->height() * char_vert_offset / 100
+        ui_viewport->height() * last_y_offset / 100
     );
     QPoint old_pos(widget->centeredX, widget->centeredY);
 
@@ -4190,7 +4190,7 @@ void Courtroom::start_chat_ticking()
   if (last_x_offset == char_offset)
     this->do_character_bounce();
 
-  if (char_offset != last_x_offset)
+  if (char_offset != last_x_offset || char_vert_offset != last_y_offset)
     this->do_character_slide(ui_vp_player_char);
 
   // handle expanded desk mods
