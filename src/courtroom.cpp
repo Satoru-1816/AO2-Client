@@ -3202,7 +3202,7 @@ void Courtroom::do_character_bounce()
   bounce_animation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void Courtroom::do_character_slide(QWidget *widget)
+void Courtroom::do_character_slide(AOLayer *widget)
 {
     QStringList self_offsets = m_chatmessage[SELF_OFFSET].split("&");
     int self_offset = self_offsets[0].toInt();
