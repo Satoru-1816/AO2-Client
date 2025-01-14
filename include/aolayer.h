@@ -105,6 +105,9 @@ public:
 
   void invert();
 
+  int getX() const { return x; }
+  int getY() const { return y; }
+
 protected:
   AOApplication *ao_app;
   NetworkManager *net_manager;
